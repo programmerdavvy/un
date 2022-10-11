@@ -8,16 +8,18 @@ import { Link } from "react-router-dom";
 // Redux Store
 import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions";
 // reactstrap
-import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Row, Col, Dropdown, DropdownToggle, DropdownMenu, Button } from "reactstrap";
 
 // Import menuDropdown
 import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown";
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 
-import logo from "../../assets/images/logo-sm.png";
-import logoLight from "../../assets/images/logo-light.png";
-import logoDark from "../../assets/images/logo-dark.png";
+// import logo from "../../assets/images/logo-sm.png";
+import ilologo from "../../assets/images/un/ilologo.png";
+// import logoLight from "../../assets/images/logo-light.png";
+// import logoDark from "../../assets/images/logo-dark.png";
+import iloLight from "../../assets/images/un/moondarkmode.png";
 
 // import images
 import github from "../../assets/images/brands/github.png";
@@ -29,8 +31,9 @@ import slack from "../../assets/images/brands/slack.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
+import LanguageMenu from "../CommonForBoth/TopbarDropdown/LanguageMenu";
 
-const Header = props => {
+const HeaderILO = props => {
   const [isSearch, setSearch] = useState(false);
   const [socialDrp, setsocialDrp] = useState(false);
 
@@ -62,24 +65,24 @@ const Header = props => {
   }
   return (
     <React.Fragment>
-      <div className="navbar-header">
+      <div className="navbar-header" style={{marginBottom:'60px'}}>
         <div className="d-flex">
           <div className="navbar-brand-box">
             <Link to="/" className="logo logo-dark">
               <span className="logo-sm">
-                <img src={logo} alt="" height="22" />
+                <img src={ilologo} alt="" style={{height:'84px', width:'516', marginTop:'20px'}} />
               </span>
               <span className="logo-lg">
-                <img src={logoDark} alt="" height="17" />
+                <img src={ilologo} alt="" style={{height:'84px', width:'516', marginTop:'20px'}}  />
               </span>
             </Link>
 
             <Link to="/" className="logo logo-light">
               <span className="logo-sm">
-                <img src={logo} alt="" height="22" />
+                <img src={ilologo} alt="" style={{height:'84px', width:'516', marginTop:'20px'}} />
               </span>
               <span className="logo-lg">
-                <img src={logoLight} alt="" height="19" />
+                <img src={ilologo} alt="" style={{height:'84px', width:'516', marginTop:'20px'}}  />
               </span>
             </Link>
           </div>
@@ -96,20 +99,21 @@ const Header = props => {
             <i className="fa fa-fw fa-bars" />
           </button>
 
-          <form className="app-search d-none d-lg-block">
+          {/* <form className="app-search d-none d-lg-block">
             <div className="position-relative">
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search.."
+                placeholder="Search...malikhey"
               />
               <span className="uil-search"></span>
             </div>
-          </form>
+          </form> */}
         </div>
 
         <div className="d-flex">
           <div className="dropdown d-inline-block d-lg-none ms-2">
+           
             <button
               type="button"
               className="btn header-item noti-icon waves-effect"
@@ -146,9 +150,35 @@ const Header = props => {
             </div>
           </div>
 
-          <LanguageDropdown />
+          <div className="dropdown d-none d-lg-inline-block ms-1">
+            <button
+              type="button"
+              className="btn header-item noti-icon waves-effect"
+            //   onClick={() => {
+            //     toggleFullscreen();
+            //   }}
+            //   data-toggle="fullscreen"
+            >
+          <img src={iloLight} alt=""   />
+            </button>
+          </div>
+          <div className="dropdown d-none d-lg-inline-block ms-1 ">
+            <button
+              type="button"
+              className="btn header-item noti-icon waves-effect fw-bolder"
+            //   onClick={() => {
+            //     toggleFullscreen();
+            //   }}
+            //   data-toggle="fullscreen"
 
-          <Dropdown
+            >
+                TRANSLATE TO
+            </button>
+          </div>
+          {/* style={{height:'84px', width:'516', marginTop:'20px'}} */}
+          {/* <LanguageDropdown /> */}
+
+          {/* <Dropdown
             className="d-none d-lg-inline-block ms-1"
             isOpen={socialDrp}
             toggle={() => {
@@ -206,9 +236,9 @@ const Header = props => {
                 </Row>
               </div>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
 
-          <div className="dropdown d-none d-lg-inline-block ms-1">
+          {/* <div className="dropdown d-none d-lg-inline-block ms-1">
             <button
               type="button"
               className="btn header-item noti-icon waves-effect"
@@ -219,13 +249,34 @@ const Header = props => {
             >
               <i className="uil-minus-path"></i>
             </button>
+          </div> */}
+
+          {/* <NotificationDropdown /> */}
+
+          {/* <ProfileMenu /> */}
+          <LanguageMenu />
+
+         
+          <div className="dropdown d-none d-lg-inline-block ms-1 ">
+            <button
+              type="button"
+              className="btn header-item noti-icon waves-effect"
+            
+
+            >
+                <Button
+                      color="success"
+                      outline
+                      className="btn btn-sm waves-effect waves-light"
+                    >
+                      LOG IN
+                </Button>
+            </button>
           </div>
 
-          <NotificationDropdown />
+          
 
-          <ProfileMenu />
-
-          <div className="dropdown d-inline-block">
+          {/* <div className="dropdown d-inline-block">
             <button
               onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar);
@@ -235,14 +286,14 @@ const Header = props => {
             >
               <i className="uil-cog"></i>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </React.Fragment>
   );
 };
 
-Header.propTypes = {
+HeaderILO.propTypes = {
   leftMenu: PropTypes.any,
   showRightSidebar: PropTypes.any,
   showRightSidebarAction: PropTypes.func,
@@ -258,4 +309,4 @@ const mapStatetoProps = state => {
 export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
-})(withTranslation()(Header));
+})(withTranslation()(HeaderILO));

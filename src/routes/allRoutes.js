@@ -6,6 +6,7 @@ import Chat from "../pages/Chat/Chat"
 
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
+import Home from "../pages/Home/index"
 
 // Pages Calendar
 import Calendar from "../pages/Calendar/index"
@@ -127,7 +128,9 @@ import UserProfile from "../pages/Authentication/user-profile"
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
+  { path: "/home", component: Home },
   { path: "/calendar", component: Calendar },
+
   //chat
   { path: "/chat", component: Chat },
 
@@ -235,7 +238,8 @@ const userRoutes = [
   {
     path: "/",
     exact: true,
-    component: () => <Redirect to="/dashboard" />
+    // component: () => <Redirect to="/dashboard" />
+    component: () => <Redirect to="/home" />
   }, 
 ];
 

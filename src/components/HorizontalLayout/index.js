@@ -15,9 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Other Layout related Component
 import Navbar from "./Navbar";
-import Header from "./Header";
+// import Header from "./Header";
+import HeaderILO from "./HeaderILO";
 import Footer from "./Footer";
 import Rightbar from "../CommonForBoth/Rightbar";
+import NavbarILO from "./NavbarILO";
 
 const Layout = (props) => {
   const dispatch = useDispatch();
@@ -113,13 +115,15 @@ const Layout = (props) => {
       </div>
 
       <div id="layout-wrapper">
-        <header id="page-topbar">
-          <Header
+        <header id="page-topbar" className="" style={{height:'200px'}}>
+          <HeaderILO
+          
             theme={topbarTheme}
             isMenuOpened={isMenuOpened}
             openLeftMenuCallBack={openMenu}
-          ></Header>
+          ></HeaderILO>
           <Navbar menuOpen={isMenuOpened} />
+          {/* <NavbarILO menuOpen={isMenuOpened} /> */}
         </header>
         <div className="main-content">{props.children}</div>
         <Footer />

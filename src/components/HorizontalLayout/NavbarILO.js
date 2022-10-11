@@ -1,15 +1,17 @@
 import PropTypes from "prop-types"
 import React, { useState, useEffect } from "react"
-import { Row, Col, Collapse } from "reactstrap"
+import { Row, Col, Collapse, Form, InputGroup } from "reactstrap"
 import { Link, withRouter } from "react-router-dom"
 import classname from "classnames"
+import searchicon from "../../assets/images/un/searchicon.png";
+
 
 //i18n
 import { withTranslation } from "react-i18next"
 
 import { connect } from "react-redux"
 
-const Navbar = props => {
+const NavbarILO = props => {
   const [ui, setui] = useState(false)
   const [app, setapp] = useState(false)
   const [email, setemail] = useState(false)
@@ -70,28 +72,93 @@ const Navbar = props => {
   return (
     <React.Fragment>
       <div className="container-fluid mt-2">
-        <div className="topnav">
+        <div className="topnav bg-white" style={{boxShadow:'none'}}>
           <nav
             className="navbar navbar-light navbar-expand-lg topnav-menu"
             id="navigation"
           >
             <Collapse
               isOpen={props.leftMenu}
-              className="navbar-collapse"
+              className="navbar-collapse d-flex justify-content-around"
               id="topnav-menu-content"
             >
+                 <Form className="row row-cols-lg-auto g-3 align-items-center">
+                      <InputGroup >
+                        <input type="text" className="form-control border" id="inlineFormInputGroupUsername"  />
+                        <div className="input-group-text border">
+                            <img src={searchicon} alt="" style={{height:'20px', width:'20px',}} />
+                        </div>
+                      </InputGroup>
+                  </Form>
               <ul className="navbar-nav">
+                <li className="nav-item text-dark">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/home"
+                  >
+                    
+                    {" "}{props.t("Home")}
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <Link
-                    className="nav-link"
-                    to="/dashboard"
+                    className="nav-link text-dark fw-bolder"
+                    to="/about"
                   >
-                    <i className="uil-home-alt me-2"></i>
-                    {" "}{props.t("Dashboard")}
+                    
+                    {" "}{props.t("About the Project")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/news"
+                  >
+                    {" "}{props.t("News")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/footprints"
+                  >
+                    {" "}{props.t("Footprints")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/dangers"
+                  >
+                    {" "}{props.t("Dangers")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/index"
+                  >
+                    {" "}{props.t("Index")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/podcasts"
+                  >
+                    {" "}{props.t("Podcasts")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link text-dark fw-bolder"
+                    to="/contact-us"
+                  >
+                    {" "}{props.t("Contact Us")}
                   </Link>
                 </li>
 
-                <li className="nav-item dropdown">
+                {/* <li className="nav-item dropdown">
                   <Link
                     to="/#"
                     onClick={e => {
@@ -202,9 +269,9 @@ const Navbar = props => {
                       </Col>
                     </Row>
                   </div>
-                </li>
+                </li> */}
 
-                <li className="nav-item dropdown">
+                {/* <li className="nav-item dropdown">
                   <Link
                     to="/#"
                     onClick={e => {
@@ -345,9 +412,9 @@ const Navbar = props => {
                       </div>
                     </div>
                   </div>
-                </li>
+                </li> */}
 
-                <li className="nav-item dropdown">
+                {/* <li className="nav-item dropdown">
                   <Link
                     to="/#"
                     className="nav-link dropdown-toggle arrow-none"
@@ -532,9 +599,9 @@ const Navbar = props => {
                       </div>
                     </div>
                   </div>
-                </li>
+                </li> */}
 
-                <li className="nav-item dropdown">
+                {/* <li className="nav-item dropdown">
                   <Link
                     className="nav-link dropdown-toggle arrow-none"
                     to="#"
@@ -621,7 +688,7 @@ const Navbar = props => {
                       </div>
                     </div>
                   </div>
-                </li>
+                </li> */}
               </ul>
             </Collapse>
           </nav>
@@ -631,7 +698,7 @@ const Navbar = props => {
   )
 }
 
-Navbar.propTypes = {
+NavbarILO.propTypes = {
   leftMenu: PropTypes.any,
   location: PropTypes.any,
   menuOpen: PropTypes.any,
@@ -644,5 +711,5 @@ const mapStatetoProps = state => {
 }
 
 export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(Navbar))
+  connect(mapStatetoProps, {})(withTranslation()(NavbarILO))
 )
