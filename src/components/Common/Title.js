@@ -15,7 +15,7 @@ const Title = props => {
       <Col xl={1}>
         <h4 className="p-2">{props.title}</h4>
       </Col>
-      <Col xl={10} className=''>
+      <Col xl={10}>
         <hr className="pt-1 "  />
       </Col>
     </Row>

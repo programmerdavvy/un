@@ -13,6 +13,9 @@ const NewsCard = props => {
               <Card>
                 <CardImg top className="img-fluid" src={newImage1} alt="Card image cap" />
                 <CardBody>
+                <CardText className="text-justify card-img-overlay text-white mt-5 h-50 d-flex align-items-end">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam est mi, auctor eget
+                  </CardText>
                   <CardText className="text-justify">
                     Some quick example text to build on the card title and make
                     up the bulk of the card content.
@@ -34,6 +37,9 @@ const NewsCard = props => {
               <Card>
                 <CardImg top className="img-fluid" src={newImage2} alt="Card image cap" />
                 <CardBody>
+                <CardText className="text-justify card-img-overlay text-white mt-5 h-50 d-flex align-items-end">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam est mi, auctor eget
+                  </CardText>
                   <CardText className="text-justify">
                     Some quick example text to build on the card title and make
                     up the bulk of the card content.
@@ -55,6 +61,9 @@ const NewsCard = props => {
               <Card>
                 <CardImg top className="img-fluid" src={newImage3} alt="Card image cap" />
                 <CardBody>
+                  <CardText className="text-justify card-img-overlay text-white mt-5 h-50 d-flex align-items-end">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam est mi, auctor eget
+                  </CardText>
                   <CardText className="text-justify">
                     Some quick example text to build on the card title and make
                     up the bulk of the card content.
