@@ -19,6 +19,8 @@ import LatestTransaction from "./latest-transaction";
 import setupanalytics from "../../assets/images/setup-analytics-amico.svg";
 import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol";
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol";
+import Title from "../../components/Common/Title";
+import NewsCard from "../../components/Common/NewsCard";
 
 const series1 = [{
   data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54]
@@ -255,6 +257,22 @@ const Dashboard = () => {
                 <Slidewithcontrol />
           </Col>
           </Row>
+          <Row>
+             <Title title='NEWS'/>
+            <NewsCard/>
+          </Row>
+
+          <Row>
+          <Col xl={8}>
+             <Title title='DANGERS'/>
+                <Slidewithcontrol />
+          </Col>
+          <Col xl={4}>
+             <Title title='VIDEO GALLERY'/>
+                <Slidewithcontrol />
+          </Col>
+          </Row>
+
           <Row>
             <MiniWidget reports={reports} />
           </Row>

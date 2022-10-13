@@ -89,17 +89,19 @@ class Slidewithcontrol extends Component {
           />
           
           <div className="carousel-caption h-75 d-inline-block d-flex flex-row justify-content-end">
-            <div className="">
-            <p>NUMBER OF CASES REPORTED:</p>
-            <h1>123</h1>
-            <Button className="btn ">Report A Case</Button>
+            <div className="h-100 d-flex flex-column justify-content-evenly m-3">
+            <p className="text-white h6">NUMBER OF CASES REPORTED:</p>
+            <h1 className="font-weight-bold text-white display-1">123</h1>
+            <button className="btn text-white border border-white rounded">Report A Case</button>
             </div>
 
-            <div>
-            <p>NUMBER OF CASES REPORTED:</p>
-            <h1>123</h1>
-            <Button className="btn ">Report A Case</Button>
+            <div className="h-100 d-flex flex-column justify-content-evenly m-3">
+            <p className="text-white h6">NUMBER OF CHILDREN IDENTIFIED:</p>
+            <h1 className="font-weight-bold text-white display-1">100</h1>
+            <button className="btn text-white border border-white rounded">Track</button>
             </div>
+            
+            
           </div>
         </CarouselItem>
       )
@@ -113,8 +115,6 @@ class Slidewithcontrol extends Component {
           previous={this.previous}
         >
           {slides}
-          <>
-          dkjhadbal</>
           <CarouselControl
             direction="prev"
             directionText="Previous"
