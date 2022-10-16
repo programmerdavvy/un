@@ -40,6 +40,7 @@ const Podcast = props => {
             View More
           </Link>
         </div>
+        
       </Col>
     </Row>
   )

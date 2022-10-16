@@ -7,6 +7,16 @@ import Chat from "../pages/Chat/Chat"
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
 import Home from "../pages/Home/index"
+import About from "../pages/About/index"
+import News from "../pages/News/index"
+import Footprints from "../pages/Footprints/index"
+import Dangers from "../pages/Dangers/index"
+import Index from "../pages/Index/index"
+import Podcast from "../pages/Podcasts/index"
+import ContactUs from "../pages/ContactUs/index"
+import Resources from "../pages/Resources/index"
+
+
 
 // Pages Calendar
 import Calendar from "../pages/Calendar/index"
@@ -129,6 +139,15 @@ import UserProfile from "../pages/Authentication/user-profile"
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
   { path: "/home", component: Home },
+  { path: "/about", component: About },
+  { path: "/news", component: News },
+  { path: "/footprints", component: Footprints },
+  { path: "/dangers", component: Dangers },
+  { path: "/index", component: Index },
+  { path: "/podcasts", component: Podcast },
+  { path: "/contact-us", component: ContactUs },
+  { path: "/resources", component: Resources },
+
   { path: "/calendar", component: Calendar },
 
   //chat

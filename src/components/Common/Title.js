@@ -5,7 +5,7 @@ import { Row, Col } from "reactstrap"
 
 const Title = props => {
   return (
-    <Row >
+    <Row className="">
       <Col xl={1} className="d-flex flex-row-reverse pt-1">
         <div
           className="p-2 mt-2"
@@ -13,10 +13,10 @@ const Title = props => {
         ></div>
       </Col>
       <Col xl={1}>
-        <h4 className="p-2">{props.title}</h4>
+        <h5 className="p-2">{props.title}</h5>
       </Col>
-      <Col xl={10}>
-        <hr className="pt-1 "  />
+      <Col xl={10} className="d-flex justify-content-end">
+        <hr className="pt-1 " style={{width:'90%'}} />
       </Col>
     </Row>
   )
