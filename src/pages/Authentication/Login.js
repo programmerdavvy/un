@@ -1,15 +1,26 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React, { useEffect } from "react"
 
-import { Row, Col, CardBody, Card, Alert, Container, Form, Input, FormFeedback, Label } from "reactstrap";
+import {
+  Row,
+  Col,
+  CardBody,
+  Card,
+  Alert,
+  Container,
+  Form,
+  Input,
+  FormFeedback,
+  Label,
+} from "reactstrap"
 
 // Redux
 import { withRouter, Link } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 //Social Media Imports
 import { GoogleLogin } from "react-google-login"
@@ -17,53 +28,50 @@ import { GoogleLogin } from "react-google-login"
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 
 // actions
-import { loginUser,socialLogin } from "../../store/actions"
+import { loginUser, socialLogin } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
+import ilologo from "../../assets/images/un/ilologo.png"
 
 //Import config
 import { facebook, google } from "../../config"
 
-const Login = (props) => {
-
-  const dispatch = useDispatch();
+const Login = props => {
+  const dispatch = useDispatch()
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: "admin@themesbrand.com" || '',
-      password: "123456" || '',
+      email: "admin@themesbrand.com" || "",
+      password: "123456" || "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
-    onSubmit: (values) => {
-      dispatch(loginUser(values, props.history));
-    }
-  });
+    onSubmit: values => {
+      dispatch(loginUser(values, props.history))
+    },
+  })
 
   const { error } = useSelector(state => ({
     error: state.Login.error,
-  }));
+  }))
 
   const signIn = (res, type) => {
-  
     if (type === "google" && res) {
-     
       const postData = {
         name: res.profileObj.name,
         email: res.profileObj.email,
         token: res.tokenObj.access_token,
         idToken: res.tokenId,
       }
-      dispatch(socialLogin(postData, props.history, type));
+      dispatch(socialLogin(postData, props.history, type))
     } else if (type === "facebook" && res) {
-
       const postData = {
         name: res.name,
         email: res.email,
@@ -85,12 +93,12 @@ const Login = (props) => {
   }
 
   useEffect(() => {
-    document.body.className = "authentication-bg";
+    document.body.className = "authentication-bg"
     // remove classname when component will unmount
     return function cleanup() {
-      document.body.className = "";
-    };
-  });
+      document.body.className = ""
+    }
+  })
 
   return (
     <React.Fragment>
@@ -100,8 +108,18 @@ const Login = (props) => {
             <Col lg={12}>
               <div className="text-center">
                 <Link to="/" className="mb-5 d-block auth-logo">
-                  <img src={logo} alt="" height="22" className="logo logo-dark" />
-                  <img src={logolight} alt="" height="22" className="logo logo-light" />
+                  <img
+                    src={ilologo}
+                    alt=""
+                    height="22"
+                    className="logo logo-dark"
+                  />
+                  <img
+                    src={ilologo}
+                    alt=""
+                    height="22"
+                    className="logo logo-light"
+                  />
                 </Link>
               </div>
             </Col>
@@ -112,20 +130,20 @@ const Login = (props) => {
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
                     <h5 className="text-primary">Welcome Back !</h5>
-                    <p className="text-muted">Sign in to continue to Minible.</p>
+                    <p className="text-muted">Sign in to continue to FGN ILO</p>
                   </div>
                   <div className="p-2 mt-4">
                     <Form
                       className="form-horizontal"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
+                      onSubmit={e => {
+                        e.preventDefault()
+                        validation.handleSubmit()
+                        return false
                       }}
                     >
-                       {error ? <Alert color="danger">{error}</Alert> : null}
+                      {error ? <Alert color="danger">{error}</Alert> : null}
 
-                       <div className="mb-3">
+                      <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
                           name="email"
@@ -136,17 +154,23 @@ const Login = (props) => {
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email ? true : false
+                            validation.touched.email && validation.errors.email
+                              ? true
+                              : false
                           }
                         />
                         {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                          <FormFeedback type="invalid">
+                            {validation.errors.email}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="mb-3">
-                      <div className="float-end">
-                          <Link to="/forgot-password" className="text-muted">Forgot password?</Link>
+                        <div className="float-end">
+                          <Link to="/forgot-password" className="text-muted">
+                            Forgot password?
+                          </Link>
                         </div>
                         <Label className="form-label">Password</Label>
                         <Input
@@ -157,11 +181,17 @@ const Login = (props) => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           invalid={
-                            validation.touched.password && validation.errors.password ? true : false
+                            validation.touched.password &&
+                            validation.errors.password
+                              ? true
+                              : false
                           }
                         />
-                        {validation.touched.password && validation.errors.password ? (
-                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        {validation.touched.password &&
+                        validation.errors.password ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.password}
+                          </FormFeedback>
                         ) : null}
                       </div>
 
@@ -180,15 +210,16 @@ const Login = (props) => {
                       </div>
 
                       <div className="mt-3">
-                        <button
-                          className="btn btn-primary w-100 waves-effect waves-light"
-                          type="submit"
-                        >
-                          Log In
-                        </button>
+                        
+                        <div className="d-flex p-2 justify-content-center">
+                          <button
+                            className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
+                          >
+                            Log in
+                          </button>
+                        </div>
                       </div>
-
-                      <div className="mt-4 text-center">
+                      {/* <div className="mt-4 text-center">
                         <h5 className="font-size-14 mb-3">Sign in with</h5>
 
                         <ul className="list-inline">
@@ -227,38 +258,37 @@ const Login = (props) => {
                           </li>
                           }
                         </ul>
-                      </div>
-
-                     
+                      </div> */}
 
                       <div className="mt-4 text-center">
-                        <p className="mb-0">Don&apos;t have an account ? <a href="/register" className="fw-medium text-primary"> Signup now </a> </p>
+                        <p className="mb-0">
+                          Don&apos;t have an account ?{" "}
+                          <a href="/home" className="fw-medium text-primary">
+                            {" "}
+                            Contact UN Admin{" "}
+                          </a>{" "}
+                        </p>
                       </div>
-
                     </Form>
-
                   </div>
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
-                <p>© {new Date().getFullYear()} Minible. Crafted with <i
-                  className="mdi mdi-heart text-danger"></i> by Themesbrand
-                        </p>
+                <p>© {new Date().getFullYear()} FGN UN ILO.</p>
               </div>
             </Col>
           </Row>
-
         </Container>
       </div>
     </React.Fragment>
   )
 }
 
-export default withRouter(Login);
+export default withRouter(Login)
 
 Login.propTypes = {
   error: PropTypes.any,
   history: PropTypes.object,
   loginUser: PropTypes.func,
-  socialLogin: PropTypes.func
+  socialLogin: PropTypes.func,
 }

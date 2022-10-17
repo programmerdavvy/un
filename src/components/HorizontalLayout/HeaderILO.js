@@ -258,11 +258,10 @@ const HeaderILO = props => {
 
          
           <div className="dropdown d-none d-lg-inline-block ms-1 ">
-            <button
+          <Link to={'/login'}>
+          <button
               type="button"
               className="btn header-item noti-icon waves-effect"
-            
-
             >
                 <Button
                       color="success"
@@ -272,6 +271,7 @@ const HeaderILO = props => {
                       LOG IN
                 </Button>
             </button>
+          </Link>
           </div>
 
           

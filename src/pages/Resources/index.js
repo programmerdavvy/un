@@ -38,6 +38,7 @@ import GoodPractices from "../../components/Common/GoodPractices"
 import Podcast from "../../components/Common/Podcast"
 import Statistics from "../../components/Common/Statistics"
 import ResourcesFile from "../../components/Common/ResourcesFile"
+import TopRead from "../../components/Common/TopRead"
 
 const series1 = [
   {
@@ -285,12 +286,6 @@ const Dashboard = () => {
               <Col className="me-3">
                 <Title title="SEE ALSO" />
                 <ResourcesFile/>
-                <Title title="RESOURCES" />
-                <Resources />
-                <Title title="GOOD PRACTICES" />
-                <GoodPractices />
-                <Title title="PODCAST" />
-                <Podcast />
               </Col>
             </Col>
             <Col xl={4}>
@@ -300,8 +295,8 @@ const Dashboard = () => {
               <EventsCard />
             </Col>
             <Col xl={12}>
-              <Title title="STATISTICS" />
-              <Statistics />
+              <Title title="TOP READ" />
+              <TopRead/>
             </Col>
           </Row>
 

@@ -24,6 +24,7 @@ class UiSessionTimeout extends Component {
 
   hideAlert() {
     window.location = "/login";
+    // window.location = "/home";
   }
   confirmAlert() {
     this.setState({ timeralert: null });
@@ -44,7 +45,8 @@ class UiSessionTimeout extends Component {
   }
   function1() {
     if (window.location.pathname === "/ui-session-timeout") {
-      window.location = "/login";
+      // window.location = "/login";
+      window.location = "/home";
     }
   }
   function2() {

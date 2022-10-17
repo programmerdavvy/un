@@ -12,6 +12,7 @@ const Title = props => {
           style={{ width: "13px", height: "18px", backgroundColor: "#65C843" }}
         ></div>
       </Col>
+      
       <Col xl={1}>
         <h5 className="p-2">{props.title}</h5>
       </Col>

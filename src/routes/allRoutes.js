@@ -15,6 +15,8 @@ import Index from "../pages/Index/index"
 import Podcast from "../pages/Podcasts/index"
 import ContactUs from "../pages/ContactUs/index"
 import Resources from "../pages/Resources/index"
+import Video from "../pages/Video/index"
+import Picture from "../pages/Picture/index"
 
 
 
@@ -147,6 +149,8 @@ const userRoutes = [
   { path: "/podcasts", component: Podcast },
   { path: "/contact-us", component: ContactUs },
   { path: "/resources", component: Resources },
+  { path: "/videos", component: Video },
+  { path: "/pictures", component: Picture },
 
   { path: "/calendar", component: Calendar },
 

@@ -15,6 +15,7 @@ const Authmiddleware = ({
         return (
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}
+            // to={{ pathname: "/home", state: { from: props.location } }}
           />
         );
       }
