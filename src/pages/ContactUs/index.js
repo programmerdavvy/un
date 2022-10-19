@@ -274,107 +274,97 @@ const Dashboard = () => {
               <Slidewithcontrol />
             </Col>
           </Row>
-          <Row>
-            <Title title="NEWS" />
-            <NewsCard />
-          </Row>
 
           <Row>
-            <Col xl={8}>
-              <Col className="me-3">
-                <Title title="DANGERS" />
-                <Card>
-                  <CardImg
-                    top
-                    className="img-fluid h-100"
-                    src={newImage1}
-                    alt="children labour"
-                  />
-                  <CardBody>
-                    <CardText className="text-justify card-img-overlay h-100 d-flex align-items-end">
-                      <h4 className="text-white font-weight-bold">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aliquam est mi, auctor eget
-                      </h4>
-                    </CardText>
-                  </CardBody>
-                </Card>
-
-                <Title title="FOOTPRINTS" />
-                <FootPrints />
-                <Title title="RESOURCES" />
-                <Resources />
-                <Title title="GOOD PRACTICES" />
-                <GoodPractices />
-                <Title title="PODCAST" />
-                <Podcast />
-              </Col>
+            <Title title="Contact Us" />
+            <div>
+              <h1>General Information</h1>
+              <p>
+                Address: 4 route des Morillons, CH-1211, Genève 22, Switzerland
+              </p>
+              <p>
+                E-mail: ilo@ilo.org , Switchboard: +41 (0) 22 799 6111 , Fax:
+                +41 (0) 22 798 8685{" "}
+              </p>
+            </div>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>Public Information</CardTitle>
+                <CardText>
+                  ILO Library Tel: +41 22 799 8682 Fax: +41 22 799 6516 Website:
+                  www.ilo.org/library Email:library@ilo.org
+                </CardText>
+              </CardBody>
             </Col>
-            <Col xl={4}>
-              <Title title="VIDEO GALLERY" />
-              <VideoCard />
-              <Title title="EVENTS" />
-              <EventsCard />
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>Media Enquiries</CardTitle>
+                <CardText>
+                  DCOMM Tel: +41 22 799 7912 Fax: +41 22 799 8577 Website:
+                  ilo.org/newsroom Email:newsroom@ilo.org
+                </CardText>
+              </CardBody>
             </Col>
-            <Col xl={12}>
-              <Title title="STATISTICS" />
-              <Statistics />
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>Partnerships and Field Support</CardTitle>
+                <CardText>
+                  Partnerships and Development Cooperation Department Tel: +41
+                  22 799 7239 Fax: +41 22 799 6872 Website: www.ilo.org/pardev
+                  Email: PARDEV@ilo.org
+                </CardText>
+              </CardBody>
+            </Col>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>
+                  Helpdesk for Business on International standards
+                </CardTitle>
+                <CardText>
+                  Tel: +41 22 799 6264 Fax: +41 22 799 6354 Website:
+                  www.ilo.org/business Email: assistance@ilo.org
+                </CardText>
+              </CardBody>
+            </Col>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>Bureau for Workers' Activities</CardTitle>
+                <CardText>
+                  Tel: +41 22 799 70 21 Fax: +41 22 799 65 70 Website:
+                  www.ilo.org/actrav Email: actrav@ilo.org
+                </CardText>
+              </CardBody>
+            </Col>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>Bureau for Employers' Activities</CardTitle>
+                <CardText>
+                  Tel: +41 22 799 77 48 Fax: +41 22 799 89 48 Website:
+                  www.ilo.org/actemp Email: actemp@ilo.org
+                </CardText>
+              </CardBody>
+            </Col>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>ILO Procurement</CardTitle>
+                <CardText>
+                  Tel: +41 22 799 7879 Fax: +41 22 799 8529 Website:
+                  www.ilo.org/procurement Email: pcrt@ilo.org
+                </CardText>
+              </CardBody>
+            </Col>
+            <Col xl={3}>
+              <CardBody>
+                <CardTitle>
+                  International Labour Organization Administrative Tribunal
+                </CardTitle>
+                <CardText>
+                  Tel: +41 22 799 87 26 Fax: +41 22 799 87 37 Website:
+                  www.ilo.org/tribunal Email: trib@ilo.org
+                </CardText>
+              </CardBody>
             </Col>
           </Row>
-
-          {/* <Row>
-            <MiniWidget reports={reports} />
-          </Row> */}
-
-          {/* <Row>
-            <Col xl={8}>
-              <SalesAnalyticsChart />
-            </Col>
-            <Col xl={4}>
-              <Card className="bg-primary">
-                <CardBody>
-                  <Row className="align-items-center">
-                    <Col sm={8}>
-                      <p className="text-white font-size-18">
-                        Enhance your <b>Campaign</b> for better outreach{" "}
-                        <i className="mdi mdi-arrow-right"></i>
-                      </p>
-                      <div className="mt-4">
-                        <Link
-                          to="#"
-                          className="btn btn-success waves-effect waves-light"
-                        >
-                          Upgrade Account!
-                        </Link>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="mt-4 mt-sm-0">
-                        <img
-                          src={setupanalytics}
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              <TopProduct />
-            </Col>
-          </Row> */}
-          {/* <Row>
-            <Col xl={4}>
-              <TopUser />
-            </Col>
-            <Col xl={4}>
-              <RecentActivity />
-            </Col>
-            <Col xl={4}>
-              <SocialSource />
-            </Col>
-          </Row> */}
-          {/* <LatestTransaction /> */}
         </Container>
       </div>
     </React.Fragment>

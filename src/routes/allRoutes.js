@@ -17,6 +17,8 @@ import ContactUs from "../pages/ContactUs/index"
 import Resources from "../pages/Resources/index"
 import Video from "../pages/Video/index"
 import Picture from "../pages/Picture/index"
+import ReportIncident from "../pages/ReportIncident/index"
+import Track from "../pages/Track/index"
 
 
 
@@ -151,6 +153,8 @@ const userRoutes = [
   { path: "/resources", component: Resources },
   { path: "/videos", component: Video },
   { path: "/pictures", component: Picture },
+  { path: "/report-incident", component: ReportIncident },
+  { path: "/track", component: Track },
 
   { path: "/calendar", component: Calendar },
 

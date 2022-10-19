@@ -5,14 +5,17 @@ import arrowUp from "../../assets/images/un/arrowUp.png"
 import { Link } from "react-router-dom"
 
 const Footer = () => {
+  const handleScrollToTop = () => {
+    window.scrollTo({top: 0, behavior: 'smooth'})
+  }
   return (
     <React.Fragment>
       <footer>
         <Container fluid={true} className=" bg-success">
           <Row>
             <Col xl={2} className="text-white ">
-              <div className="d-flex justify-content-center">
-              <span className="m-2">Back to the Top</span> <img src={arrowUp} height='15px' className="mt-2 pt-1"/>{" "}
+              <div className="d-flex justify-content-center" onClick={handleScrollToTop} style={{cursor:'pointer'}}>
+              <span className="m-2">Back to the Top</span> <img src={arrowUp} height='15px' className="mt-2 pt-1" />{" "}
               </div>
             </Col>
             <Col

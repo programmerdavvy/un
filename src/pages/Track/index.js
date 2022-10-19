@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Container,
   Row,
@@ -8,9 +8,13 @@ import {
   CardTitle,
   CardImg,
   CardText,
+  Form,
+  Label,
+  Input,
+  Button,
 } from "reactstrap"
 import { Link } from "react-router-dom"
-import newImage1 from "../../assets/images/un/children.png"
+import newImage1 from "../../assets/images/un/successicon.png"
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -37,7 +41,7 @@ import Resources from "../../components/Common/Resources"
 import GoodPractices from "../../components/Common/GoodPractices"
 import Podcast from "../../components/Common/Podcast"
 import Statistics from "../../components/Common/Statistics"
-import YoutubeEmbed from "../../components/Common/YoutubeEmbed"
+import Dropzone from "react-dropzone"
 
 const series1 = [
   {
@@ -194,6 +198,8 @@ const options4 = {
 }
 
 const Dashboard = () => {
+  const [selectedFiles, setselectedFiles] = useState([])
+
   const reports = [
     {
       id: 1,
@@ -277,95 +283,57 @@ const Dashboard = () => {
           </Row>
 
           <Row>
-            <Col xl={8}>
-              <Col className="me-3">
-                <Title title="About FGN UN ILO" />
-                
+            
+              <Col xl={12}>
+              <div className="d-flex p-2 justify-content-center">
+                <Col lg={6}>
                   <CardBody>
-                    <CardText className=" h-100 d-flex align-items-end">
-                      <h4 className="text-dark text-justify">
-                        The only tripartite U.N. agency, since 1919 the ILO
-                        brings together governments, employers and workers of
-                        187 member States , to set labour standards, develop
-                        policies and devise programmes promoting decent work for
-                        all women and men. Origins and history
-                      </h4>
-                    </CardText>
+                    <CardTitle className="mb-4 d-flex p-2 justify-content-center">
+                     Track status of your complain here
+                    </CardTitle>
+                    <div className="mb-3">
+                      <Label htmlFor="formrow-firstname-Input">Complaint ID</Label>
+                      <Input
+                        type="text"
+                        className="form-control btn-outline-dark"
+                        id="formrow-firstname-Input"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <Label htmlFor="formrow-firstname-Input">
+                        Registered Phone Number
+                      </Label>
+                      <Input
+                        type="text"
+                        className="form-control btn-outline-dark"
+                        id="formrow-firstname-Input"
+                      />
+                    </div>
+                    <Col xl={12}>
+                      <Row>
+                      <Col xl={6}>
+                      <div className="d-flex p-2 justify-content-center">
+                        <button className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold">
+                          Submit
+                        </button>
+                      </div>
+                      </Col>
+                      <Col xl={6}>
+                      <div className="d-flex p-2 justify-content-center">
+                        <button className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold">
+                          Reset
+                        </button>
+                      </div>
+                      </Col>
+                      </Row>
+                      
+                    </Col>
                   </CardBody>
-              
-                
-                  <CardBody>
-                 <YoutubeEmbed embedId="HJEue9-lTgg"/>
-                  </CardBody>
-              
-
-                <Title title="PODCAST" />
-                <Podcast />
-              </Col>
+                </Col>
+              </div>
             </Col>
-            <Col xl={4}>
-              <Title title="VIDEO GALLERY" />
-              <VideoCard />
-            </Col>
-            <Col xl={12}>
-              <Title title="STATISTICS" />
-              <Statistics />
-            </Col>
+       
           </Row>
-
-          {/* <Row>
-            <MiniWidget reports={reports} />
-          </Row> */}
-
-          {/* <Row>
-            <Col xl={8}>
-              <SalesAnalyticsChart />
-            </Col>
-            <Col xl={4}>
-              <Card className="bg-primary">
-                <CardBody>
-                  <Row className="align-items-center">
-                    <Col sm={8}>
-                      <p className="text-white font-size-18">
-                        Enhance your <b>Campaign</b> for better outreach{" "}
-                        <i className="mdi mdi-arrow-right"></i>
-                      </p>
-                      <div className="mt-4">
-                        <Link
-                          to="#"
-                          className="btn btn-success waves-effect waves-light"
-                        >
-                          Upgrade Account!
-                        </Link>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="mt-4 mt-sm-0">
-                        <img
-                          src={setupanalytics}
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              <TopProduct />
-            </Col>
-          </Row> */}
-          {/* <Row>
-            <Col xl={4}>
-              <TopUser />
-            </Col>
-            <Col xl={4}>
-              <RecentActivity />
-            </Col>
-            <Col xl={4}>
-              <SocialSource />
-            </Col>
-          </Row> */}
-          {/* <LatestTransaction /> */}
         </Container>
       </div>
     </React.Fragment>

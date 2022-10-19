@@ -13,11 +13,11 @@ const Title = props => {
         ></div>
       </Col>
       
-      <Col xl={1}>
-        <h5 className="p-2">{props.title}</h5>
+      <Col xl={3}>
+        <h5 className="p-2 text-nowrap">{props.title}</h5>
       </Col>
-      <Col xl={10} className="d-flex justify-content-end">
-        <hr className="pt-1 " style={{width:'90%'}} />
+      <Col xl={8} className="d-flex justify-content-end">
+        <hr className="pt-1 " style={{width:'100%'}} />
       </Col>
     </Row>
   )
