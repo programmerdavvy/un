@@ -254,7 +254,7 @@ const HeaderILO = props => {
           {/* <NotificationDropdown /> */}
 
           {/* <ProfileMenu /> */}
-          <LanguageMenu />
+          <LanguageMenu setSelectedLanguage={props.setSelectedLanguage}/>
 
          
           <div className="dropdown d-none d-lg-inline-block ms-1 ">

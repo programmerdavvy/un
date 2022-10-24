@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Container,
   Row,
@@ -12,9 +12,11 @@ import {
   Label,
   Input,
   Button,
+  Spinner,
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import newImage1 from "../../assets/images/un/successicon.png"
+import axios from "axios"
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -32,186 +34,53 @@ import LatestTransaction from "./latest-transaction"
 import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
 import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
-import Title from "../../components/Common/Title"
-import NewsCard from "../../components/Common/NewsCard"
-import VideoCard from "../../components/Common/VideoCard"
-import EventsCard from "../../components/Common/EventsCard"
-import FootPrints from "../../components/Common/FootPrints"
-import Resources from "../../components/Common/Resources"
-import GoodPractices from "../../components/Common/GoodPractices"
-import Podcast from "../../components/Common/Podcast"
-import Statistics from "../../components/Common/Statistics"
 import Dropzone from "react-dropzone"
-
-const series1 = [
-  {
-    data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54],
-  },
-]
-
-const options1 = {
-  fill: {
-    colors: ["#5b73e8"],
-  },
-  chart: {
-    width: 70,
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: "50%",
-    },
-  },
-  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  xaxis: {
-    crosshairs: {
-      width: 1,
-    },
-  },
-  tooltip: {
-    fixed: {
-      enabled: !1,
-    },
-    x: {
-      show: !1,
-    },
-    y: {
-      title: {
-        formatter: function (seriesName) {
-          return ""
-        },
-      },
-    },
-    marker: {
-      show: !1,
-    },
-  },
-}
-
-const series2 = [70]
-
-const options2 = {
-  fill: {
-    colors: ["#34c38f"],
-  },
-  chart: {
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  dataLabels: {
-    enabled: !1,
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: "60%",
-      },
-      track: {
-        margin: 0,
-      },
-      dataLabels: {
-        show: !1,
-      },
-    },
-  },
-}
-
-const series3 = [55]
-
-const options3 = {
-  fill: {
-    colors: ["#5b73e8"],
-  },
-  chart: {
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  dataLabels: {
-    enabled: !1,
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: "60%",
-      },
-      track: {
-        margin: 0,
-      },
-      dataLabels: {
-        show: !1,
-      },
-    },
-  },
-}
-
-const series4 = [
-  {
-    data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54],
-  },
-]
-
-const options4 = {
-  fill: {
-    colors: ["#f1b44c"],
-  },
-  chart: {
-    width: 70,
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: "50%",
-    },
-  },
-  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  xaxis: {
-    crosshairs: {
-      width: 1,
-    },
-  },
-  tooltip: {
-    fixed: {
-      enabled: !1,
-    },
-    x: {
-      show: !1,
-    },
-    y: {
-      title: {
-        formatter: function (seriesName) {
-          return ""
-        },
-      },
-    },
-    marker: {
-      show: !1,
-    },
-  },
-}
+import { Slider } from "@material-ui/core"
+import { Translator, Translate } from "react-auto-translate"
 
 const Dashboard = () => {
   const [selectedFiles, setselectedFiles] = useState([])
   const [displayForm, setDisplayForm] = useState(true)
   const [displaySuccessIcon, setDisplaySuccessIcon] = useState(false)
+  const [childName, setChildName] = useState("")
+  const [sex, setSex] = useState("")
+  const [value, setValue] = React.useState([1, 10])
+  const [category, setCategory] = useState("")
+  const [description, setDescription] = useState("")
+  const [imageUpload, setImageUpload] = useState("")
+  const [houseNumber, setHouseNumber] = useState("")
+  const [landMark, setLandMark] = useState("")
+  const [city, setCity] = useState("")
+  const [state, setState] = useState("")
+  const [LGA, setLGA] = useState("")
+  const [reporterName, setReporterName] = useState("")
+  const [reporterPhoneNumber, setReporterPhoneNumber] = useState("")
+  const [reporterEmail, setReporterEmail] = useState("")
+  const [imageSelected, setImageSelected] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [incidentCategory, setIncidentCategory] = useState([])
+  const [referenceId, setReferenceId] = useState("")
 
   function handleAcceptedFiles(files) {
-    files.map(file =>
-      Object.assign(file, {
+    const formData = new FormData()
+    files.map(file => {
+      return Object.assign(file, {
         preview: URL.createObjectURL(file),
         formattedSize: formatBytes(file.size),
       })
-    )
+    })
     setselectedFiles(files)
-  }
 
+    formData.append("file", files[0])
+    formData.append("upload_preset", "vixb0h0r")
+
+    axios
+      .post(
+        "https://api/cloudinary.com/v1_1/malikmukhtar/image/upload",
+        formData
+      )
+      .then(response => console.log("malaam", response))
+  }
   /**
    * Formats the size
    */
@@ -225,76 +94,55 @@ const Dashboard = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
   }
 
-  const reports = [
-    {
-      id: 1,
-      icon: "mdi mdi-arrow-up-bold",
-      title: "Total Revenue",
-      value: 34152,
-      prefix: "$",
-      suffix: "",
-      badgeValue: "2.65%",
-      decimal: 0,
-      charttype: "bar",
-      chartheight: 40,
-      chartwidth: 70,
-      color: "success",
-      desc: "since last week",
-      series: series1,
-      options: options1,
-    },
-    {
-      id: 2,
-      icon: "mdi mdi-arrow-down-bold",
-      title: "Orders",
-      value: 5643,
-      decimal: 0,
-      charttype: "radialBar",
-      chartheight: 45,
-      chartwidth: 45,
-      prefix: "",
-      suffix: "",
-      badgeValue: "0.82%",
-      color: "danger",
-      desc: "since last week",
-      series: series2,
-      options: options2,
-    },
-    {
-      id: 3,
-      icon: "mdi mdi-arrow-down-bold",
-      title: "Customers",
-      value: 45254,
-      decimal: 0,
-      prefix: "",
-      suffix: "",
-      charttype: "radialBar",
-      chartheight: 45,
-      chartwidth: 45,
-      badgeValue: "6.24%",
-      color: "danger",
-      desc: "since last week",
-      series: series3,
-      options: options3,
-    },
-    {
-      id: 4,
-      icon: "mdi mdi-arrow-up-bold",
-      title: "Growth",
-      value: 12.58,
-      decimal: 2,
-      prefix: "+",
-      suffix: "%",
-      charttype: "bar",
-      chartheight: 40,
-      chartwidth: 70,
-      badgeValue: "10.51%",
-      color: "success",
-      desc: "since last week",
-      series: series4,
-      options: options4,
-    },
-  ]
+  const handleFormSubmit = async () => {
+    const payLoad = {
+      childname: childName,
+      categoryId: category,
+      sex: sex,
+      age: `${value[0]} - ${value[1]}`,
+      description: description,
+      media_file: imageUpload,
+      child_address: houseNumber,
+      landmark: landMark,
+      city: city,
+      state: state,
+      lga: LGA,
+      isMobile: false,
+      reporter_phone: reporterPhoneNumber,
+      reporter_name: reporterName,
+      reporter_mail: reporterEmail,
+    }
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        "https://unirp.herokuapp.com/incident/create",
+        payLoad
+      )
+      setLoading(false)
+      if (response?.data?.success) {
+        setReferenceId(response?.data.result.referenceId)
+        setDisplaySuccessIcon(true)
+        setDisplayForm(false)
+      }
+    } catch (error) {
+      console.log("Submit incident report error", error)
+      setLoading(false)
+    }
+  }
+
+  const rangeSelector = (event, newValue) => {
+    setValue(newValue)
+  }
+
+  useEffect(() => {
+    const fetchAllCategory = async () => {
+      const response = await axios.get(
+        "https://unirp.herokuapp.com/category?type=incident"
+      )
+      setIncidentCategory(response?.data?.result)
+    }
+    fetchAllCategory()
+  }, [])
 
   return (
     <React.Fragment>
@@ -310,247 +158,326 @@ const Dashboard = () => {
           <Row>
             {displayForm && (
               <Col xl={12}>
-              <div className="d-flex p-2 justify-content-center">
-                <Col lg={6}>
-                  <CardBody>
-                    <CardTitle className="mb-4 d-flex p-2 justify-content-center">
-                      *Use the form below to report a Child Abuse Incident
-                    </CardTitle>
-                    <CardTitle className="mb-4 font-weight-bold">
-                      Child Labour/Adolescent Details
-                    </CardTitle>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">
-                        Name of the Child
-                      </Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
+                <div className="d-flex p-2 justify-content-center">
+                  <Col lg={6}>
+                    <CardBody>
+                      <CardTitle className="mb-4 d-flex p-2 justify-content-center">
+                        <Translate>
+                          *Use the form below to report a Child Abuse Incident
+                        </Translate>
+                      </CardTitle>
+                      <CardTitle className="mb-4 font-weight-bold">
+                        <Translate>Child Labour/Adolescent Details</Translate>
+                      </CardTitle>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Name of the Child</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setChildName(e.target.value)}
+                        />
+                      </div>
 
-                    <div className="col-sm-auto mb-3">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="autoSizingSelect"
-                      >
-                        Category
-                      </label>
-                      <select className="form-select" id="autoSizingSelect">
-                        <option selected>Select Category</option>
-                        <option value="Labour Exploitation">
-                          Labour Exploitation
-                        </option>
-                        <option value="Sexual Exploitation">
-                          Sexual Exploitation
-                        </option>
-                        <option value="Child Trafficking">
-                          Child Trafficking
-                        </option>
-                        <option value="Domestic Servitude">
-                          Domestic Servitude
-                        </option>
-                        <option value="Forced Criminality">
-                          Forced Criminality
-                        </option>
-                        <option value="Forced Marriage">Forced Marriage</option>
-                        <option value="Other">Other</option>
-                        <option value="Unknown">Unknown</option>
-                      </select>
-                    </div>
-                    <div className="mb-3">
-                      <Label>Incident Description</Label>
-                      <Input
-                        type="textarea"
-                        id="textarea"
-                        // onChange={e => {
-                        //   textareachange(e)
-                        // }}
-                        maxLength="225"
-                        rows="3"
-                        placeholder=""
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Dropzone
-                        onDrop={acceptedFiles => {
-                          handleAcceptedFiles(acceptedFiles)
-                        }}
-                      >
-                        {({ getRootProps, getInputProps }) => (
-                          <div className="dropzone">
-                            <div
-                              className="dz-message needsclick"
-                              {...getRootProps()}
-                            >
-                              <input {...getInputProps()} />
-                              <div className="d-flex p-2 justify-content-center">
-                                <i className="fas fa-paperclip"></i>
-                                <h4>Attach media file</h4>
+                      <div className="col-sm-auto mb-3">
+                        <label
+                          className="visually-hidden"
+                          htmlFor="autoSizingSelect"
+                        >
+                          <Translate>Sex</Translate>
+                        </label>
+                        <select
+                          className="form-select"
+                          id="autoSizingSelect"
+                          onChange={e => setSex(e.target.value)}
+                        >
+                          <option selected>
+                            <Translate>Select Sex</Translate>
+                          </option>
+                          <option value="Male">
+                            <Translate>Male</Translate>
+                          </option>
+                          <option value="Female">
+                            <Translate>Female</Translate>
+                          </option>
+                        </select>
+                      </div>
+                      <div className="col-sm-auto mb-3">
+                        <label
+                          className="visually-hidden"
+                          htmlFor="autoSizingSelect2"
+                        >
+                          <Translate>Category</Translate>
+                        </label>
+                        <Translate>Age Range</Translate>
+                        <Slider
+                          value={value}
+                          onChange={rangeSelector}
+                          valueLabelDisplay="auto"
+                        />
+                      </div>
+                      <div className="col-sm-auto mb-3">
+                        <label
+                          className="visually-hidden"
+                          htmlFor="autoSizingSelect"
+                        >
+                          <Translate>Category</Translate>
+                        </label>
+                        <select
+                          className="form-select"
+                          id="autoSizingSelect"
+                          onChange={e => setCategory(e.target.value)}
+                        >
+                          <option selected>select category</option>
+                          {incidentCategory?.map(category => (
+                            <option value={`${category.id}`}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="mb-3">
+                        <Label>
+                          <Translate>Incident Description</Translate>
+                        </Label>
+                        <Input
+                          type="textarea"
+                          id="textarea"
+                          onChange={e => setDescription(e.target.value)}
+                          maxLength="225"
+                          rows="3"
+                          placeholder=""
+                        />
+                      </div>
+                      {/* <div className="mb-3">
+                        <Dropzone
+                          onDrop={acceptedFiles => {
+                            handleAcceptedFiles(acceptedFiles)
+                          }}
+                        >
+                          {({ getRootProps, getInputProps }) => (
+                            <div className="dropzone">
+                              <div
+                                className="dz-message needsclick"
+                                {...getRootProps()}
+                              >
+                                <input {...getInputProps()} />
+                                <div className="d-flex p-2 justify-content-center">
+                                  <i className="fas fa-paperclip"></i>
+                                  <h4>Attach media file</h4>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                      </Dropzone>
-                      <div
-                        className="dropzone-previews mt-3"
-                        id="file-previews"
-                      >
-                        {selectedFiles.map((f, i) => {
-                          return (
-                            <Card
-                              className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                              key={i + "-file"}
-                            >
-                              <div className="p-2">
-                                <Row className="align-items-center">
-                                  <Col className="col-auto">
-                                    <img
-                                      data-dz-thumbnail=""
-                                      height="80"
-                                      className="avatar-sm rounded bg-light"
-                                      alt={f.name}
-                                      src={f.preview}
-                                    />
-                                  </Col>
-                                  <Col>
-                                    <Link
-                                      to="#"
-                                      className="text-muted font-weight-bold"
-                                    >
-                                      {f.name}
-                                    </Link>
-                                    <p className="mb-0">
-                                      <strong>{f.formattedSize}</strong>
-                                    </p>
-                                  </Col>
-                                </Row>
-                              </div>
-                            </Card>
-                          )
-                        })}
+                          )}
+                        </Dropzone>
+                        <div
+                          className="dropzone-previews mt-3"
+                          id="file-previews"
+                        >
+                          {selectedFiles.map((f, i) => {
+                            return (
+                              <Card
+                                className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                key={i + "-file"}
+                              >
+                                <div className="p-2">
+                                  <Row className="align-items-center">
+                                    <Col className="col-auto">
+                                      <img
+                                        data-dz-thumbnail=""
+                                        height="80"
+                                        className="avatar-sm rounded bg-light"
+                                        alt={f.name}
+                                        src={f.preview}
+                                      />
+                                    </Col>
+                                    <Col>
+                                      <Link
+                                        to="#"
+                                        className="text-muted font-weight-bold"
+                                      >
+                                        {f.name}
+                                      </Link>
+                                      <p className="mb-0">
+                                        <strong>{f.formattedSize}</strong>
+                                      </p>
+                                    </Col>
+                                  </Row>
+                                </div>
+                              </Card>
+                            )
+                          })}
+                        </div>
+                      </div> */}
+                      <div className="mb-3">
+                        <input
+                          type="file"
+                          onChange={event => {
+                            const formData = new FormData()
+                            formData.append("file", event.target.files[0])
+                            formData.append("upload_preset", "qr2bdqtz")
+                            fetch(
+                              `https://api.cloudinary.com/v1_1/malikmukhtar/image/upload`,
+                              {
+                                method: "POST",
+                                body: formData,
+                              }
+                            )
+                              .then(response => {
+                                return response.json()
+                              })
+                              .then(data => {
+                                console.log("helllo", data)
+                                setImageUpload(data?.secure_url)
+                              })
+                          }}
+                        />
                       </div>
-                    </div>
 
-                    <CardTitle className="mb-4 font-weight-bold">
-                      Address where child if found
-                    </CardTitle>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">
-                        House Number
-                      </Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">Landmark</Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">City</Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">State</Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">
-                        Local Government Area
-                      </Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
+                      <CardTitle className="mb-4 font-weight-bold">
+                        <Translate>Address where child if found</Translate>
+                      </CardTitle>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>House Number</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setHouseNumber(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Landmark</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setLandMark(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>City</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setCity(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>State</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setState(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Local Government Area</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setLGA(e.target.value)}
+                        />
+                      </div>
 
-                    <CardTitle className="mb-4 font-weight-bold">
-                      Reports's Details
-                    </CardTitle>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">Name</Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">
-                        Phone Number
-                      </Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">Email</Label>
-                      <Input
-                        type="text"
-                        className="form-control"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <Col xl={12}>
-                      <div className="d-flex p-2 justify-content-center">
-                        <button className="btn btn-outline-success waves-effect waves-light w-25 text-dark font-weight-bold">
-                          Submit
-                        </button>
+                      <CardTitle className="mb-4 font-weight-bold">
+                        <Translate>Reporter's Details</Translate>
+                      </CardTitle>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Name</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setReporterName(e.target.value)}
+                        />
                       </div>
-                    </Col>
-                  </CardBody>
-                </Col>
-              </div>
-            </Col>
-            )}
-            
-            {displaySuccessIcon && (
-              <Col xl={12}>
-              <div className="d-flex p-2 justify-content-center">
-                <Col lg={6}>
-                  <Col xl={12}>
-                    <CardImg
-                      top
-                      className="img-fluid"
-                      src={newImage1}
-                      alt="Card image cap"
-                    />
-                    <CardBody>
-                      <div className="d-flex p-2 justify-content-center">
-                        <h6 className="text-dark font-weight-bold">
-                          Thank you for reporting this incident. Your complaint
-                          ID is 000-000-00000
-                        </h6>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Phone Number</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setReporterPhoneNumber(e.target.value)}
+                        />
                       </div>
-                      <div className="d-flex justify-content-center">
-                        <h6 className="text-dark font-weight-bold">
-                        We will take the necessary actions immediately
-                        </h6>
+                      <div className="mb-3">
+                        <Label htmlFor="formrow-firstname-Input">
+                          <Translate>Email</Translate>
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="formrow-firstname-Input"
+                          onChange={e => setReporterEmail(e.target.value)}
+                        />
                       </div>
+                      <Col xl={12}>
+                        <div className="d-flex p-2 justify-content-center">
+                          <button
+                            className="btn btn-outline-success waves-effect waves-light w-25 text-dark font-weight-bold"
+                            onClick={handleFormSubmit}
+                          >
+                            {loading ? (
+                              <Spinner type="grow" size="sm" color="success" />
+                            ) : (
+                              <Translate>Submit</Translate>
+                            )}
+                          </button>
+                        </div>
+                      </Col>
                     </CardBody>
                   </Col>
-                </Col>
-              </div>
-            </Col>
+                </div>
+              </Col>
+            )}
+
+            {displaySuccessIcon && (
+              <Col xl={12}>
+                <div className="d-flex p-2 justify-content-center">
+                  <Col lg={6}>
+                    <Col xl={12}>
+                      <CardImg
+                        top
+                        className="img-fluid"
+                        src={newImage1}
+                        alt="Card image cap"
+                      />
+                      <CardBody>
+                        <div className="d-flex p-2 justify-content-center">
+                          <h6 className="text-dark font-weight-bold">
+                          <Translate>Thank you for reporting this incident. Your
+                            complaint ID is</Translate>
+                             {referenceId}, <Translate>
+                             We will take the
+                            necessary actions immediately
+                             </Translate>
+                          </h6>
+                        </div>
+                      </CardBody>
+                    </Col>
+                  </Col>
+                </div>
+              </Col>
             )}
           </Row>
         </Container>

@@ -11364,6 +11364,11 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-auto-translate@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/react-auto-translate/-/react-auto-translate-0.0.6.tgz#b0838133aef9a89b34ea12b7b11948e5cfc26fa3"
+  integrity sha512-6peT9hlmiHGPUd98t13Xs+5pc5nB5d6wIhAMYDZSR7L5USVig7LVWQh0dGs3Rm6lVjimjjbvplBl13uhnEW7cQ==
+
 react-bootstrap-editable@^0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/react-bootstrap-editable/-/react-bootstrap-editable-0.8.2.tgz#a1a9b3a4116e30eb79a121c9665708cdbe1f1aa9"
