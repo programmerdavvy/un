@@ -13,6 +13,8 @@ import {
   Input,
   Button,
   Spinner,
+  CardHeader,
+  Modal,
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import newImage1 from "../../assets/images/un/successicon.png"
@@ -50,10 +52,22 @@ const Dashboard = () => {
   const [selectedFiles, setselectedFiles] = useState([])
   const [complaintId, setComplaintId] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [otp, setOTP] = useState("")
   const [loading, setLoading] = useState(false)
   const [trackComplain, setTrackComplain] = useState(null)
   const [displayForm, setDisplayForm] = useState(true)
   const [displayResult, setDisplayResult] = useState(false)
+  const [displayModal, setDisplayModal] = useState(false)
+  const [modal_center, setmodal_center] = useState(false)
+
+  function tog_center() {
+    setmodal_center(!modal_center)
+    removeBodyCss()
+  }
+
+  function removeBodyCss() {
+    document.body.classList.add("no_padding")
+  }
 
   const handleTrackComplain = async () => {
     const payLoad = {
@@ -66,8 +80,10 @@ const Dashboard = () => {
         "https://unirp.herokuapp.com/incident/get-incident",
         payLoad
       )
-      console.log("api ans", response)
       setLoading(false)
+      if (response?.data?.message == "Sent" && phoneNumber.length == 11) {
+        tog_center()
+      }
       if (response?.data?.success) {
         setTrackComplain(response?.data?.result)
       }
@@ -80,6 +96,28 @@ const Dashboard = () => {
   const handleReset = () => {
     setComplaintId("")
     setPhoneNumber("")
+  }
+
+
+  const handleConfirmOTP = async () => {
+    const payLoad = {
+      phone: phoneNumber,
+      code: otp,
+    }
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        "https://unirp.herokuapp.com/incident/verify-otp",
+        payLoad
+      )
+      setLoading(false)
+      if (response?.data?.success) {
+        setTrackComplain(response?.data?.result)
+        setmodal_center(false)
+      }
+    } catch (error) {
+      console.log("Send OTP Error", error)
+    }
   }
 
   return (
@@ -157,11 +195,119 @@ const Dashboard = () => {
                         </Col>
                       </Row>
                     </Col>
+                    <Col lg={6}>
+                      <Modal
+                        isOpen={modal_center}
+                        toggle={() => {
+                          tog_center()
+                        }}
+                        centered={true}
+                      >
+                        <div className="modal-header">
+                          <h5 className="modal-title mt-0">
+                            Confirm your Phone Number
+                          </h5>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setmodal_center(false)
+                            }}
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="mb-3">
+                            <label
+                              htmlFor="recipient-name"
+                              className="col-form-label"
+                            >
+                              Enter OTP:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="recipient-name"
+                              onChange={e => setOTP(e.target.value)}
+                            />
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={handleConfirmOTP}
+                            >
+                              Confirm
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
+                    </Col>
+                    <Col xl={12}>
+                      <Row>
+                        <Col xl={12}>
+                          <div className="d-flex p-2 justify-content-center">
+                            <Col lg={12}>
+                              <Card>
+                                <CardHeader>
+                                  Reference ID: {trackComplain?.referenceId}
+                                </CardHeader>
+                                <CardBody>
+                                  <blockquote className="card-blockquote mb-0">
+                                    <CardText>
+                                      <span>Child Name : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.childname}
+                                      </span>
+                                      <br />
+                                      <span>Category : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.category}
+                                      </span>
+                                      <br />
+                                      <span>Description : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.description}
+                                      </span>
+                                      <br />
+                                      <span>
+                                        Comments :{" "}
+                                        {trackComplain?.comments?.map(
+                                          (comment, i) => (
+                                            <div>
+                                              {i + 1}. {"  "}
+                                              <span className="fw-bold">
+                                                {comment.comment}
+                                              </span>
+                                              <br />
+                                            </div>
+                                          )
+                                        )}
+                                      </span>
+                                    </CardText>
+                                    <footer className="blockquote-footer mt-3 font-size-12">
+                                      {" "}
+                                      Status :
+                                      <cite title="Source Title">
+                                        {" "}
+                                        Court Order
+                                      </cite>
+                                    </footer>
+                                  </blockquote>
+                                </CardBody>
+                              </Card>
+                            </Col>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
                   </CardBody>
                 </Col>
               </div>
             </Col>
-            <div>{JSON.stringify(trackComplain, null, 4)}</div>
           </Row>
         </Container>
       </div>
