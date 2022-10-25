@@ -12,6 +12,9 @@ import {
   Label,
   Input,
   Button,
+  Spinner,
+  CardHeader,
+  Modal,
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import newImage1 from "../../assets/images/un/successicon.png"
@@ -42,234 +45,80 @@ import GoodPractices from "../../components/Common/GoodPractices"
 import Podcast from "../../components/Common/Podcast"
 import Statistics from "../../components/Common/Statistics"
 import Dropzone from "react-dropzone"
-
-const series1 = [
-  {
-    data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54],
-  },
-]
-
-const options1 = {
-  fill: {
-    colors: ["#5b73e8"],
-  },
-  chart: {
-    width: 70,
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: "50%",
-    },
-  },
-  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  xaxis: {
-    crosshairs: {
-      width: 1,
-    },
-  },
-  tooltip: {
-    fixed: {
-      enabled: !1,
-    },
-    x: {
-      show: !1,
-    },
-    y: {
-      title: {
-        formatter: function (seriesName) {
-          return ""
-        },
-      },
-    },
-    marker: {
-      show: !1,
-    },
-  },
-}
-
-const series2 = [70]
-
-const options2 = {
-  fill: {
-    colors: ["#34c38f"],
-  },
-  chart: {
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  dataLabels: {
-    enabled: !1,
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: "60%",
-      },
-      track: {
-        margin: 0,
-      },
-      dataLabels: {
-        show: !1,
-      },
-    },
-  },
-}
-
-const series3 = [55]
-
-const options3 = {
-  fill: {
-    colors: ["#5b73e8"],
-  },
-  chart: {
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  dataLabels: {
-    enabled: !1,
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: "60%",
-      },
-      track: {
-        margin: 0,
-      },
-      dataLabels: {
-        show: !1,
-      },
-    },
-  },
-}
-
-const series4 = [
-  {
-    data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54],
-  },
-]
-
-const options4 = {
-  fill: {
-    colors: ["#f1b44c"],
-  },
-  chart: {
-    width: 70,
-    sparkline: {
-      enabled: !0,
-    },
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: "50%",
-    },
-  },
-  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  xaxis: {
-    crosshairs: {
-      width: 1,
-    },
-  },
-  tooltip: {
-    fixed: {
-      enabled: !1,
-    },
-    x: {
-      show: !1,
-    },
-    y: {
-      title: {
-        formatter: function (seriesName) {
-          return ""
-        },
-      },
-    },
-    marker: {
-      show: !1,
-    },
-  },
-}
+import { Translator, Translate } from "react-auto-translate"
+import axios from "axios"
 
 const Dashboard = () => {
   const [selectedFiles, setselectedFiles] = useState([])
+  const [complaintId, setComplaintId] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [otp, setOTP] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [trackComplain, setTrackComplain] = useState(null)
+  const [displayForm, setDisplayForm] = useState(true)
+  const [displayResult, setDisplayResult] = useState(false)
+  const [displayModal, setDisplayModal] = useState(false)
+  const [modal_center, setmodal_center] = useState(false)
 
-  const reports = [
-    {
-      id: 1,
-      icon: "mdi mdi-arrow-up-bold",
-      title: "Total Revenue",
-      value: 34152,
-      prefix: "$",
-      suffix: "",
-      badgeValue: "2.65%",
-      decimal: 0,
-      charttype: "bar",
-      chartheight: 40,
-      chartwidth: 70,
-      color: "success",
-      desc: "since last week",
-      series: series1,
-      options: options1,
-    },
-    {
-      id: 2,
-      icon: "mdi mdi-arrow-down-bold",
-      title: "Orders",
-      value: 5643,
-      decimal: 0,
-      charttype: "radialBar",
-      chartheight: 45,
-      chartwidth: 45,
-      prefix: "",
-      suffix: "",
-      badgeValue: "0.82%",
-      color: "danger",
-      desc: "since last week",
-      series: series2,
-      options: options2,
-    },
-    {
-      id: 3,
-      icon: "mdi mdi-arrow-down-bold",
-      title: "Customers",
-      value: 45254,
-      decimal: 0,
-      prefix: "",
-      suffix: "",
-      charttype: "radialBar",
-      chartheight: 45,
-      chartwidth: 45,
-      badgeValue: "6.24%",
-      color: "danger",
-      desc: "since last week",
-      series: series3,
-      options: options3,
-    },
-    {
-      id: 4,
-      icon: "mdi mdi-arrow-up-bold",
-      title: "Growth",
-      value: 12.58,
-      decimal: 2,
-      prefix: "+",
-      suffix: "%",
-      charttype: "bar",
-      chartheight: 40,
-      chartwidth: 70,
-      badgeValue: "10.51%",
-      color: "success",
-      desc: "since last week",
-      series: series4,
-      options: options4,
-    },
-  ]
+  function tog_center() {
+    setmodal_center(!modal_center)
+    removeBodyCss()
+  }
+
+  function removeBodyCss() {
+    document.body.classList.add("no_padding")
+  }
+
+  const handleTrackComplain = async () => {
+    const payLoad = {
+      phone: phoneNumber,
+      referenceId: complaintId,
+    }
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        "https://unirp.herokuapp.com/incident/get-incident",
+        payLoad
+      )
+      setLoading(false)
+      if (response?.data?.message == "Sent" && phoneNumber.length == 11) {
+        tog_center()
+      }
+      if (response?.data?.success) {
+        setTrackComplain(response?.data?.result)
+      }
+    } catch (error) {
+      console.log("track incident report error", error)
+      setLoading(false)
+    }
+  }
+
+  const handleReset = () => {
+    setComplaintId("")
+    setPhoneNumber("")
+  }
+
+
+  const handleConfirmOTP = async () => {
+    const payLoad = {
+      phone: phoneNumber,
+      code: otp,
+    }
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        "https://unirp.herokuapp.com/incident/verify-otp",
+        payLoad
+      )
+      setLoading(false)
+      if (response?.data?.success) {
+        setTrackComplain(response?.data?.result)
+        setmodal_center(false)
+      }
+    } catch (error) {
+      console.log("Send OTP Error", error)
+    }
+  }
 
   return (
     <React.Fragment>
@@ -283,56 +132,182 @@ const Dashboard = () => {
           </Row>
 
           <Row>
-            
-              <Col xl={12}>
+            <Col xl={12}>
               <div className="d-flex p-2 justify-content-center">
                 <Col lg={6}>
                   <CardBody>
                     <CardTitle className="mb-4 d-flex p-2 justify-content-center">
-                     Track status of your complain here
+                      <Translate>Track status of your complain here</Translate>
                     </CardTitle>
                     <div className="mb-3">
-                      <Label htmlFor="formrow-firstname-Input">Complaint ID</Label>
-                      <Input
-                        type="text"
-                        className="form-control btn-outline-dark"
-                        id="formrow-firstname-Input"
-                      />
-                    </div>
-                    <div className="mb-3">
                       <Label htmlFor="formrow-firstname-Input">
-                        Registered Phone Number
+                        <Translate>Complaint ID</Translate>
                       </Label>
                       <Input
                         type="text"
                         className="form-control btn-outline-dark"
                         id="formrow-firstname-Input"
+                        value={complaintId}
+                        onChange={e => setComplaintId(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <Label htmlFor="formrow-firstname-Input">
+                        <Translate>Registered Phone Number</Translate>
+                      </Label>
+                      <Input
+                        type="text"
+                        className="form-control btn-outline-dark"
+                        value={phoneNumber}
+                        id="formrow-firstname-Input"
+                        onChange={e => setPhoneNumber(e.target.value)}
                       />
                     </div>
                     <Col xl={12}>
                       <Row>
-                      <Col xl={6}>
-                      <div className="d-flex p-2 justify-content-center">
-                        <button className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold">
-                          Submit
-                        </button>
-                      </div>
-                      </Col>
-                      <Col xl={6}>
-                      <div className="d-flex p-2 justify-content-center">
-                        <button className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold">
-                          Reset
-                        </button>
-                      </div>
-                      </Col>
+                        <Col xl={6}>
+                          <div className="d-flex p-2 justify-content-center">
+                            <button
+                              className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold"
+                              onClick={handleTrackComplain}
+                            >
+                              {loading ? (
+                                <Spinner
+                                  type="grow"
+                                  size="sm"
+                                  color="success"
+                                />
+                              ) : (
+                                <Translate>Submit</Translate>
+                              )}
+                            </button>
+                          </div>
+                        </Col>
+                        <Col xl={6}>
+                          <div className="d-flex p-2 justify-content-center">
+                            <button
+                              className="btn btn-outline-success waves-effect waves-light w-75 text-dark font-weight-bold"
+                              onClick={handleReset}
+                            >
+                              <Translate>Reset</Translate>
+                            </button>
+                          </div>
+                        </Col>
                       </Row>
-                      
+                    </Col>
+                    <Col lg={6}>
+                      <Modal
+                        isOpen={modal_center}
+                        toggle={() => {
+                          tog_center()
+                        }}
+                        centered={true}
+                      >
+                        <div className="modal-header">
+                          <h5 className="modal-title mt-0">
+                            Confirm your Phone Number
+                          </h5>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setmodal_center(false)
+                            }}
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="mb-3">
+                            <label
+                              htmlFor="recipient-name"
+                              className="col-form-label"
+                            >
+                              Enter OTP:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="recipient-name"
+                              onChange={e => setOTP(e.target.value)}
+                            />
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={handleConfirmOTP}
+                            >
+                              Confirm
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
+                    </Col>
+                    <Col xl={12}>
+                      <Row>
+                        <Col xl={12}>
+                          <div className="d-flex p-2 justify-content-center">
+                            <Col lg={12}>
+                              <Card>
+                                <CardHeader>
+                                  Reference ID: {trackComplain?.referenceId}
+                                </CardHeader>
+                                <CardBody>
+                                  <blockquote className="card-blockquote mb-0">
+                                    <CardText>
+                                      <span>Child Name : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.childname}
+                                      </span>
+                                      <br />
+                                      <span>Category : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.category}
+                                      </span>
+                                      <br />
+                                      <span>Description : </span>
+                                      <span className="fw-bold">
+                                        {trackComplain?.description}
+                                      </span>
+                                      <br />
+                                      <span>
+                                        Comments :{" "}
+                                        {trackComplain?.comments?.map(
+                                          (comment, i) => (
+                                            <div>
+                                              {i + 1}. {"  "}
+                                              <span className="fw-bold">
+                                                {comment.comment}
+                                              </span>
+                                              <br />
+                                            </div>
+                                          )
+                                        )}
+                                      </span>
+                                    </CardText>
+                                    <footer className="blockquote-footer mt-3 font-size-12">
+                                      {" "}
+                                      Status :
+                                      <cite title="Source Title">
+                                        {" "}
+                                        Court Order
+                                      </cite>
+                                    </footer>
+                                  </blockquote>
+                                </CardBody>
+                              </Card>
+                            </Col>
+                          </div>
+                        </Col>
+                      </Row>
                     </Col>
                   </CardBody>
                 </Col>
               </div>
             </Col>
-       
           </Row>
         </Container>
       </div>

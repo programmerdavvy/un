@@ -86,17 +86,26 @@ const [selectedOption, setSelectedOption] = useState(null)
           /> */}
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <DropdownItem tag="a" onClick={() => setLanguage("English")}>
+          <DropdownItem tag="a" onClick={() => {
+            setLanguage("English")
+            props.setSelectedLanguage('en')
+            }}>
             {" "}
             {props.t("English")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" onClick={() => setLanguage("Hausa")}>
+          <DropdownItem tag="a" onClick={() => {
+            props.setSelectedLanguage('ha')
+            setLanguage("Hausa")}}>
             {props.t("Hausa")}
           </DropdownItem>
-          <DropdownItem tag="a" onClick={() => setLanguage("Yoruba")}>
+          <DropdownItem tag="a" onClick={() => {
+            props.setSelectedLanguage('yo')
+            setLanguage("Yoruba")}}>
             {props.t("Yoruba")}
           </DropdownItem>
-          <DropdownItem tag="a" onClick={() => setLanguage("Igbo")}>
+          <DropdownItem tag="a" onClick={() => {
+            props.setSelectedLanguage('ig')
+            setLanguage("Igbo")}}>
             {props.t("Igbo")}
           </DropdownItem>
           <div className="dropdown-divider" />

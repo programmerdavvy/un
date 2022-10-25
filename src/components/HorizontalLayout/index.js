@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Translator, Translate } from "react-auto-translate"
 
 import {
   changeLayout,
@@ -100,6 +101,7 @@ const Layout = (props) => {
   }, [dispatch, layoutWidth]);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
   const openMenu = () => {
     setIsMenuOpened(!isMenuOpened);
   };
@@ -117,15 +119,22 @@ const Layout = (props) => {
       <div id="layout-wrapper">
         <header id="page-topbar" className="" style={{height:'200px'}}>
           <HeaderILO
-          
             theme={topbarTheme}
             isMenuOpened={isMenuOpened}
             openLeftMenuCallBack={openMenu}
+            setSelectedLanguage={setSelectedLanguage}
           ></HeaderILO>
           <Navbar menuOpen={isMenuOpened} />
           <NavbarILO menuOpen={isMenuOpened} />
         </header>
+        <Translator
+        // cacheProvider={cacheProvider}
+        from="en"
+        to={`${selectedLanguage}`}
+        googleApiKey="AIzaSyDogdQTDE7923og4oUR4xIk7XvsTnFHqSA"
+      >
         <div className="main-content">{props.children}</div>
+        </Translator>
         <Footer />
       </div>
 
