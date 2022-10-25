@@ -14,7 +14,7 @@ import Authmiddleware from "./routes/middleware/Authmiddleware";
 import VerticalLayout from "./components/VerticalLayout/";
 import HorizontalLayout from "./components/HorizontalLayout/";
 import NonAuthLayout from "./components/NonAuthLayout";
-
+import Routes from "./routes/middleware/index"
 // Import scss
 import "./assets/scss/theme.scss";
 
@@ -56,10 +56,11 @@ const App = props => {
     return layoutCls;
   }
 
-  const Layout = getLayout();
+  // const Layout = getLayout();
   return (
     <React.Fragment>
-      <Switch>
+      <Routes />
+      {/* <Switch>
         <Route>
           {authRoutes.map((route, idx) => (
             <Authmiddleware
@@ -82,7 +83,7 @@ const App = props => {
             />
           ))}
         </Route>
-      </Switch>
+      </Switch> */}
     </React.Fragment>
   );
 };

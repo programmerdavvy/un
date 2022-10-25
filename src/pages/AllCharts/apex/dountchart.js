@@ -8,7 +8,7 @@ const dountchart = () => {
     colors: ["#34c38f", "#5b73e8", "#f1b44c", "#50a5f1", "#f46a6a"],
     legend: {
       show: !0,
-      position: 'bottom',
+      position: 'right',
       horizontalAlign: 'center',
       verticalAlign: 'middle',
       floating: !1,

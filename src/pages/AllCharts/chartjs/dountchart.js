@@ -13,8 +13,20 @@ const DountChart = () => {
       },
     ],
   }
-
-  return <Doughnut width={474} height={260} data={data} />
+  const options = {
+    plugins: {
+      legend: {
+        position: 'right',
+        rtl: true,
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 20,
+        }
+      }
+    },
+  };
+  return <Doughnut width={474} height={260} data={data} options={options} />
 }
 
 export default DountChart
