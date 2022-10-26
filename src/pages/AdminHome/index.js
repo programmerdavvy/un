@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, CardBody, Card } from "reactstrap";
 import { Link } from "react-router-dom";
+import ReactApexChart from "react-apexcharts"
 
 
 //Import Breadcrumb
@@ -147,6 +148,32 @@ const Dashboard = () => {
       casereported: 2
     }
   ]
+  const series = [1, 1]
+
+  const options = {
+      labels: ["Closed", "Open"],
+      colors: ["#228e68", "#5b73e8", "#f95000"],
+      legend: {
+          show: !0,
+          position: 'right',
+          horizontalAlign: 'center',
+          verticalAlign: 'middle',
+          floating: !1,
+          fontSize: '14px',
+          offsetX: 0
+      },
+      responsive: [{
+          breakpoint: 600,
+          options: {
+              chart: {
+                  height: 240
+              },
+              legend: {
+                  show: !1
+              },
+          }
+      }]
+  }
   return (
     <React.Fragment>
       <div className="page-content">
@@ -159,12 +186,30 @@ const Dashboard = () => {
               <Row>
                 <Statistics reports={reports} />
               </Row>
+              <Row className="mb-3">
+                <Col xl={3} className='mb-0 p-0'>
+                  <Card className='p-4 mb-0'
+                  // style={{ height: '220px' }}
+                  >
+                    <CardBody className='p-2'>
+                      <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
+                      {/* <p className='text-center fs-4'></p> */}
+                      <ReactApexChart
+                        options={options}
+                        series={series}
+                        type="donut"
+                        height="220"
+                        className="apex-charts"
+                      />
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
               <Row>
-                <AwaitingApproval />
+                <AwaitingApproval /> 
               </Row>
               <div className="d-none">
-                <Analysis />
-
+              <Analysis />
               </div>
 
             </Col>

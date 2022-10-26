@@ -4,6 +4,9 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
+import { Editor } from "react-draft-wysiwyg"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+
 
 const NewIncident = () => {
     const id = '';
@@ -96,7 +99,7 @@ const NewIncident = () => {
                                             <Col>
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom02">Paragraph</Label>
-                                                    <Input
+                                                    {/* <Input
                                                         name="description"
                                                         placeholder="Paragraph"
                                                         type="textarea"
@@ -109,6 +112,11 @@ const NewIncident = () => {
                                                         invalid={
                                                             validation.touched.description && validation.errors.description ? true : false
                                                         }
+                                                    /> */}
+                                                    <Editor
+                                                        toolbarClassName="toolbarClassName"
+                                                        wrapperClassName="wrapperClassName"
+                                                        editorClassName="editorClassName"
                                                     />
                                                     {validation.touched.description && validation.errors.description ? (
                                                         <FormFeedback type="invalid">{validation.errors.description}</FormFeedback>
@@ -213,7 +221,7 @@ const NewIncident = () => {
                                                 </Col>
                                             </Row>
                                             <div>
-                                                <Button  color="primary" type="submit">
+                                                <Button color="primary" type="submit">
                                                     Publish
                                                 </Button>
                                             </div>
