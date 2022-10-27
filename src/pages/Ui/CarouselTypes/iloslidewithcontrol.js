@@ -6,6 +6,7 @@ import img4 from "../../../assets/images/un/slideone.png"
 import img5 from "../../../assets/images/un/slidetwo.png"
 import img6 from "../../../assets/images/un/slidethree.png"
 import img7 from "../../../assets/images/un/slidefour.png"
+import { Link } from "react-router-dom"
 
 const items = [
   {
@@ -33,7 +34,7 @@ const items = [
 class Slidewithcontrol extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeIndex: 0 }
+    this.state = { activeIndex: 0 , cases: 0, children: 0}
     this.next = this.next.bind(this)
     this.previous = this.previous.bind(this)
     this.goToIndex = this.goToIndex.bind(this)
@@ -41,6 +42,18 @@ class Slidewithcontrol extends Component {
     this.onExited = this.onExited.bind(this)
   }
 
+  componentDidMount() {
+    fetch("https://unirp.herokuapp.com/incident/getall?page=1&limit=1")
+      .then(res => res.json())
+      .then(
+        (result) => this.setState({cases: result?.paging?.total}))
+
+    fetch("https://unirp.herokuapp.com/incident/identifychild/?action=count")
+      .then(res => res.json())
+      .then(
+        (result) => this.setState({children: result?.result}))
+      }
+      // console.log('hey', result?.paging?.total)
   onExiting() {
     this.animating = true
   }
@@ -73,7 +86,7 @@ class Slidewithcontrol extends Component {
   }
 
   render() {
-    const { activeIndex } = this.state
+    const { activeIndex, cases, children } = this.state
 
     const slides = items.map(item => {
       return (
@@ -87,21 +100,27 @@ class Slidewithcontrol extends Component {
             className="d-block img-fluid"
             alt={item.altText}
           />
-          
+
           <div className="carousel-caption h-75 d-inline-block d-flex flex-row justify-content-end">
             <div className="h-100 d-flex flex-column justify-content-evenly m-3">
-            <p className="text-white h6">NUMBER OF CASES REPORTED:</p>
-            <h1 className="font-weight-bold text-white display-1">123</h1>
-            <button className="btn text-white border border-white rounded">Report A Case</button>
+              <p className="text-white h6">NUMBER OF CASES REPORTED:</p>
+              <h1 className="font-weight-bold text-white display-1">{cases}</h1>
+                <button className="btn text-white border border-white rounded">
+              <Link to="/report-incident" className="w-100 h-100 text-white">
+                  Report A Case
+              </Link>
+                </button>
             </div>
 
             <div className="h-100 d-flex flex-column justify-content-evenly m-3">
-            <p className="text-white h6">NUMBER OF CHILDREN IDENTIFIED:</p>
-            <h1 className="font-weight-bold text-white display-1">100</h1>
-            <button className="btn text-white border border-white rounded">Track</button>
+              <p className="text-white h6">NUMBER OF CHILDREN IDENTIFIED:</p>
+              <h1 className="font-weight-bold text-white display-1">{children}</h1>
+              <button className="btn text-white border border-white rounded">
+              <Link to="/track" className="w-100 h-100 text-white">
+                  Track
+              </Link>
+                </button>
             </div>
-            
-            
           </div>
         </CarouselItem>
       )

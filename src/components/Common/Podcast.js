@@ -12,6 +12,7 @@ import {
   CardSubtitle,
   CardHeader,
 } from "reactstrap"
+import { Translate } from "react-auto-translate"
 
 const Podcast = props => {
   return (
@@ -20,27 +21,35 @@ const Podcast = props => {
         <Card className="bg-success">
           <CardBody>
             <CardText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              posuere erat a ante.
+              <Translate>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                posuere erat a ante.
+              </Translate>
             </CardText>
-            <Col xl={12} className='d-flex flex-row justify-content-center'>
-              <div style={{width:'0px', height:'0px', borderTop:'10px solid transparent', borderBottom:'10px solid transparent', borderLeft:'10px solid white', margin:'8px'}}></div><hr className="pt-1 bg-white w-100" />
+            <Col xl={12} className="d-flex flex-row justify-content-center">
+              <div
+                style={{
+                  width: "0px",
+                  height: "0px",
+                  borderTop: "10px solid transparent",
+                  borderBottom: "10px solid transparent",
+                  borderLeft: "10px solid white",
+                  margin: "8px",
+                }}
+              ></div>
+              <hr className="pt-1 bg-white w-100" />
             </Col>
-            <Col xl={12}>
-        
-      </Col>
+            <Col xl={12}></Col>
           </CardBody>
-          
         </Card>
         <div className="d-flex p-2 justify-content-center">
           <Link
             to="#"
             className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
           >
-            View More
+            <Translate>View More</Translate>
           </Link>
         </div>
-        
       </Col>
     </Row>
   )

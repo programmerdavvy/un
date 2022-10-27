@@ -13,6 +13,7 @@ import {
 } from "reactstrap"
 import newImage1 from "../../assets/images/un/footprint1.png"
 import newImage2 from "../../assets/images/un/footprint2.png"
+import { Translate } from "react-auto-translate"
 
 const FootPrints = props => {
   return (
@@ -29,14 +30,19 @@ const FootPrints = props => {
           <Col md={8}>
             <CardBody>
               <CardTitle className="h5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                est mi, auctor eget
+                <Translate>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aliquam est mi, auctor eget
+                </Translate>
               </CardTitle>
               <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                est mi, auctor eget vestibulum eget, rutrum et justo. Vivamus
-                euismod bibendum ipsum ac scelerisque. Phasellus tellus nisi,
-                ullamcorper vitae massa vel, malesuada fringilla neque.
+                <Translate>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aliquam est mi, auctor eget vestibulum eget, rutrum et justo.
+                  Vivamus euismod bibendum ipsum ac scelerisque. Phasellus
+                  tellus nisi, ullamcorper vitae massa vel, malesuada fringilla
+                  neque.
+                </Translate>
               </CardText>
             </CardBody>
           </Col>
@@ -54,14 +60,19 @@ const FootPrints = props => {
           <Col md={8}>
             <CardBody>
               <CardTitle className="h5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                est mi, auctor eget
+                <Translate>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aliquam est mi, auctor eget
+                </Translate>
               </CardTitle>
               <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                est mi, auctor eget vestibulum eget, rutrum et justo. Vivamus
-                euismod bibendum ipsum ac scelerisque. Phasellus tellus nisi,
-                ullamcorper vitae massa vel, malesuada fringilla neque.
+                <Translate>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Aliquam est mi, auctor eget vestibulum eget, rutrum et justo.
+                  Vivamus euismod bibendum ipsum ac scelerisque. Phasellus
+                  tellus nisi, ullamcorper vitae massa vel, malesuada fringilla
+                  neque.
+                </Translate>
               </CardText>
             </CardBody>
           </Col>
@@ -73,7 +84,7 @@ const FootPrints = props => {
             to="#"
             className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
           >
-            Read More
+            <Translate>Read More</Translate>
           </Link>
         </div>
       </Col>

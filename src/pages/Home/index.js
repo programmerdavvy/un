@@ -37,7 +37,7 @@ import Resources from "../../components/Common/Resources"
 import GoodPractices from "../../components/Common/GoodPractices"
 import Podcast from "../../components/Common/Podcast"
 import Statistics from "../../components/Common/Statistics"
-
+import { Translate } from "react-auto-translate"
 
 const Dashboard = () => {
   
@@ -71,8 +71,11 @@ const Dashboard = () => {
                   <CardBody>
                     <CardText className="text-justify card-img-overlay h-100 d-flex align-items-end">
                       <h4 className="text-white font-weight-bold">
+                        <Translate>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Aliquam est mi, auctor eget
+                        </Translate>
+                        
                       </h4>
                     </CardText>
                   </CardBody>

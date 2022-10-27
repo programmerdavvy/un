@@ -117,6 +117,12 @@ const Layout = (props) => {
       </div>
 
       <div id="layout-wrapper">
+      <Translator
+       // cacheProvider={cacheProvider}
+       from="en"
+       to={`${selectedLanguage}`}
+       googleApiKey="AIzaSyDogdQTDE7923og4oUR4xIk7XvsTnFHqSA"
+     >
         <header id="page-topbar" className="" style={{height:'200px'}}>
           <HeaderILO
             theme={topbarTheme}
@@ -127,12 +133,7 @@ const Layout = (props) => {
           <Navbar menuOpen={isMenuOpened} />
           <NavbarILO menuOpen={isMenuOpened} />
         </header>
-        <Translator
-        // cacheProvider={cacheProvider}
-        from="en"
-        to={`${selectedLanguage}`}
-        googleApiKey="AIzaSyDogdQTDE7923og4oUR4xIk7XvsTnFHqSA"
-      >
+       
         <div className="main-content">{props.children}</div>
         </Translator>
         <Footer />

@@ -21,14 +21,6 @@ import axios from "axios"
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-//Import Components
-import MiniWidget from "./mini-widget"
-import SalesAnalyticsChart from "./salesanalytics-chart"
-import TopProduct from "./topselling-product"
-import TopUser from "./topuser"
-import RecentActivity from "./recent-activity"
-import SocialSource from "./socialsource"
-import LatestTransaction from "./latest-transaction"
 
 //Import Image
 import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
@@ -36,7 +28,7 @@ import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Dropzone from "react-dropzone"
 import { Slider } from "@material-ui/core"
-import { Translator, Translate } from "react-auto-translate"
+import { Translate } from "react-auto-translate"
 
 const Dashboard = () => {
   const [selectedFiles, setselectedFiles] = useState([])
@@ -118,6 +110,7 @@ const Dashboard = () => {
         "https://unirp.herokuapp.com/incident/create",
         payLoad
       )
+      // console.log('joel test', response)
       setLoading(false)
       if (response?.data?.success) {
         setReferenceId(response?.data.result.referenceId)
