@@ -15,8 +15,8 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Container fluid>
-          <Breadcrumbs title="posts" breadcrumbItem="Stakeholder Posts" />
+        <Breadcrumbs title="posts" breadcrumbItem="Stakeholder Posts" />
+        <Container >
           <Row>
             <Col>
               <PostLists />

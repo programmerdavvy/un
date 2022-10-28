@@ -110,7 +110,7 @@ function Analysis() {
                     >
                         <CardBody className='p-2'>
                             <h4 className="card-title mb-2  text-center">Organization report by state of occ..</h4>
-                            <p className='text-center fs-4'>State Sggregate</p>
+                            <p className='text-center fs-4'>State Segregate</p>
                             <ReactApexChart
                                 options={options}
                                 series={series}

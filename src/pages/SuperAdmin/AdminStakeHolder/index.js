@@ -8,8 +8,8 @@ function index() {
     return (
         <React.Fragment>
             <div className='page-content'>
-                <Container fluid>
-                    <Breadcrumbs title="StakeHolders" breadcrumbItem="StakeHolders" />
+                <Breadcrumbs title="StakeHolders" breadcrumbItem="StakeHolders" />
+                <Container  >
                     <StakeHolder />
                 </Container>
             </div>

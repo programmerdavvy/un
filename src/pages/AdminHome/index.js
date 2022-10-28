@@ -12,7 +12,8 @@ import Statistics from "./Statistics";
 import CaseAnalysis from "./CaseAnalysis";
 import Analysis from "./Analysis";
 import AwaitingApproval from "./Post/awaitingapproval";
-
+import TopUsers from './topuser';
+import PostTable from './latest-transaction';
 
 const series2 = [10];
 
@@ -151,28 +152,28 @@ const Dashboard = () => {
   const series = [1, 1]
 
   const options = {
-      labels: ["Closed", "Open"],
-      colors: ["#228e68", "#5b73e8", "#f95000"],
-      legend: {
-          show: !0,
-          position: 'right',
-          horizontalAlign: 'center',
-          verticalAlign: 'middle',
-          floating: !1,
-          fontSize: '14px',
-          offsetX: 0
-      },
-      responsive: [{
-          breakpoint: 600,
-          options: {
-              chart: {
-                  height: 240
-              },
-              legend: {
-                  show: !1
-              },
-          }
-      }]
+    labels: ["Closed", "Open"],
+    colors: ["#228e68", "#5b73e8", "#f95000"],
+    legend: {
+      show: !0,
+      position: 'right',
+      horizontalAlign: 'center',
+      verticalAlign: 'middle',
+      floating: !1,
+      fontSize: '14px',
+      offsetX: 0
+    },
+    responsive: [{
+      breakpoint: 600,
+      options: {
+        chart: {
+          height: 240
+        },
+        legend: {
+          show: !1
+        },
+      }
+    }]
   }
   return (
     <React.Fragment>
@@ -184,32 +185,47 @@ const Dashboard = () => {
           <Row>
             <Col xl={12}>
               <Row>
-                <Statistics reports={reports} />
-              </Row>
-              <Row className="mb-3">
-                <Col xl={3} className='mb-0 p-0'>
-                  <Card className='p-4 mb-0'
-                  // style={{ height: '220px' }}
-                  >
-                    <CardBody className='p-2'>
-                      <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
-                      {/* <p className='text-center fs-4'></p> */}
-                      <ReactApexChart
-                        options={options}
-                        series={series}
-                        type="donut"
-                        height="220"
-                        className="apex-charts"
-                      />
+                <Col>
+                  <Row>
+                    <Statistics reports={reports} />
+                    <Col xl={4}>
+                      <Card
+                      // style={{ height: '220px' }}
+                      >
+                        <CardBody className='p-2'>
+                          <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
+                          {/* <p className='text-center fs-4'></p> */}
+                          <ReactApexChart
+                            options={options}
+                            series={series}
+                            type="donut"
+                            height="180"
+                            className="apex-charts"
+                          />
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="mt-4">
+                    <PostTable />
+                  </Row>
+                </Col>
+                <Col xl={3}>
+                  <Card>
+                    <CardBody>
+                      <h2 style={{ fontWeight: '700' }}> Recent Updates Case Analytics by State</h2>
                     </CardBody>
                   </Card>
+
+                  <TopUsers />
                 </Col>
               </Row>
-              <Row>
-                <AwaitingApproval /> 
-              </Row>
+             
+              {/* <Row>
+                <AwaitingApproval />
+              </Row> */}
               <div className="d-none">
-              <Analysis />
+                <Analysis />
               </div>
 
             </Col>

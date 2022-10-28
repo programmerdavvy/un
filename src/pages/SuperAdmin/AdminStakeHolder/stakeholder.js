@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-    Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip, FormFeedback, FormGroup,
+    Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip, FormFeedback, FormGroup, Pagination, PaginationItem, PaginationLink,
     Modal, ModalHeader, ModalBody, Form,
 } from "reactstrap";
 import { Link } from "react-router-dom";
@@ -47,7 +47,7 @@ const StakeHolder = () => {
 
         <Row>
             <Modal
-                size="md"
+                size="xl"
                 className=""
                 isOpen={modal}
                 toggle={() => {
@@ -62,7 +62,9 @@ const StakeHolder = () => {
                 >
                     Register StakeHolder
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody className="p-2">
+                    {/* <Card>
+                        <CardBody> */}
                     <Form className="needs-validation"
                         onSubmit={(e) => {
                             e.preventDefault();
@@ -218,6 +220,8 @@ const StakeHolder = () => {
                             Register
                         </Button>
                     </Form>
+                    {/* </CardBody>
+                    </Card> */}
                 </ModalBody>
             </Modal>
             <Col lg={12}>
@@ -225,14 +229,19 @@ const StakeHolder = () => {
                     <CardBody>
                         <div className="d-flex justify-content-between">
                             <CardTitle className="h4 mb-4">Stakeholders</CardTitle>
-                            <div className=''>
-                                <Button onClick={() => setmodal(!modal)} className="btn btn-success">
-                                    Add New
-                                </Button>
+                            <div className='d-flex justify-content-between'>
+                                <div>
+                                    <Input placeholder="search" />
+                                </div>
+                                <div>
+                                    <Button className="mx-2" onClick={() => setmodal(!modal)} color="primary">
+                                        Add New
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                         <div className="table-responsive">
-                            <Table className="table-centered table-nowrap mb-0">
+                            <Table className="table-centered table-nowrap mb-0" striped bordered>
                                 <thead className="table-light">
                                     <tr>
                                         <th>Name</th>
@@ -523,6 +532,60 @@ const StakeHolder = () => {
                                     </tr>
                                 </tbody>
                             </Table>
+                            <div className="d-flex justify-content-between mt-4">
+                                <div>Showing 1 to 10 of 57 entries</div>
+                                <Pagination aria-label="Page navigation example">
+                                    <PaginationItem disabled>
+                                        <PaginationLink
+                                            first
+                                            href="#"
+                                        />
+                                    </PaginationItem>
+                                    <PaginationItem disabled>
+                                        <PaginationLink
+                                            href="#"
+                                            previous
+                                        />
+                                    </PaginationItem>
+                                    <PaginationItem active>
+                                        <PaginationLink href="#">
+                                            1
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink href="#">
+                                            2
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem disabled>
+                                        <PaginationLink href="#">
+                                            3
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink href="#">
+                                            4
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink href="#">
+                                            5
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink
+                                            href="#"
+                                            next
+                                        />
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink
+                                            href="#"
+                                            last
+                                        />
+                                    </PaginationItem>
+                                </Pagination>
+                            </div>
                         </div>
                     </CardBody>
                 </Card>

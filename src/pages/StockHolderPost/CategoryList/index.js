@@ -7,8 +7,9 @@ function Index() {
     return (
         <React.Fragment>
             <div className='page-content'>
-                <Container fluid>
-                    <Breadcrumb title="Categories" breadcrumbItem="All Categories" />
+                <Breadcrumb title="Categories" breadcrumbItem="All Categories" />
+
+                <Container >
                     <Row>
                         <Col>
                             <Categories />

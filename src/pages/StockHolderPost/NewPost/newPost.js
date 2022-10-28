@@ -61,9 +61,9 @@ const NewIncident = () => {
                 <CardBody>
                     <Row>
                         <Col>
-                            <Card>
-                                <CardBody>
-                                    <h4 className="card-title">{id.id ? 'Edit' : 'Add'} Post</h4>
+                            {/* <Card>
+                                <CardBody> */}
+                                    <h4 className="card-title">{id.id ? 'Edit' : 'Create a New'} Post</h4>
 
                                     <Form className="needs-validation"
                                         onSubmit={(e) => {
@@ -92,6 +92,87 @@ const NewIncident = () => {
                                                     {validation.touched.title && validation.errors.title ? (
                                                         <FormFeedback type="invalid">{validation.errors.title}</FormFeedback>
                                                     ) : null}
+                                                </FormGroup>
+                                            </Col>
+                                </Row>
+                                <Row>
+                                            <Col>
+                                                <FormGroup className="mb-3">
+                                                    <Label htmlFor="validationCustom01">Tags</Label>
+                                                    <Input
+                                                        name="title"
+                                                        placeholder="tags"
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="validationCustom01"
+                                                        onChange={validation.handleChange}
+                                                        onBlur={validation.handleBlur}
+                                                        value={validation.values.title || ""}
+                                                        invalid={
+                                                            validation.touched.title && validation.errors.title ? true : false
+                                                        }
+                                                    />
+                                                    {validation.touched.title && validation.errors.title ? (
+                                                        <FormFeedback type="invalid">{validation.errors.title}</FormFeedback>
+                                                    ) : null}
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+
+                                            <Col xl={2} className='d-flex'>
+                                                <div>Categories:</div>
+                                                <FormGroup className="mb-3 mx-2">
+                                                    <div className="form-check">
+                                                        <Input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id="invalidCheck"
+                                                        />
+                                                        <Label
+                                                            className="form-check-label"
+                                                            htmlFor="invalidCheck"
+                                                        >
+                                                            {" "}
+                                                            Resources
+                                                        </Label>
+                                                    </div>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col xl={1}>
+                                                <FormGroup className="mb-3">
+                                                    <div className="form-check">
+                                                        <Input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id="invalidCheck"
+                                                        />
+                                                        <Label
+                                                            className="form-check-label"
+                                                            htmlFor="invalidCheck"
+                                                        >
+                                                            {" "}
+                                                            Articles
+                                                        </Label>
+                                                    </div>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col xl={2}>
+                                                <FormGroup className="mb-3">
+                                                    <div className="form-check">
+                                                        <Input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id="invalidCheck"
+                                                        />
+                                                        <Label
+                                                            className="form-check-label"
+                                                            htmlFor="invalidCheck"
+                                                        >
+                                                            {" "}
+                                                            News
+                                                        </Label>
+                                                    </div>
                                                 </FormGroup>
                                             </Col>
                                         </Row>
@@ -125,9 +206,7 @@ const NewIncident = () => {
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col>
-                                                {/* <Card>
-                                                    <CardBody> */}
+                                            <Col className='d-none'>
                                                 <Form>
                                                     <Dropzone
                                                         onDrop={acceptedFiles => {
@@ -185,7 +264,6 @@ const NewIncident = () => {
                                                         })}
                                                     </div>
                                                 </Form>
-
                                                 {/* <div className="text-center mt-4">
                                                             <button
                                                                 type="button"
@@ -197,9 +275,18 @@ const NewIncident = () => {
                                                 {/* </CardBody>
                                                 </Card> */}
                                             </Col>
+                                            <Col>
+                                                <Label>Add Documents</Label>
+                                                <Input type='file' />
+                                            </Col>
+                                            <Col>
+                                                <Label>Add Feature Image</Label>
+                                                <Input type='file' />
+
+                                            </Col>
                                         </Row>
 
-                                        <div className='d-flex justify-content-between'>
+                                        <div className='d-flex justify-content-between mt-3'>
                                             <Row>
                                                 <Col lg="12">
                                                     <FormGroup className="mb-3">
@@ -227,10 +314,10 @@ const NewIncident = () => {
                                             </div>
                                         </div>
                                     </Form>
-                                </CardBody>
-                            </Card>
+                                {/* </CardBody>
+                            </Card> */}
                         </Col>
-                        <Col xl={3} >
+                        <Col xl={3} className='d-none'>
                             <Card className='mb-2'>
                                 <CardBody>
                                     <h4 className="card-title">Categories</h4>
