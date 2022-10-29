@@ -31,13 +31,12 @@ const TopUser = () => {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </div> */}
-                    <h4 className="card-title mb-4">Case Analysis</h4>
+                    <h4 className="card-title mb-4">Recent Updates Case Analytics by State</h4>
                     <SimpleBar>
                         <div className="table-responsive">
                             <Table className="table-borderless table-centered table-nowrap">
                                 <tbody>
                                     <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -48,7 +47,6 @@ const TopUser = () => {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -58,7 +56,6 @@ const TopUser = () => {
                                             <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -68,7 +65,6 @@ const TopUser = () => {
                                             <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -78,7 +74,6 @@ const TopUser = () => {
                                             <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -88,7 +83,6 @@ const TopUser = () => {
                                             <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
                                             <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
                                             <p className="text-muted font-size-13 mb-0">
@@ -96,37 +90,6 @@ const TopUser = () => {
                                         </td>
                                         <td className="text-muted fw-semibold text-end">
                                             <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
-                                        </td>
-                                    </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
-                                        <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
-                                            <p className="text-muted font-size-13 mb-0">
-                                                <i className="mdi mdi-map-marker"></i> </p>
-                                        </td>
-                                        <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
-                                        </td>
-                                    </tr>  <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
-                                        <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
-                                            <p className="text-muted font-size-13 mb-0">
-                                                <i className="mdi mdi-map-marker"></i> </p>
-                                        </td>
-                                        <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
-                                        <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Enugu State</h6>
-                                            <p className="text-muted font-size-13 mb-0">
-                                                <i className="mdi mdi-map-marker"></i> </p>
-                                        </td>
-                                        <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />4 cases in total
                                         </td>
                                     </tr>
                                 </tbody>

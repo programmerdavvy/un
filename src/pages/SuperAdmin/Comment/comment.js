@@ -51,12 +51,12 @@ const Comment = () => {
                                             07 Oct, 2019
                                         </td>
                                         <td>
-                                            <div className="d-flex gap-3 users">
+                                        <div className="d-flex gap-3 users">
                                                 <ul className="list-inline font-size-20 contact-links mb-0">
-                                                    <li className="list-inline-item">
+                                                <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-primary"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
@@ -64,20 +64,20 @@ const Comment = () => {
                                                         >
                                                             <i className="uil-check font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                Approve
+                                                                approve
                                                             </UncontrolledTooltip>
                                                         </Link>
                                                     </li>
                                                     <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-primary"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil-eye font-size-18" id="edittooltip" />
+                                                            <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
                                                                 View Details
                                                             </UncontrolledTooltip>
@@ -85,14 +85,14 @@ const Comment = () => {
                                                     </li>
                                                     <li className="list-inline-item">
                                                         <Link
-                                                            to="/edit-comment/1"
-                                                            className="text-primary"
+                                                            to="/#"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                            <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
                                                                 Edit
                                                             </UncontrolledTooltip>
@@ -101,11 +101,12 @@ const Comment = () => {
                                                     <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
+                                                            // onClick={() => {
+                                                            //   const users = cellProps.row.original
+                                                            //   onClickDelete(users)
+                                                            // }}
+                                                            className="text-dark"
+
                                                         >
                                                             <i
                                                                 className="uil uil-trash-alt font-size-18"

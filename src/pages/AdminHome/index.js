@@ -211,7 +211,7 @@ const Dashboard = () => {
                   </Row>
                 </Col>
                 <Col xl={3}>
-                  <Card>
+                  <Card className="d-none">
                     <CardBody>
                       <h2 style={{ fontWeight: '700' }}> Recent Updates Case Analytics by State</h2>
                     </CardBody>

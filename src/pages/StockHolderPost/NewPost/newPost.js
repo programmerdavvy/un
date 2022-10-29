@@ -5,12 +5,14 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import { Editor } from "react-draft-wysiwyg"
+import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 
 const NewIncident = () => {
     const id = '';
     const [selectedFiles, setselectedFiles] = useState([]);
+    const [selectedMulti, setselectedMulti] = useState(null)
 
     function handleAcceptedFiles(files) {
         files.map(file =>
@@ -32,6 +34,9 @@ const NewIncident = () => {
 
         const i = Math.floor(Math.log(bytes) / Math.log(k))
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+    }
+    function handleMulti(selectedMulti) {
+        setselectedMulti(selectedMulti)
     }
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -55,6 +60,24 @@ const NewIncident = () => {
             console.log("values", values);
         }
     });
+    const optionGroup = [
+        {
+            label: "Picnic",
+            options: [
+                { label: "Mustard", value: "Mustard" },
+                { label: "Ketchup", value: "Ketchup" },
+                { label: "Relish", value: "Relish" },
+            ],
+        },
+        {
+            label: "Camping",
+            options: [
+                { label: "Tent", value: "Tent" },
+                { label: "Flashlight", value: "Flashlight" },
+                { label: "Toilet Paper", value: "Toilet Paper" },
+            ],
+        },
+    ]
     return (
         <React.Fragment>
             <Card>
@@ -63,124 +86,121 @@ const NewIncident = () => {
                         <Col>
                             {/* <Card>
                                 <CardBody> */}
-                                    <h4 className="card-title">{id.id ? 'Edit' : 'Create a New'} Post</h4>
+                            <h4 className="card-title">{id.id ? 'Edit' : 'Create a New'} Post</h4>
 
-                                    <Form className="needs-validation"
-                                        onSubmit={(e) => {
-                                            e.preventDefault();
-                                            validation.handleSubmit();
-                                            return false;
-                                        }}
-                                    >
-                                        <Row>
-                                            <Col>
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Title</Label>
-                                                    <Input
-                                                        name="title"
-                                                        placeholder="Title"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom01"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.title || ""}
-                                                        invalid={
-                                                            validation.touched.title && validation.errors.title ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.title && validation.errors.title ? (
-                                                        <FormFeedback type="invalid">{validation.errors.title}</FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
+                            <Form className="needs-validation"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    validation.handleSubmit();
+                                    return false;
+                                }}
+                            >
+                                <Row>
+                                    <Col>
+                                        <FormGroup className="mb-3">
+                                            <Label htmlFor="validationCustom01">Title</Label>
+                                            <Input
+                                                name="title"
+                                                placeholder="Title"
+                                                type="text"
+                                                className="form-control"
+                                                id="validationCustom01"
+                                                onChange={validation.handleChange}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.title || ""}
+                                                invalid={
+                                                    validation.touched.title && validation.errors.title ? true : false
+                                                }
+                                            />
+                                            {validation.touched.title && validation.errors.title ? (
+                                                <FormFeedback type="invalid">{validation.errors.title}</FormFeedback>
+                                            ) : null}
+                                        </FormGroup>
+                                    </Col>
                                 </Row>
                                 <Row>
-                                            <Col>
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Tags</Label>
-                                                    <Input
-                                                        name="title"
-                                                        placeholder="tags"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom01"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.title || ""}
-                                                        invalid={
-                                                            validation.touched.title && validation.errors.title ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.title && validation.errors.title ? (
-                                                        <FormFeedback type="invalid">{validation.errors.title}</FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
+                                    <Col>
 
-                                            <Col xl={2} className='d-flex'>
-                                                <div>Categories:</div>
-                                                <FormGroup className="mb-3 mx-2">
-                                                    <div className="form-check">
-                                                        <Input
-                                                            type="checkbox"
-                                                            className="form-check-input"
-                                                            id="invalidCheck"
-                                                        />
-                                                        <Label
-                                                            className="form-check-label"
-                                                            htmlFor="invalidCheck"
-                                                        >
-                                                            {" "}
-                                                            Resources
-                                                        </Label>
-                                                    </div>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col xl={1}>
-                                                <FormGroup className="mb-3">
-                                                    <div className="form-check">
-                                                        <Input
-                                                            type="checkbox"
-                                                            className="form-check-input"
-                                                            id="invalidCheck"
-                                                        />
-                                                        <Label
-                                                            className="form-check-label"
-                                                            htmlFor="invalidCheck"
-                                                        >
-                                                            {" "}
-                                                            Articles
-                                                        </Label>
-                                                    </div>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col xl={2}>
-                                                <FormGroup className="mb-3">
-                                                    <div className="form-check">
-                                                        <Input
-                                                            type="checkbox"
-                                                            className="form-check-input"
-                                                            id="invalidCheck"
-                                                        />
-                                                        <Label
-                                                            className="form-check-label"
-                                                            htmlFor="invalidCheck"
-                                                        >
-                                                            {" "}
-                                                            News
-                                                        </Label>
-                                                    </div>
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom02">Paragraph</Label>
-                                                    {/* <Input
+                                        <div className="mb-3" style={{ outline: 'none' }}>
+                                            <label htmlFor="floatingSelectGrid" className='control-label'>
+                                                Tag
+                                            </label>
+                                            <Select
+                                                styles={{outline:'none'}}
+                                                value={selectedMulti}
+                                                isMulti={true}
+                                                onChange={() => {
+                                                    handleMulti()
+                                                }}
+                                                options={optionGroup}
+                                                classNamePrefix="select2-selection"
+                                            />
+
+                                        </div></Col>
+                                </Row>
+                                <Row>
+
+                                    <Col xl={2} className='d-flex'>
+                                        <div>Categories:</div>
+                                        <FormGroup className="mb-3 mx-2">
+                                            <div className="form-check">
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    id="invalidCheck"
+                                                />
+                                                <Label
+                                                    className="form-check-label"
+                                                    htmlFor="invalidCheck"
+                                                >
+                                                    {" "}
+                                                    Resources
+                                                </Label>
+                                            </div>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col xl={1}>
+                                        <FormGroup className="mb-3">
+                                            <div className="form-check">
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    id="invalidCheck"
+                                                />
+                                                <Label
+                                                    className="form-check-label"
+                                                    htmlFor="invalidCheck"
+                                                >
+                                                    {" "}
+                                                    Articles
+                                                </Label>
+                                            </div>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col xl={2}>
+                                        <FormGroup className="mb-3">
+                                            <div className="form-check">
+                                                <Input
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    id="invalidCheck"
+                                                />
+                                                <Label
+                                                    className="form-check-label"
+                                                    htmlFor="invalidCheck"
+                                                >
+                                                    {" "}
+                                                    News
+                                                </Label>
+                                            </div>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <FormGroup className="mb-3">
+                                            <Label htmlFor="validationCustom02">Paragraph</Label>
+                                            {/* <Input
                                                         name="description"
                                                         placeholder="Paragraph"
                                                         type="textarea"
@@ -194,77 +214,77 @@ const NewIncident = () => {
                                                             validation.touched.description && validation.errors.description ? true : false
                                                         }
                                                     /> */}
-                                                    <Editor
-                                                        toolbarClassName="toolbarClassName"
-                                                        wrapperClassName="wrapperClassName"
-                                                        editorClassName="editorClassName"
-                                                    />
-                                                    {validation.touched.description && validation.errors.description ? (
-                                                        <FormFeedback type="invalid">{validation.errors.description}</FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col className='d-none'>
-                                                <Form>
-                                                    <Dropzone
-                                                        onDrop={acceptedFiles => {
-                                                            handleAcceptedFiles(acceptedFiles)
-                                                        }}
-                                                    >
-                                                        {({ getRootProps, getInputProps }) => (
-                                                            <div className="dropzone">
-                                                                <div
-                                                                    className="dz-message needsclick"
-                                                                    {...getRootProps()}
-                                                                >
-                                                                    <input {...getInputProps()} />
-                                                                    <div className="mb-3">
-                                                                        <i className="display-4 text-muted uil uil-cloud-upload" />
-                                                                    </div>
-                                                                    <h4>Add Documents.</h4>
-                                                                </div>
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                            />
+                                            {validation.touched.description && validation.errors.description ? (
+                                                <FormFeedback type="invalid">{validation.errors.description}</FormFeedback>
+                                            ) : null}
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className='d-none'>
+                                        <Form>
+                                            <Dropzone
+                                                onDrop={acceptedFiles => {
+                                                    handleAcceptedFiles(acceptedFiles)
+                                                }}
+                                            >
+                                                {({ getRootProps, getInputProps }) => (
+                                                    <div className="dropzone">
+                                                        <div
+                                                            className="dz-message needsclick"
+                                                            {...getRootProps()}
+                                                        >
+                                                            <input {...getInputProps()} />
+                                                            <div className="mb-3">
+                                                                <i className="display-4 text-muted uil uil-cloud-upload" />
                                                             </div>
-                                                        )}
-                                                    </Dropzone>
-                                                    <div className="dropzone-previews mt-3" id="file-previews">
-                                                        {selectedFiles.map((f, i) => {
-                                                            return (
-                                                                <Card
-                                                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                                    key={i + "-file"}
-                                                                >
-                                                                    <div className="p-2">
-                                                                        <Row className="align-items-center">
-                                                                            <Col className="col-auto">
-                                                                                <img
-                                                                                    data-dz-thumbnail=""
-                                                                                    height="80"
-                                                                                    className="avatar-sm rounded bg-light"
-                                                                                    alt={f.name}
-                                                                                    src={f.preview}
-                                                                                />
-                                                                            </Col>
-                                                                            <Col>
-                                                                                <Link
-                                                                                    to="#"
-                                                                                    className="text-muted font-weight-bold"
-                                                                                >
-                                                                                    {f.name}
-                                                                                </Link>
-                                                                                <p className="mb-0">
-                                                                                    <strong>{f.formattedSize}</strong>
-                                                                                </p>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </div>
-                                                                </Card>
-                                                            )
-                                                        })}
+                                                            <h4>Add Documents.</h4>
+                                                        </div>
                                                     </div>
-                                                </Form>
-                                                {/* <div className="text-center mt-4">
+                                                )}
+                                            </Dropzone>
+                                            <div className="dropzone-previews mt-3" id="file-previews">
+                                                {selectedFiles.map((f, i) => {
+                                                    return (
+                                                        <Card
+                                                            className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                                            key={i + "-file"}
+                                                        >
+                                                            <div className="p-2">
+                                                                <Row className="align-items-center">
+                                                                    <Col className="col-auto">
+                                                                        <img
+                                                                            data-dz-thumbnail=""
+                                                                            height="80"
+                                                                            className="avatar-sm rounded bg-light"
+                                                                            alt={f.name}
+                                                                            src={f.preview}
+                                                                        />
+                                                                    </Col>
+                                                                    <Col>
+                                                                        <Link
+                                                                            to="#"
+                                                                            className="text-muted font-weight-bold"
+                                                                        >
+                                                                            {f.name}
+                                                                        </Link>
+                                                                        <p className="mb-0">
+                                                                            <strong>{f.formattedSize}</strong>
+                                                                        </p>
+                                                                    </Col>
+                                                                </Row>
+                                                            </div>
+                                                        </Card>
+                                                    )
+                                                })}
+                                            </div>
+                                        </Form>
+                                        {/* <div className="text-center mt-4">
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-primary waves-effect waves-light"
@@ -272,49 +292,49 @@ const NewIncident = () => {
                                                                 Upload Document
                                                             </button>
                                                         </div> */}
-                                                {/* </CardBody>
+                                        {/* </CardBody>
                                                 </Card> */}
-                                            </Col>
-                                            <Col>
-                                                <Label>Add Documents</Label>
-                                                <Input type='file' />
-                                            </Col>
-                                            <Col>
-                                                <Label>Add Feature Image</Label>
-                                                <Input type='file' />
+                                    </Col>
+                                    <Col>
+                                        <Label>Add Documents</Label>
+                                        <Input type='file' />
+                                    </Col>
+                                    <Col>
+                                        <Label>Add Feature Image</Label>
+                                        <Input type='file' />
 
-                                            </Col>
-                                        </Row>
+                                    </Col>
+                                </Row>
 
-                                        <div className='d-flex justify-content-between mt-3'>
-                                            <Row>
-                                                <Col lg="12">
-                                                    <FormGroup className="mb-3">
-                                                        <div className="form-check">
-                                                            <Input
-                                                                type="checkbox"
-                                                                className="form-check-input"
-                                                                id="invalidCheck"
-                                                            />
-                                                            <Label
-                                                                className="form-check-label"
-                                                                htmlFor="invalidCheck"
-                                                            >
-                                                                {" "}
-                                                                Allow Comments
-                                                            </Label>
-                                                        </div>
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <div>
-                                                <Button color="primary" type="submit">
-                                                    Publish
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </Form>
-                                {/* </CardBody>
+                                <div className='d-flex justify-content-between mt-3'>
+                                    <Row>
+                                        <Col lg="12">
+                                            <FormGroup className="mb-3">
+                                                <div className="form-check">
+                                                    <Input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        id="invalidCheck"
+                                                    />
+                                                    <Label
+                                                        className="form-check-label"
+                                                        htmlFor="invalidCheck"
+                                                    >
+                                                        {" "}
+                                                        Allow Comments
+                                                    </Label>
+                                                </div>
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <div>
+                                        <Button color="primary" type="submit">
+                                            Publish
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Form>
+                            {/* </CardBody>
                             </Card> */}
                         </Col>
                         <Col xl={3} className='d-none'>
