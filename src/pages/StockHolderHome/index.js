@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Row, Col, CardBody, Card } from "reactstrap";
 
 //Import Breadcrumb
@@ -11,6 +11,7 @@ import Statistics from "./Statistics";
 import CaseAnalysis from "./CaseAnalysis";
 import Analysis from "./Analysis";
 import IncidentPost from "./IncidentPost";
+import { request } from "../../services/utilities";
 
 
 
@@ -47,6 +48,40 @@ const options2 = {
 
 
 const Dashboard = () => {
+  const [incidents, setIncidents] = useState([])
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [count, setCount] = useState(1);
+  const [totalreportedincident, setTotalreportedincident] = useState(0);
+  const [meta, setMeta] = useState(null);
+
+
+  const fetchIncident = useCallback(async page => {
+    const p = page || 1;
+
+    try {
+      let url = `incident/getall?page=${p}&limit=5`;
+      const rs = await request(url, 'GET', false);
+      console.log(rs);
+      if (rs.success === true) {
+        setIncidents(rs.result);
+        setTotalreportedincident(rs.paging?.total)
+        setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+        setMeta(rs.paging);
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }, [rowsPerPage]);
+
+  const handlePagination = page => {
+    fetchIncident(page.selected + 1)
+    setCurrentPage(page.selected + 1)
+  }
+
+  useEffect(() => {
+    fetchIncident();
+  }, [fetchIncident])
 
   const reports = [
     {
@@ -88,7 +123,7 @@ const Dashboard = () => {
       id: 3,
       icon: "uil-coins",
       title: "Total Reported Incident",
-      rate: 54,
+      rate: totalreportedincident,
       value: 5643,
       decimal: 0,
       charttype: "radialBar",
@@ -134,8 +169,6 @@ const Dashboard = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* <Breadcrumbs title="Minible" breadcrumbItem="Dashboard" /> */}
-
 
           <Row>
             <Col xl={10}>
@@ -156,7 +189,7 @@ const Dashboard = () => {
           </Row>
 
           <Row className="mt-4">
-            <IncidentPost /> 
+            <IncidentPost incidents={incidents} handlePagination={handlePagination} currentPage={currentPage} count={count} meta={meta} />
           </Row>
         </Container>
       </div>
