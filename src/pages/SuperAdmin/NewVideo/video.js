@@ -4,11 +4,11 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
+import { request } from '../../../services/utilities';
 
 
-const NewEvent = () => {
+const NewEvent = (props) => {
     const id = ''
-    const [selectedFiles, setselectedFiles] = useState([])
 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -24,10 +24,23 @@ const NewEvent = () => {
             link: Yup.string().required("Please Enter Embed Link"),
             categories: Yup.string().required("Please Select Categories")
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (values) => {
+            let data = { title: values.title, link: values.link, categories: values.categories };
+            let url = `category`;
+            try {
+                const rs = await request(url, 'POST', false, data);
+                console.log(rs);
+                if (rs.success === true) {
+                    props.showToast('success', 'Saved successfully ');
+                }
+
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to save')
+            }
         }
     });
+
     return (
         <React.Fragment>
 
@@ -129,7 +142,7 @@ const NewEvent = () => {
                                     </Col>
                                 </Row>
 
-                            
+
                                 <Button className='float-end' color="success" type="submit">
                                     Publish
                                 </Button>

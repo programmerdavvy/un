@@ -121,7 +121,185 @@ const Comment = () => {
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
 
+<td>
+    <div>
+        <span>James John</span>
+    </div>
+    <div>
+        <span>james@gmail.com</span>
+    </div>
+</td>
+<td>
+    comment
+</td>
+<td>
+    Incident Reported
+</td>
+<td>
+    07 Oct, 2019
+</td>
+<td>
+<div className="d-flex gap-3 users">
+        <ul className="list-inline font-size-20 contact-links mb-0">
+        <li className="list-inline-item">
+                <Link
+                    to="#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-check font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        approve
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        View Details
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="/#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        Edit
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="#"
+                    // onClick={() => {
+                    //   const users = cellProps.row.original
+                    //   onClickDelete(users)
+                    // }}
+                    className="text-dark"
+
+                >
+                    <i
+                        className="uil uil-trash-alt font-size-18"
+                        id="deletetooltip"
+                    />
+                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                        Delete
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+        </ul>
+    </div>
+</td>
+</tr> <tr>
+
+<td>
+    <div>
+        <span>James John</span>
+    </div>
+    <div>
+        <span>james@gmail.com</span>
+    </div>
+</td>
+<td>
+    comment
+</td>
+<td>
+    Incident Reported
+</td>
+<td>
+    07 Oct, 2019
+</td>
+<td>
+<div className="d-flex gap-3 users">
+        <ul className="list-inline font-size-20 contact-links mb-0">
+        <li className="list-inline-item">
+                <Link
+                    to="#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-check font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        approve
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        View Details
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="/#"
+                    className="text-dark"
+                // onClick={() => {
+                //   const users = cellProps.row.original
+                //   // handleUserClick(users)
+                // }}
+                >
+                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
+                    <UncontrolledTooltip placement="top" target="edittooltip">
+                        Edit
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+            <li className="list-inline-item">
+                <Link
+                    to="#"
+                    // onClick={() => {
+                    //   const users = cellProps.row.original
+                    //   onClickDelete(users)
+                    // }}
+                    className="text-dark"
+
+                >
+                    <i
+                        className="uil uil-trash-alt font-size-18"
+                        id="deletetooltip"
+                    />
+                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                        Delete
+                    </UncontrolledTooltip>
+                </Link>
+            </li>
+        </ul>
+    </div>
+</td>
+</tr>
                                 </tbody>
                             </Table>
                             <div className="d-flex justify-content-between mt-4">
