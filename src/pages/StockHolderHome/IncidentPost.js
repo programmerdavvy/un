@@ -23,7 +23,7 @@ function IncidentPost() {
                                         <th scope="row">22-2-2022</th>
                                         <td>Mark</td>
                                         <td>
-                                            <i className='uil-circle text-danger font-size-18' id='edittooltip' style={{ cursor: 'pointer' }}></i>
+                                            <i className='uil-circle text-danger font-size-12' id='edittooltip' style={{ cursor: 'pointer' }}></i>
                                             <UncontrolledTooltip placement="top" target="edittooltip">
                                                 Unapproved
                                             </UncontrolledTooltip>
@@ -33,7 +33,7 @@ function IncidentPost() {
                                         <th scope="row">1</th>
                                         <td>Mark</td>
                                         <td>
-                                            <i className='uil-circle text-success font-size-18' id='edittooltip2' style={{ cursor: 'pointer' }}></i>
+                                            <i className='uil-circle text-success font-size-12' id='edittooltip2' style={{ cursor: 'pointer' }}></i>
                                             <UncontrolledTooltip placement="top" target="edittooltip2">
                                                 Approved
                                             </UncontrolledTooltip>

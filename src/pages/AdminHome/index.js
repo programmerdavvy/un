@@ -188,7 +188,7 @@ const Dashboard = () => {
                 <Col>
                   <Row>
                     <Statistics reports={reports} />
-                    <Col xl={4}>
+                    <Col xl={3}>
                       <Card
                       // style={{ height: '220px' }}
                       >
@@ -207,20 +207,24 @@ const Dashboard = () => {
                     </Col>
                   </Row>
                   <Row className="mt-4">
-                    <PostTable />
+                    <Col>
+                      <PostTable />
+                    </Col>
+                    <Col xl={3}>
+                      <TopUsers />
+                    </Col>
                   </Row>
                 </Col>
-                <Col xl={3}>
-                  <Card className="d-none">
+                <Col xl={3} className="d-none">
+                  <Card >
                     <CardBody>
                       <h2 style={{ fontWeight: '700' }}> Recent Updates Case Analytics by State</h2>
                     </CardBody>
                   </Card>
 
-                  <TopUsers />
                 </Col>
               </Row>
-             
+
               {/* <Row>
                 <AwaitingApproval />
               </Row> */}
