@@ -9,7 +9,7 @@ import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 
-const NewIncident = () => {
+const NewIncident = (props) => {
     const id = '';
     const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedMulti, setselectedMulti] = useState(null)
@@ -126,7 +126,7 @@ const NewIncident = () => {
                                                 Tag
                                             </label>
                                             <Select
-                                                styles={{outline:'none'}}
+                                                style={{ outline: 'none' }}
                                                 value={selectedMulti}
                                                 isMulti={true}
                                                 onChange={() => {
@@ -142,24 +142,29 @@ const NewIncident = () => {
 
                                     <Col xl={2} className='d-flex'>
                                         <div>Categories:</div>
-                                        <FormGroup className="mb-3 mx-2">
-                                            <div className="form-check">
-                                                <Input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    id="invalidCheck"
-                                                />
-                                                <Label
-                                                    className="form-check-label"
-                                                    htmlFor="invalidCheck"
-                                                >
-                                                    {" "}
-                                                    Resources
-                                                </Label>
-                                            </div>
-                                        </FormGroup>
+                                        {props.categories?.map(e => {
+                                            return (
+                                                <FormGroup className="mb-3 mx-2">
+                                                    <div className="form-check">
+                                                        <Input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id={`invalidCheck${e.id}`}
+                                                        />
+                                                        <Label
+                                                            className="form-check-label text-capitalize"
+                                                            htmlFor="invalidCheck"
+                                                        >
+                                                            {" "}
+                                                            {e.name}
+                                                        </Label>
+                                                    </div>
+                                                </FormGroup>
+                                            )
+                                        })}
+
                                     </Col>
-                                    <Col xl={1}>
+                                    {/* <Col xl={1}>
                                         <FormGroup className="mb-3">
                                             <div className="form-check">
                                                 <Input
@@ -194,7 +199,7 @@ const NewIncident = () => {
                                                 </Label>
                                             </div>
                                         </FormGroup>
-                                    </Col>
+                                    </Col> */}
                                 </Row>
                                 <Row>
                                     <Col>

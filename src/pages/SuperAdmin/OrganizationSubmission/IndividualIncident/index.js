@@ -14,11 +14,11 @@ function Index() {
     const fetchSubmission = useCallback(async (page) => {
         const p = page || 1;
         try {
-            let url = `incident/getall?page=${p}&limit=10`;
+            let url = `incident/all/specific/?action=stakeholder`;
             const rs = await request(url, 'GET', false);
-            let dataArray = rs.result.sort(x => x.userId === null);
-            setOrganizationSubmission(dataArray);
-            setCount(Math.ceil(rs.paging.total / rowsPerPage));
+            // let dataArray = rs.result.sort(x => x.userId === null);
+            setOrganizationSubmission(rs.result);
+            setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         } catch (err) {
             console.log(err);
         }

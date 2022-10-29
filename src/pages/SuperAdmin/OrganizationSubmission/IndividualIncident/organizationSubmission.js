@@ -62,17 +62,31 @@ const OrganizationSubmission = (props) => {
                                                     <td>
                                                         <div className="d-flex gap-3 users">
                                                             <ul className="list-inline font-size-20 contact-links mb-0">
-
                                                                 <li className="list-inline-item">
                                                                     <Link
-                                                                        to="/admin-edit-post/1"
-                                                                        className="text-primary"
+                                                                        to="/view-post/1"
+                                                                        className="text-dark"
                                                                     // onClick={() => {
                                                                     //   const users = cellProps.row.original
                                                                     //   // handleUserClick(users)
                                                                     // }}
                                                                     >
-                                                                        <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                                        <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
+                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                            View Details
+                                                                        </UncontrolledTooltip>
+                                                                    </Link>
+                                                                </li>
+                                                                <li className="list-inline-item">
+                                                                    <Link
+                                                                        to="/edit-post/1"
+                                                                        className="text-dark"
+                                                                    // onClick={() => {
+                                                                    //   const users = cellProps.row.original
+                                                                    //   // handleUserClick(users)
+                                                                    // }}
+                                                                    >
+                                                                        <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                                         <UncontrolledTooltip placement="top" target="edittooltip">
                                                                             Edit
                                                                         </UncontrolledTooltip>
@@ -81,11 +95,12 @@ const OrganizationSubmission = (props) => {
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
-                                                                        className="text-danger"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   onClickDelete(users)
-                                                                    // }}
+                                                                        // onClick={() => {
+                                                                        //   const users = cellProps.row.original
+                                                                        //   onClickDelete(users)
+                                                                        // }}
+                                                                        className="text-dark"
+
                                                                     >
                                                                         <i
                                                                             className="uil uil-trash-alt font-size-18"
@@ -106,27 +121,32 @@ const OrganizationSubmission = (props) => {
 
                                 </tbody>
                             </Table>
-                            <div className="mt-3">
-                                <ReactPaginate
-                                    nextLabel='Next'
-                                    breakLabel='...'
-                                    previousLabel='Prev'
-                                    pageCount={props.count}
-                                    activeClassName='active'
-                                    breakClassName='page-item'
-                                    pageClassName={'page-item'}
-                                    breakLinkClassName='page-link'
-                                    nextLinkClassName={'page-link'}
-                                    pageLinkClassName={'page-link'}
-                                    nextClassName={'page-item next'}
-                                    previousLinkClassName={'page-link'}
-                                    previousClassName={'page-item prev'}
-                                    onPageChange={page => props.handlePagination(page)}
-                                    forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
-                                    containerClassName={'pagination react-paginate justify-content-end p-1'}
-                                />
+                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                                <div>Showing 1 to 10 of 57 entries</div>
+                                <div>
+                                    <ReactPaginate
+                                        nextLabel='Next'
+                                        breakLabel='...'
+                                        previousLabel='Prev'
+                                        pageCount={props.count}
+                                        activeClassName='active'
+                                        breakClassName='page-item'
+                                        pageClassName={'page-item'}
+                                        breakLinkClassName='page-link'
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                        nextClassName={'page-item next'}
+                                        previousLinkClassName={'page-link'}
+                                        previousClassName={'page-item prev'}
+                                        onPageChange={page => props.handlePagination(page)}
+                                        forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                        containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                    />
+
+                                </div>
                             </div>
                         </div>
+
                     </CardBody>
                 </Card>
             </Col>

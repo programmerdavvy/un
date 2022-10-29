@@ -30,104 +30,122 @@ const IndividualSubmission = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.submission?.map((e, i) => {
-                                        if (e.userId !== null) {
-                                            return (
-                                                <tr key={i} className='text-capitalize'>
-                                                    <td><Link to="#" className="text-body fw-bold">#{e.referenceId}</Link> </td>
-                                                    <td>
-                                                        {e.childname}
-                                                    </td>
-                                                    <td>{e.isMobile === true ? <><i className="uil-mobile-android-alt"></i> Mobile</> : <><i className="uil-desktop"></i> Desktop</>} </td>
-                                                    <td>
-                                                        {e.category}
-                                                    </td>
-                                                    <td>
-                                                        {e.city}
-                                                    </td>
-                                                    <td>
-                                                        {e.state}
-                                                    </td>
-                                                    <td>
-                                                        {new Date(e.createdAt).toDateString()}
-                                                    </td>
-                                                    <td>
-                                                        <img src={e.media_file} className='img-thumbnail' width='50' alt='evidence' />
-                                                    </td>
-                                                    <td>
-                                                        {e.status}
-                                                    </td>
-                                                    <td>
-                                                        <div className="d-flex gap-3 users">
-                                                            <ul className="list-inline font-size-20 contact-links mb-0">
-
-                                                                <li className="list-inline-item">
-                                                                    <Link
-                                                                        to="/admin-edit-post/1"
-                                                                        className="text-primary"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   // handleUserClick(users)
-                                                                    // }}
-                                                                    >
-                                                                        <i className="uil uil-pen font-size-18" id="edittooltip" />
-                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                            Edit
-                                                                        </UncontrolledTooltip>
-                                                                    </Link>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <Link
-                                                                        to="#"
-                                                                        className="text-danger"
+                                        return (
+                                            <tr key={i} className='text-capitalize'>
+                                                <td><Link to="#" className="text-body fw-bold">#{e.referenceId}</Link> </td>
+                                                <td>
+                                                    {e.childname}
+                                                </td>
+                                                <td>{e.isMobile === true ? <><i className="uil-mobile-android-alt"></i> Mobile</> : <><i className="uil-desktop"></i> Desktop</>} </td>
+                                                <td>
+                                                    {e.category}
+                                                </td>
+                                                <td>
+                                                    {e.city}
+                                                </td>
+                                                <td>
+                                                    {e.state}
+                                                </td>
+                                                <td>
+                                                    {new Date(e.createdAt).toDateString()}
+                                                </td>
+                                                <td>
+                                                    <img src={e.media_file} className='img-thumbnail' width='50' alt='evidence' />
+                                                </td>
+                                                <td>
+                                                    {e.status}
+                                                </td>
+                                                <td>
+                                                    <div className="d-flex gap-3 users">
+                                                        <ul className="list-inline font-size-20 contact-links mb-0">
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="/view-post/1"
+                                                                    className="text-dark"
+                                                                // onClick={() => {
+                                                                //   const users = cellProps.row.original
+                                                                //   // handleUserClick(users)
+                                                                // }}
+                                                                >
+                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        View Details
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="/edit-post/1"
+                                                                    className="text-dark"
+                                                                // onClick={() => {
+                                                                //   const users = cellProps.row.original
+                                                                //   // handleUserClick(users)
+                                                                // }}
+                                                                >
+                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        Edit
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
                                                                     // onClick={() => {
                                                                     //   const users = cellProps.row.original
                                                                     //   onClickDelete(users)
                                                                     // }}
-                                                                    >
-                                                                        <i
-                                                                            className="uil uil-trash-alt font-size-18"
-                                                                            id="deletetooltip"
-                                                                        />
-                                                                        <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                            Delete
-                                                                        </UncontrolledTooltip>
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
+                                                                    className="text-dark"
+
+                                                                >
+                                                                    <i
+                                                                        className="uil uil-trash-alt font-size-18"
+                                                                        id="deletetooltip"
+                                                                    />
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                        Delete
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )
                                     })}
 
                                 </tbody>
                             </Table>
-                            <div className="mt-3">
-                                <ReactPaginate
-                                    nextLabel='Next'
-                                    breakLabel='...'
-                                    previousLabel='Prev'
-                                    pageCount={props.count}
-                                    activeClassName='active'
-                                    breakClassName='page-item'
-                                    pageClassName={'page-item'}
-                                    breakLinkClassName='page-link'
-                                    nextLinkClassName={'page-link'}
-                                    pageLinkClassName={'page-link'}
-                                    nextClassName={'page-item next'}
-                                    previousLinkClassName={'page-link'}
-                                    previousClassName={'page-item prev'}
-                                    onPageChange={page => props.handlePagination(page)}
-                                    forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
-                                    containerClassName={'pagination react-paginate justify-content-end p-1'}
-                                />
+                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                                <div>Showing 1 to 10 of 57 entries</div>
+
+                                <div>
+                                    <ReactPaginate
+                                        nextLabel='Next'
+                                        breakLabel='...'
+                                        previousLabel='Prev'
+                                        pageCount={props.count}
+                                        activeClassName='active'
+                                        breakClassName='page-item'
+                                        pageClassName={'page-item'}
+                                        breakLinkClassName='page-link'
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                        nextClassName={'page-item next'}
+                                        previousLinkClassName={'page-link'}
+                                        previousClassName={'page-item prev'}
+                                        onPageChange={page => props.handlePagination(page)}
+                                        forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                        containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                    />
+                                </div>
+
                             </div>
                         </div>
                     </CardBody>
                 </Card>
             </Col>
-        </Row>
+        </Row >
     );
 };
 

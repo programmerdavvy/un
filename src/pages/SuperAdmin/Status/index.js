@@ -21,18 +21,16 @@ function Index() {
         try {
             const url = `status`;
             const rs = await request(url, 'GET', false);
-            console.log(rs)
             setStatus(rs.result);
-            setCount(Math.ceil(rs.paging.total / rowsPerPage));
-            console.log(rs);
+            setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         } catch (err) {
             console.log(err);
         }
     }, [rowsPerPage]);
 
     const handlePagination = page => {
-        fetchStatus(page.selected + 1)
-        setCurrentPage(page.selected + 1)
+        fetchStatus(page.selected + 1);
+        setCurrentPage(page.selected + 1);
     }
     useEffect(() => {
         fetchStatus();
@@ -41,11 +39,11 @@ function Index() {
     return (
         <React.Fragment>
             <div className='page-content'>
-                <Container fluid>
-                    <Breadcrumb title="Status" breadcrumbItem="All Status" />
+                <Breadcrumb title="Status" breadcrumbItem="All Status" />
+                <Container>
                     <Row>
                         <Col>
-                            <Status count={count} status={status} handlePagination={handlePagination} currentPage={currentPage}  />
+                            <Status count={count} status={status} handlePagination={handlePagination} currentPage={currentPage} />
                         </Col>
                     </Row>
                 </Container>
