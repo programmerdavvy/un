@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import Flatpickr from "react-flatpickr"
+import { request } from '../../../services/utilities';
 
 
 const NewEvent = () => {
@@ -20,9 +21,7 @@ const NewEvent = () => {
         )
         setselectedFiles(files)
     }
-    /**
-     * Formats the size
-     */
+
     function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return "0 Bytes"
         const k = 1024
@@ -56,10 +55,17 @@ const NewEvent = () => {
             venue: Yup.string().required("Please Enter Venue"),
             categories: Yup.string().required("Please Select Categories")
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (values) => {
+            const data = {}
+            try {
+                let url = ``;
+                const rs = await request(url, 'POST', false, data)
+            } catch (err) {
+
+            }
         }
     });
+
     return (
         <React.Fragment>
 
@@ -159,7 +165,7 @@ const NewEvent = () => {
                                                             <div className="mb-3">
                                                                 <i className="display-4 text-muted uil uil-cloud-upload" />
                                                             </div>
-                                                            <h4>Attache Media File.</h4>
+                                                            <h4>Attache Featured Image.</h4>
                                                         </div>
                                                     </div>
                                                 )}

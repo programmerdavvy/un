@@ -38,7 +38,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchGallery = useCallback(async () => {
-        let url = `gallery/media?id=1`;
+        let url = `gallery/media`;
         try {
             const rs = await request(url, 'GET', false);
             setGallery(rs.result);
