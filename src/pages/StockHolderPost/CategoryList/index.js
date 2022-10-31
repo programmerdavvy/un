@@ -66,7 +66,7 @@ function Index() {
                 <Container>
                     <Row>
                         <Col>
-                            <Categories categories={categories} showToast={showToast} />
+                            <Categories categories={categories} fetchCategories={fetchCategories} showToast={showToast} />
                         </Col>
                     </Row>
                 </Container>

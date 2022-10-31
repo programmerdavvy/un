@@ -53,7 +53,17 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [count, setCount] = useState(1);
   const [totalreportedincident, setTotalreportedincident] = useState(0);
+  const [totalreportedpost, setTotalreportedpost] = useState(0);
+
   const [meta, setMeta] = useState(null);
+
+  const [rowsPerPageP, setRowsPerPageP] = useState(10)
+  const [currentPageP, setCurrentPageP] = useState(1)
+  const [countP, setCountP] = useState(1);
+  const [metaP, setMetaP] = useState(null);
+  const [posts, setPosts] = useState([]);
+
+  const [totaldocument, setTotaldocument] = useState(0);
 
 
   const fetchIncident = useCallback(async page => {
@@ -62,7 +72,6 @@ const Dashboard = () => {
     try {
       let url = `incident/getall?page=${p}&limit=5`;
       const rs = await request(url, 'GET', false);
-      console.log(rs);
       if (rs.success === true) {
         setIncidents(rs.result);
         setTotalreportedincident(rs.paging?.total)
@@ -74,22 +83,58 @@ const Dashboard = () => {
     }
   }, [rowsPerPage]);
 
+  const fetchPosts = useCallback(async (page) => {
+    let p = page || 1;
+    let url = `sections/admin?pageId=3&page=${p}&limit=5`;
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        setPosts(rs.result);
+        setTotalreportedpost(rs.paging.total)
+        setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
+        setMetaP(rs.paging);
+      }
+    } catch (err) {
+      console.log(err);
+      // showToast('error', 'Failed to fetch')
+    }
+  }, [rowsPerPageP]);
+
+  const fetchDocuments = useCallback(async (page) => {
+    let p = page || 1;
+
+    let url = `media?pageId=&id=&page=${p}&limit=10`;
+    try {
+      const rs = await request(url, 'GET', false);
+      setTotaldocument(rs.paging.total);
+
+    } catch (err) {
+      console.log(err);
+    }
+  }, [])
+
   const handlePagination = page => {
     fetchIncident(page.selected + 1)
     setCurrentPage(page.selected + 1)
   }
+  const handlePaginationP = page => {
+    fetchPosts(page.selected + 1)
+    setCurrentPageP(page.selected + 1)
+  }
 
   useEffect(() => {
     fetchIncident();
-  }, [fetchIncident])
+    fetchPosts();
+    fetchDocuments()
+  }, [fetchIncident, fetchPosts, fetchDocuments])
 
   const reports = [
     {
       id: 1,
       icon: "uil-signal-alt-3",
       title: "Total Document Uploaded",
-      rate: 88,
-      value: 5643,
+      rate: totaldocument,
+      value: totaldocument,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -106,8 +151,8 @@ const Dashboard = () => {
       id: 2,
       icon: "uil-file-info-alt",
       title: "Total Approved Reports",
-      rate: 34,
-      value: 5643,
+      rate: totalreportedpost,
+      value: totalreportedpost,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -124,7 +169,7 @@ const Dashboard = () => {
       icon: "uil-coins",
       title: "Total Reported Incident",
       rate: totalreportedincident,
-      value: 5643,
+      value: totalreportedincident,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -175,7 +220,6 @@ const Dashboard = () => {
               <Row>
                 <Statistics reports={reports} />
               </Row>
-              {/* <Analysis /> */}
 
             </Col>
             <Col xl={3} className="d-none">
@@ -189,7 +233,9 @@ const Dashboard = () => {
           </Row>
 
           <Row className="mt-4">
-            <IncidentPost incidents={incidents} handlePagination={handlePagination} currentPage={currentPage} count={count} meta={meta} />
+            <IncidentPost incidents={incidents} handlePagination={handlePagination} currentPage={currentPage} count={count} meta={meta}
+              posts={posts} currentPageP={currentPageP} handlePaginationP={handlePaginationP} countP={countP} metaP={metaP}
+            />
           </Row>
         </Container>
       </div>

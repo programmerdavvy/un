@@ -130,7 +130,7 @@ const SidebarContent = props => {
                   <Link to="/new-incident">{props.t("Report Incident")}</Link>
                 </li>
                 <li>
-                  <Link to="/incidents">{props.t("Incident Reported")}</Link>
+                  <Link to="/reported-incident">{props.t("Incident Reported")}</Link>
                 </li>
                 <li>
                 </li>
@@ -138,7 +138,7 @@ const SidebarContent = props => {
             </li>
 
             <li>
-              <Link to="/documents" className="waves-effect">
+              <Link to="/stakeholder-documents" className="waves-effect">
                 <i className="uil-coins"></i>
                 <span>{props.t("Documents")}</span>
               </Link>

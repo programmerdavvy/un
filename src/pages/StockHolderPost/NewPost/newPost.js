@@ -1,18 +1,26 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Card, CardBody, Col, Row, FormFeedback, Form, Input, Label, Button, FormGroup } from 'reactstrap'
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
-import { Link, } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { Editor } from "react-draft-wysiwyg"
 import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import { request } from '../../../services/utilities';
 
 
 const NewIncident = (props) => {
+    const {
+        match: { params },
+    } = props;
     const id = '';
     const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedMulti, setselectedMulti] = useState(null)
+    const [tags, setTags] = useState('');
+    const [description, setDescription] = useState('');
+    const [post, setPost] = useState(null)
+    // let { id } = useParams();
 
     function handleAcceptedFiles(files) {
         files.map(file =>
@@ -36,28 +44,59 @@ const NewIncident = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     function handleMulti(selectedMulti) {
-        setselectedMulti(selectedMulti)
+        setselectedMulti(selectedMulti);
+        setTags(selectedMulti)
     }
+    const fetchPostById = useCallback(async () => {
+        try {
+            let url = `sections/admin?pageId=&id=${params.id}`;
+            const rs = await request(url, 'GET', false);
+            if (rs.success === true) {
+                setPost(rs.result);
+                setDescription(rs.result.content);
+                // let tag = rs.result.tags.split(',');
+                // let tags = 
+                // console.log(tag)
+                // setselectedMulti(rs.result.tags)
+            }
+            console.log(rs);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [params?.id]);
+
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
 
         initialValues: {
-            title: '',
-            description: '',
-            city: '',
-            state: '',
-            zip: '',
+            title: params.id ? post?.title : '',
+            // description: ''
+            // city: '',
+            // state: '',
+            // zip: '',
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Title"),
-            description: Yup.string().required("Please Enter Paragraph"),
-            city: Yup.string().required("Please Enter Your City"),
-            state: Yup.string().required("Please Enter Your State"),
-            zip: Yup.string().required("Please Enter Your Zip"),
+            title: Yup.string().required("Please Enter Title")
+            // description: Yup.string().required("Please Enter Paragraph"),
+            // city: Yup.string().required("Please Enter Your City"),
+            // state: Yup.string().required("Please Enter Your State"),
+            // zip: Yup.string().required("Please Enter Your Zip"),
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async e => {
+            let data = { pageId: 4, title: e.title, content: description, tags: selectedMulti[0].value, media: [], language: 'english', date: new Date() }
+
+            let url = params.id ? `sections?id=${params.id}` : `sections`
+            try {
+                const rs = await request(url, 'POST', false, data);
+                if (rs.success === true) {
+                    props.showToast('success', 'Saved Successfully')
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to save')
+
+            }
         }
     });
     const optionGroup = [
@@ -78,6 +117,11 @@ const NewIncident = (props) => {
             ],
         },
     ]
+
+    useEffect(() => {
+        fetchPostById();
+    }, [fetchPostById]);
+
     return (
         <React.Fragment>
             <Card>
@@ -86,15 +130,14 @@ const NewIncident = (props) => {
                         <Col>
                             {/* <Card>
                                 <CardBody> */}
-                            <h4 className="card-title">{id.id ? 'Edit' : 'Create a New'} Post</h4>
+                            <h4 className="card-title">{params.id ? 'Edit' : 'Create a New'} Post</h4>
 
                             <Form className="needs-validation"
                                 onSubmit={(e) => {
                                     e.preventDefault();
                                     validation.handleSubmit();
                                     return false;
-                                }}
-                            >
+                                }}>
                                 <Row>
                                     <Col>
                                         <FormGroup className="mb-3">
@@ -129,8 +172,8 @@ const NewIncident = (props) => {
                                                 style={{ outline: 'none' }}
                                                 value={selectedMulti}
                                                 isMulti={true}
-                                                onChange={() => {
-                                                    handleMulti()
+                                                onChange={(e) => {
+                                                    handleMulti(e)
                                                 }}
                                                 options={optionGroup}
                                                 classNamePrefix="select2-selection"
@@ -144,7 +187,7 @@ const NewIncident = (props) => {
                                         <div>Categories:</div>
                                         {props.categories?.map(e => {
                                             return (
-                                                <FormGroup className="mb-3 mx-2">
+                                                <FormGroup className="mb-3 mx-2" key={e.id}>
                                                     <div className="form-check">
                                                         <Input
                                                             type="checkbox"
@@ -223,10 +266,13 @@ const NewIncident = (props) => {
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"
                                                 editorClassName="editorClassName"
+                                                name='description'
+                                                onChange={e => setDescription(e.blocks[0].text)}
+
                                             />
-                                            {validation.touched.description && validation.errors.description ? (
+                                            {/* {validation.touched.description && validation.errors.description ? (
                                                 <FormFeedback type="invalid">{validation.errors.description}</FormFeedback>
-                                            ) : null}
+                                            ) : null} */}
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -334,7 +380,7 @@ const NewIncident = (props) => {
                                     </Row>
                                     <div>
                                         <Button color="primary" type="submit">
-                                            Publish
+                                            {params?.id ? 'Publish' : 'Update'}
                                         </Button>
                                     </div>
                                 </div>
@@ -518,4 +564,4 @@ const NewIncident = (props) => {
     )
 }
 
-export default NewIncident
+export default withRouter(NewIncident) 

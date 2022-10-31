@@ -23,38 +23,38 @@ function IncidentPost(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        
-                                        <th scope="row">22-2-2022</th>
-                                        <td>Mark</td>
-                                        <td>
-                                            <i className='uil-circle text-danger font-size-12' id='edittooltip' style={{ cursor: 'pointer' }}></i>
-                                            <UncontrolledTooltip placement="top" target="edittooltip">
-                                                Unapproved
-                                            </UncontrolledTooltip>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">23-4=2022</th>
-                                        <td>Mark</td>
-                                        <td>
-                                            <i className='uil-circle text-success font-size-12' id='edittooltip2' style={{ cursor: 'pointer' }}></i>
-                                            <UncontrolledTooltip placement="top" target="edittooltip2">
-                                                Approved
-                                            </UncontrolledTooltip>
-                                        </td>
-                                    </tr>
+                                    {props.posts?.map((e, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <th scope="row">{new Date(e.createdAt).toDateString()}</th>
+                                                <td>{e.title}</td>
+                                                <td>
+                                                    {e.isApproved === false ? <div>
+                                                        <i className='uil-circle text-danger font-size-12' id='edittooltip' style={{ cursor: 'pointer' }}></i>
+                                                        <UncontrolledTooltip placement="top" target="edittooltip">
+                                                            Unapproved
+                                                        </UncontrolledTooltip>
+                                                    </div> : <div>
+                                                        <i className='uil-circle text-success font-size-12' id='edittooltip2' style={{ cursor: 'pointer' }}></i>
+                                                        <UncontrolledTooltip placement="top" target="edittooltip2">
+                                                            Approved
+                                                        </UncontrolledTooltip>
+                                                    </div>}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                             <div className="mt-3 d-flex align-items-center justify-content-between">
-                                <div>Showing {props.currentPage} to 5 of {props.meta?.total} entries</div>
+                                <div>Showing 1 to 5 of {props.metaP?.total} entries</div>
 
                                 <div>
                                     <ReactPaginate
                                         nextLabel='Next'
                                         breakLabel='...'
                                         previousLabel='Prev'
-                                        pageCount={props.count}
+                                        pageCount={props.countP}
                                         activeClassName='active'
                                         breakClassName='page-item'
                                         pageClassName={'page-item'}
@@ -64,8 +64,8 @@ function IncidentPost(props) {
                                         nextClassName={'page-item next'}
                                         previousLinkClassName={'page-link'}
                                         previousClassName={'page-item prev'}
-                                        onPageChange={page => props.handlePagination(page)}
-                                        forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                        onPageChange={page => props.handlePaginationP(page)}
+                                        forcePage={props.currentPageP !== 0 ? props.currentPageP - 1 : 0}
                                         containerClassName={'pagination react-paginate justify-content-end p-1'}
                                     />
                                 </div>

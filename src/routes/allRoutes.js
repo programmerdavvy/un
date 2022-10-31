@@ -15,6 +15,7 @@ import StockHolderAddPost from "../pages/StockHolderPost/NewPost/index"
 import StockHolderAddIncident from '../pages/StockHolderPost/NewIncident/index'
 import StackHolderDocument from '../pages/StakeHolderDocument/index'
 import StockHolderCategoryList from '../pages/StockHolderPost/CategoryList/index'
+import StakeHolderReportedIncident from '../pages/StockHolderPost/ReportedIncident/index'
 import SuperAdminIndividualSubmission from "../pages/SuperAdmin/IndividualIncident/index"
 import SuperAdminOrganizationSubmission from "../pages/SuperAdmin/OrganizationSubmission/IndividualIncident/index"
 import SuperAdminStatus from '../pages/SuperAdmin/Status/index'
@@ -341,6 +342,8 @@ const superAdminRoutes = [
   { path: "/edit-post/:id", component: StockHolderAddPost },
   { path: "/new-post", component: StockHolderAddPost },
   { path: "/new-incident", component: StockHolderAddIncident },
+  { path: "/reported-incident", component: StakeHolderReportedIncident },
+
   { path: "/categories", component: StockHolderCategoryList },
 ]
 const authRoutes = [

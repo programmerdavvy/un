@@ -8,7 +8,8 @@ function Categories(props) {
 
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
-
+    const [isEdit, setIsedit] = useState(false);
+    const [id, setId] = useState(null)
     const isSuperAdmin = false
 
     const addCategory = async () => {
@@ -27,6 +28,39 @@ function Categories(props) {
             props.showToast('error', 'Failed to save')
         }
     }
+    const updateCategory = async () => {
+        let data = { name, id };
+        let url = `category/edit`;
+        try {
+            const rs = await request(url, 'PATCH', false, data);
+            if (rs.success === true) {
+                setIsedit(false);
+                props.fetchCategories();
+                setmodal(!modal);
+                props.showToast('success', 'Updated successfully ');
+            }
+
+        } catch (err) {
+            setIsedit(false);
+            console.log(err);
+            props.showToast('error', 'Failed to update')
+        }
+    }
+    const onClickDelete = async id => {
+        if (window.confirm('Are you sure!')) {
+            try {
+                let url = `category/delete/?id=${id}`;
+                const rs = await request(url, 'DELETE', false);
+                if (rs.success === true) {
+                    props.fetchCategories();
+                    props.showToast('success', 'Successfully Deleted');
+                }
+            } catch (err) {
+                console.log(err)
+                props.showToast('error', 'Failed to Delete');
+            }
+        }
+    }
     return (
         <React.Fragment>
             <Modal
@@ -34,16 +68,17 @@ function Categories(props) {
                 className=""
                 isOpen={modal}
                 toggle={() => {
-                    setmodal(!modal)
+                    setmodal(!modal);
                 }}
                 centered={false}>
                 <ModalHeader
                     className=""
                     toggle={() => {
                         setmodal(!modal)
+                        setIsedit(false);
                     }}
                 >
-                    Add New Category
+                    {isEdit === true ? 'Edit Category' : ' Add New Category'}
                 </ModalHeader>
                 <ModalBody>
                     <Card>
@@ -56,6 +91,7 @@ function Categories(props) {
                                             <input
                                                 type="text"
                                                 onChange={e => setName(e.target.value)}
+                                                value={name}
                                                 className="form-control"
                                                 id="name"
                                                 placeholder="Enter category"
@@ -66,8 +102,8 @@ function Categories(props) {
                                 <Row>
                                     <Col lg={12}>
                                         <div className="text-end">
-                                            <button type="button" onClick={addCategory} className="btn btn-success">
-                                                Save
+                                            <button type="button" onClick={isEdit === true ? updateCategory : addCategory} className="btn btn-success">
+                                                {isEdit === true ? 'Update' : 'Save'}
                                             </button>
                                         </div>
                                     </Col>
@@ -108,59 +144,46 @@ function Categories(props) {
                                                     <td>{e.name}</td>
                                                     <td>30</td>
                                                     <td>
-                                                            <div className="d-flex gap-3 users">
-                                                                <ul className="list-inline font-size-20 contact-links mb-0">
-                                                                    <li className="list-inline-item">
-                                                                        <Link
-                                                                            to="#"
-                                                                            className="text-dark"
-                                                                        // onClick={() => {
-                                                                        //   const users = cellProps.row.original
-                                                                        //   // handleUserClick(users)
-                                                                        // }}
-                                                                        >
-                                                                            <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                                                            <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                                View Details
-                                                                            </UncontrolledTooltip>
-                                                                        </Link>
-                                                                    </li>
-                                                                    <li className="list-inline-item">
-                                                                        <Link
-                                                                            to="#"
-                                                                            className="text-dark"
-                                                                        // onClick={() => {
-                                                                        //   const users = cellProps.row.original
-                                                                        //   // handleUserClick(users)
-                                                                        // }}
-                                                                        >
-                                                                            <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                            <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                                Edit
-                                                                            </UncontrolledTooltip>
-                                                                        </Link>
-                                                                    </li>
-                                                                    <li className="list-inline-item">
-                                                                        <Link
-                                                                            to="#"
-                                                                            // onClick={() => {
-                                                                            //   const users = cellProps.row.original
-                                                                            //   onClickDelete(users)
-                                                                            // }}
-                                                                            className="text-dark"
+                                                        <div className="d-flex gap-3 users">
+                                                            <ul className="list-inline font-size-20 contact-links mb-0">
 
-                                                                        >
-                                                                            <i
-                                                                                className="uil uil-trash-alt font-size-18"
-                                                                                id="deletetooltip"
-                                                                            />
-                                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                                Delete
-                                                                            </UncontrolledTooltip>
-                                                                        </Link>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
+                                                                <li className="list-inline-item">
+                                                                    <Link
+                                                                        to="#"
+                                                                        className="text-dark"
+                                                                        onClick={() => {
+                                                                            setId(e.id);
+                                                                            setName(e.name);
+                                                                            setIsedit(true);
+                                                                            setmodal(!modal);
+                                                                        }}
+                                                                    >
+                                                                        <i className="uil-edit-alt font-size-18" id="edittooltip" />
+                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                            Edit
+                                                                        </UncontrolledTooltip>
+                                                                    </Link>
+                                                                </li>
+                                                                <li className="list-inline-item">
+                                                                    <Link
+                                                                        to="#"
+                                                                        onClick={() => {
+                                                                            onClickDelete(e.id)
+                                                                        }}
+                                                                        className="text-dark"
+
+                                                                    >
+                                                                        <i
+                                                                            className="uil uil-trash-alt font-size-18"
+                                                                            id="deletetooltip"
+                                                                        />
+                                                                        <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                            Delete
+                                                                        </UncontrolledTooltip>
+                                                                    </Link>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             )

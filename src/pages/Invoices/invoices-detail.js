@@ -13,6 +13,7 @@ import { getInvoiceDetail } from "../../store/invoices/actions";
 import { connect } from "react-redux";
 
 const InvoiceDetail = props => {
+  console.log(props)
   const {
     invoiceDetail,
     match: { params },
