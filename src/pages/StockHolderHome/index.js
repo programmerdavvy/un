@@ -93,6 +93,7 @@ const Dashboard = () => {
         setTotalreportedpost(rs.paging.total)
         setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
         setMetaP(rs.paging);
+        console.log(rs);
       }
     } catch (err) {
       console.log(err);

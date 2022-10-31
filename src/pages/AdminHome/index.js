@@ -54,6 +54,11 @@ const Dashboard = () => {
   const [organizationCount, setOrganizationCount] = useState(0);
 
   const [totalSubmission, setTotalSubmission] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [count, setCount] = useState(1);
+  const [posts, setPosts] = useState([]);
+  const [meta, setMeta] = useState(null);
 
 
   const fetchMobileCount = useCallback(async () => {
@@ -75,22 +80,29 @@ const Dashboard = () => {
     }
   }, []);
 
-  // const fetchSubmission = useCallback(async (page) => {
-  //   const p = page || 1;
-  //   try {
-  //     let url = `incident/all/specific/?action=individual`;
-  //     const rs = await request(url, 'GET', false);
-  //     // let dataArray = rs.result.sort(x => x.userId !== null);
-  //     setIndividualSubmission(rs.result);
-  //     setCount(Math.ceil(rs.paging?.total / rowsPerPage));
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [rowsPerPage]);
+  const fetchAwaitingPosts = useCallback(async page => {
+    const p = page || 1;
+    try {
+      const url = `sections/admin?pageId=3&page=${p}&limit=5`;
+      const rs = await request(url, 'GET', false);
+      setPosts(rs.result);
+      setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+      setMeta(rs.paging);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [rowsPerPage]);
 
+  const handlePagination = page => {
+    fetchAwaitingPosts(page.selected + 1)
+    setCurrentPage(page.selected + 1)
+  }
   useEffect(() => {
-    fetchMobileCount()
-  }, [fetchMobileCount])
+    fetchAwaitingPosts();
+    fetchMobileCount();
+  }, [fetchAwaitingPosts, fetchMobileCount]);
+
+
   const reports = [
     {
       id: 1,
@@ -250,7 +262,7 @@ const Dashboard = () => {
                   </Row>
                   <Row className="mt-4">
                     <Col>
-                      <PostTable />
+                      <PostTable posts={posts} currentPage={currentPage} handlePagination={handlePagination} count={count} meta={meta} />
                     </Col>
                     <Col xl={3}>
                       <TopUsers />

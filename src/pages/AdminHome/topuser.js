@@ -38,7 +38,7 @@ const TopUser = () => {
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Enugu State</h6>
                                             <p className="text-muted font-size-13 mb-0">
                                                 <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
@@ -48,7 +48,16 @@ const TopUser = () => {
                                     </tr>
                                     <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Benue State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
+                                        </td>
+                                        <td className="text-muted fw-semibold text-end">
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />10 cases in total
+                                        </td>
+                                    </tr>  <tr>
+                                        <td>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Kaduna State</h6>
                                             <p className="text-muted font-size-13 mb-0">
                                                 <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
@@ -66,21 +75,12 @@ const TopUser = () => {
                                         </td>
                                     </tr>  <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Nasarawa State</h6>
                                             <p className="text-muted font-size-13 mb-0">
                                                 <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
-                                        </td>
-                                    </tr>  <tr>
-                                        <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
-                                            <p className="text-muted font-size-13 mb-0">
-                                                <i className="mdi mdi-map-marker"></i> </p>
-                                        </td>
-                                        <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />5 cases in total
                                         </td>
                                     </tr>  <tr>
                                         <td>
