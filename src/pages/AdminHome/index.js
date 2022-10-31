@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Row, Col, CardBody, Card } from "reactstrap";
 import { Link } from "react-router-dom";
 import ReactApexChart from "react-apexcharts"
@@ -14,6 +14,7 @@ import Analysis from "./Analysis";
 import AwaitingApproval from "./Post/awaitingapproval";
 import TopUsers from './topuser';
 import PostTable from './latest-transaction';
+import { request } from "../../services/utilities";
 
 const series2 = [10];
 
@@ -48,14 +49,55 @@ const options2 = {
 
 
 const Dashboard = () => {
+  const [mobileCount, setMobileCount] = useState(0);
+  const [individualCount, setIndividualCount] = useState(0);
+  const [organizationCount, setOrganizationCount] = useState(0);
 
+  const [totalSubmission, setTotalSubmission] = useState(0);
+
+
+  const fetchMobileCount = useCallback(async () => {
+    try {
+      const url = `incident/get/count/?action=mobile`;
+      const url_individual_sub = `incident/all/specific/?action=individual`;
+      const url_organization_sub = `incident/all/specific/?action=individual`;
+
+      const rs = await request(url, 'GET', false);
+      const rs_individual = await request(url_individual_sub, 'GET', false);
+      const rs_organization = await request(url_organization_sub, 'GET', false);
+      setOrganizationCount(rs_organization.paging.total);
+      setIndividualCount(rs_individual.paging.total);
+      const total = rs_individual.paging.total + rs_organization.paging.total;
+      setTotalSubmission(total);
+      setMobileCount(rs.result.totalCount);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  // const fetchSubmission = useCallback(async (page) => {
+  //   const p = page || 1;
+  //   try {
+  //     let url = `incident/all/specific/?action=individual`;
+  //     const rs = await request(url, 'GET', false);
+  //     // let dataArray = rs.result.sort(x => x.userId !== null);
+  //     setIndividualSubmission(rs.result);
+  //     setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [rowsPerPage]);
+
+  useEffect(() => {
+    fetchMobileCount()
+  }, [fetchMobileCount])
   const reports = [
     {
       id: 1,
       icon: "uil-signal-alt-3",
       title: "Total Submissions",
-      rate: 88,
-      value: 5643,
+      rate: totalSubmission,
+      value: totalSubmission,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -72,8 +114,8 @@ const Dashboard = () => {
       id: 2,
       icon: "uil-file-info-alt",
       title: "Individual Submissions",
-      rate: 34,
-      value: 5643,
+      rate: individualCount,
+      value: individualCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -89,8 +131,8 @@ const Dashboard = () => {
       id: 3,
       icon: "uil-coins",
       title: "Organization Submissions",
-      rate: 54,
-      value: 5643,
+      rate: organizationCount,
+      value: organizationCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -107,8 +149,8 @@ const Dashboard = () => {
       id: 3,
       icon: "uil-phone",
       title: "Mobile submissions",
-      rate: 37,
-      value: 5643,
+      rate: mobileCount,
+      value: mobileCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,

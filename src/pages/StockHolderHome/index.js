@@ -103,7 +103,7 @@ const Dashboard = () => {
   const fetchDocuments = useCallback(async (page) => {
     let p = page || 1;
 
-    let url = `media?pageId=&id=&page=${p}&limit=10`;
+    let url = `media?pageId=&id=&page=${p}&limit=5`;
     try {
       const rs = await request(url, 'GET', false);
       setTotaldocument(rs.paging.total);
