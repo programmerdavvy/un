@@ -1,57 +1,44 @@
-import React, { useEffect, useState } from "react"
-import {
-  Container,
-  Row,
-  Col,
-  CardBody,
-  Card,
-  CardTitle,
-  CardImg,
-  CardText,
-} from "reactstrap"
-import { Link, useParams } from "react-router-dom"
-import newImage1 from "../../assets/images/un/children.png"
+import React, { useEffect } from "react";
+import { Link, withRouter } from "react-router-dom";
+import { Card, CardBody, CardImg, CardText, CardTitle, Col, Container, Row, Table } from "reactstrap";
+import { isEmpty, map } from "lodash";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
-
-//Import Components
-import MiniWidget from "./mini-widget"
-import SalesAnalyticsChart from "./salesanalytics-chart"
-import TopProduct from "./topselling-product"
-import TopUser from "./topuser"
-import RecentActivity from "./recent-activity"
-import SocialSource from "./socialsource"
-import LatestTransaction from "./latest-transaction"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
+import axios from 'axios'
+import newImage1 from "../../assets/images/un/children.png"
 
 //Import Image
-import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
-import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
-import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
-import Title from "../../components/Common/Title"
-import NewsCard from "../../components/Common/NewsCard"
-import VideoCard from "../../components/Common/VideoCard"
-import EventsCard from "../../components/Common/EventsCard"
-import FootPrints from "../../components/Common/FootPrints"
-import Resources from "../../components/Common/Resources"
-import GoodPractices from "../../components/Common/GoodPractices"
-import Podcast from "../../components/Common/Podcast"
-import Statistics from "../../components/Common/Statistics"
-import SeeAlso from "../../components/Common/SeeAlso"
-import TopRead from "../../components/Common/TopRead"
-import axios from "axios"
+import logo from "../../assets/images/logo-dark.png";
+import PropTypes from "prop-types";
+import { getInvoiceDetail } from "../../store/invoices/actions";
+import { connect } from "react-redux";
+import { useState } from "react";
+import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol";
+import Title from "../../components/Common/Title";
+import VideoCard from "../../components/Common/VideoCard";
+import EventsCard from "../../components/Common/EventsCard";
+import TopRead from "../../components/Common/TopRead";
 
-const Dashboard = () => {
-  const param = useParams()
-  const [individualNews, setIndividualNews] = useState()
+const InvoiceDetail = props => {
+  const {
+    invoiceDetail,
+    match: { params },
+    onGetInvoiceDetail,
+  } = props;
+
   
-  // console.log('aboki', param)
+  
+  const [individualNews, setIndividualNews] = useState(null)
+  
   useEffect(() => {
     const fetchAllNews = async () => {
       const response = await axios.get(
-        "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
-      )
-      // setIndividualNews(response?.data?.result)
+        `https://unirp.herokuapp.com/sections/?pageId=1&id=${params.id}&language=&events=&commentPage=1&commentLimit=20`
+        )
+        console.log(response)
+
+      setIndividualNews(response?.data?.result)
     }
     fetchAllNews()
   }, [])
@@ -74,21 +61,15 @@ const Dashboard = () => {
                     <CardImg
                       top
                       className="img-fluid"
-                      src={newImage1}
+                      src={individualNews?.media[0].link}
                       alt="Card image cap"
                     />
                     <CardBody>
-                      <CardTitle className="h4 mt-0">Card title</CardTitle>
+                      <CardTitle className="h4 mt-0">{individualNews?.title}</CardTitle>
                       <CardText>
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card&apos;s content.
+                      {individualNews?.content}
                       </CardText>
-                      <Link
-                        to="#"
-                        className="btn btn-primary waves-effect waves-light"
-                      >
-                        Button
-                      </Link>
+                      
                     </CardBody>
                   </Card>
             </Col>
@@ -107,6 +88,22 @@ const Dashboard = () => {
       </div>
     </React.Fragment>
   )
-}
+};
 
-export default Dashboard
+InvoiceDetail.propTypes = {
+  invoiceDetail: PropTypes.object,
+  onGetInvoiceDetail: PropTypes.func,
+};
+
+const mapStateToProps = ({ invoices }) => ({
+  invoiceDetail: invoices.invoiceDetail,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onGetInvoiceDetail: id => dispatch(getInvoiceDetail(id)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(InvoiceDetail));

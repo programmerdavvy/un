@@ -17,6 +17,7 @@ import moment from "moment"
 
 const SeeAlso = props => {
   const { news } = props
+  console.log('sabi', news)
   return (
     <Row>
       {news?.map((news, index) => (
@@ -25,7 +26,7 @@ const SeeAlso = props => {
             <Col md={4}>
               <CardImg
                 className="img-fluid"
-                src={newImage1}
+                src={news?.media[0].link}
                 alt="Card image cap"
               />
             </Col>

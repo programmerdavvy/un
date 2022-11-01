@@ -32,6 +32,7 @@ const InvoiceDetail = props => {
     window.print();
   };
 
+
   return (
     <React.Fragment>
       <div className="page-content">
