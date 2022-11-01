@@ -259,9 +259,9 @@ function Index() {
                                                         <td>
                                                             {e.type}
                                                         </td>
-                                                        <td>
+                                                        <td width='50%'>
                                                             {e.type === 'image' ? <div>
-                                                                <img src={e.link} className='img-thumbnails' alt='uploaded incident' />
+                                                                <img src={e.link} className='img-thumbnail'   width='100%'   alt='uploaded incident' />
                                                             </div> : e.type === 'video' ? <div>
                                                                 <video>
                                                                     <source src={e.link} type="video/mp4" />

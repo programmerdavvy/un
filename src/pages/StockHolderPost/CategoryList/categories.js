@@ -192,7 +192,7 @@ function Categories(props) {
                                     </tbody>
                                 </Table>
                                 <div className="d-flex justify-content-between">
-                                    <div>Showing 1 to 10 of 57 entries</div>
+                                    <div>Showing 1 to 10 of {props.categories?.length} entries</div>
                                     <Pagination aria-label="Page navigation example">
                                         <PaginationItem disabled>
                                             <PaginationLink

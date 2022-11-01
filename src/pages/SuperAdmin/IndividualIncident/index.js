@@ -10,6 +10,7 @@ function Index() {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
     const [count, setCount] = useState(1);
+    const [meta, setMeta] = useState(null);
 
 
     const fetchSubmission = useCallback(async (page) => {
@@ -20,6 +21,7 @@ function Index() {
             // let dataArray = rs.result.sort(x => x.userId !== null);
             setIndividualSubmission(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+            setMeta(rs.paging)
         } catch (err) {
             console.log(err);
         }
@@ -40,7 +42,7 @@ function Index() {
             <div className='page-content'>
                 <Container fluid>
                     <Breadcrumbs title="submission" breadcrumbItem="Individual Submission" />
-                    <IndividualSubmission submission={individualSubmission}  count={count} handlePagination={handlePagination} currentPage={currentPage} />
+                    <IndividualSubmission submission={individualSubmission} meta={meta}  count={count} handlePagination={handlePagination} currentPage={currentPage} />
                 </Container>
             </div>
         </React.Fragment>

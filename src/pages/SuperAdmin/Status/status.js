@@ -5,12 +5,13 @@ import { useState } from 'react';
 import { request } from '../../../services/utilities';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import ReactPaginate from 'react-paginate';
 
 
 function Status(props) {
     const [name, setName] = useState('');
     const [modal, setmodal] = useState(false);
-
+    const [isEdit, setIsedit] = useState(false);
 
     const showToast = (error, message) => {
         let positionClass = "toast-top-right"
@@ -58,7 +59,38 @@ function Status(props) {
 
         }
     }
+    const onClickDelete = async (id) => {
+        if (window.confirm('Are you sure')) {
+            try {
+                const url = `status/delete/?id=${id}`;
+                const rs = await request(url, 'DELETE', false);
+                if (rs.success === true) {
+                    showToast('success', 'Deleted  successfully');
+                    props.fetchStatus()
+                }
 
+            } catch (err) {
+                console.log(err);
+                showToast('error', 'Failed to delete');
+
+            }
+        }
+    }
+    const updateStatus = async () => {
+        try {
+            const url = `status?id=1`;
+            const rs = await request(url, 'DELETE', false);
+            if (rs.success === true) {
+                showToast('success', 'Deleted  successfully');
+
+            }
+
+        } catch (err) {
+            console.log(err);
+            showToast('error', 'Failed to save');
+
+        }
+    }
     return (
         <React.Fragment>
             <Modal
@@ -72,10 +104,11 @@ function Status(props) {
                 <ModalHeader
                     className=""
                     toggle={() => {
-                        setmodal(!modal)
+                        setIsedit(false);
+                        setmodal(!modal);
                     }}
                 >
-                    Add New Category
+                    {isEdit === true ? 'Edit Category' : ' Add New Category'}
                 </ModalHeader>
                 <ModalBody>
                     <Card>
@@ -91,6 +124,7 @@ function Status(props) {
                                                 id="name"
                                                 placeholder="Enter Status"
                                                 onChange={e => setName(e.target.value)}
+                                                value={name}
                                             />
                                         </div>
                                     </Col>
@@ -99,7 +133,7 @@ function Status(props) {
                                     <Col lg={12}>
                                         <div className="text-end">
                                             <button type="button" onClick={saveStatus} className="btn btn-success">
-                                                Save
+                                                {isEdit === true ? 'Update' : 'Save'}
                                             </button>
                                         </div>
                                     </Col>
@@ -144,7 +178,7 @@ function Status(props) {
                                                     <td>
                                                         <div className="d-flex gap-3 users">
                                                             <ul className="list-inline font-size-20 contact-links mb-0">
-                                                                <li className="list-inline-item">
+                                                                {/* <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
                                                                         className="text-dark"
@@ -158,15 +192,17 @@ function Status(props) {
                                                                             View Details
                                                                         </UncontrolledTooltip>
                                                                     </Link>
-                                                                </li>
+                                                                </li> */}
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
                                                                         className="text-dark"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   // handleUserClick(users)
-                                                                    // }}
+                                                                        onClick={() => {
+                                                                            setName(e.name);
+                                                                            setIsedit(true);
+                                                                            setmodal(!modal)
+                                                                            // handleUserClick(users)
+                                                                        }}
                                                                     >
                                                                         <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                                         <UncontrolledTooltip placement="top" target="edittooltip">
@@ -177,10 +213,9 @@ function Status(props) {
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
-                                                                        // onClick={() => {
-                                                                        //   const users = cellProps.row.original
-                                                                        //   onClickDelete(users)
-                                                                        // }}
+                                                                        onClick={() => {
+                                                                            onClickDelete(e.id);
+                                                                        }}
                                                                         className="text-dark"
 
                                                                     >
@@ -202,59 +237,29 @@ function Status(props) {
 
                                     </tbody>
                                 </Table>
-                                <div className="d-flex justify-content-between">
-                                    <div>Showing 1 to 10 of 57 entries</div>
-                                    <Pagination aria-label="Page navigation example">
-                                        <PaginationItem disabled>
-                                            <PaginationLink
-                                                first
-                                                href="#"
-                                            />
-                                        </PaginationItem>
-                                        <PaginationItem disabled>
-                                            <PaginationLink
-                                                href="#"
-                                                previous
-                                            />
-                                        </PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink href="#">
-                                                1
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                2
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem disabled>
-                                            <PaginationLink href="#">
-                                                3
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                4
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                5
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink
-                                                href="#"
-                                                next
-                                            />
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink
-                                                href="#"
-                                                last
-                                            />
-                                        </PaginationItem>
-                                    </Pagination>
+                                <div className="mt-3 d-flex align-items-center justify-content-between">
+                                    <div>Showing 1 to 10 of {props.meta?.total || '10'} entries</div>
+                                    <div>
+                                        <ReactPaginate
+                                            nextLabel='Next'
+                                            breakLabel='...'
+                                            previousLabel='Prev'
+                                            pageCount={props.count}
+                                            activeClassName='active'
+                                            breakClassName='page-item'
+                                            pageClassName={'page-item'}
+                                            breakLinkClassName='page-link'
+                                            nextLinkClassName={'page-link'}
+                                            pageLinkClassName={'page-link'}
+                                            nextClassName={'page-item next'}
+                                            previousLinkClassName={'page-link'}
+                                            previousClassName={'page-item prev'}
+                                            onPageChange={page => props.handlePagination(page)}
+                                            forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                            containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                        />
+
+                                    </div>
                                 </div>
                             </div>
                         </CardBody>

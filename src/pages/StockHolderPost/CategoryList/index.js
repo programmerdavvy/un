@@ -46,7 +46,7 @@ function Index() {
         let url = `category?type=post`;
         try {
             const rs = await request(url, 'GET', false);
-            setCategories(rs.result)
+            setCategories(rs.result);
         } catch (err) {
             console.log(err);
             showToast('error', 'Failed to fetch');

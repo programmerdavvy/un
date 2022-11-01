@@ -117,7 +117,7 @@ const IndividualSubmission = (props) => {
                                 </tbody>
                             </Table>
                             <div className="mt-3 d-flex align-items-center justify-content-between">
-                                <div>Showing 1 to 10 of 57 entries</div>
+                                <div>Showing 1 to 10 of {props.meta?.total} entries</div>
 
                                 <div>
                                     <ReactPaginate

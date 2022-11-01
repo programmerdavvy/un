@@ -14,6 +14,7 @@ function Index() {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
     const [count, setCount] = useState(1);
+    const [meta, setMeta] = useState(null);
 
 
     const fetchStatus = useCallback(async page => {
@@ -22,6 +23,7 @@ function Index() {
             const url = `status`;
             const rs = await request(url, 'GET', false);
             setStatus(rs.result);
+            setMeta(rs.paging)
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         } catch (err) {
             console.log(err);
@@ -43,7 +45,7 @@ function Index() {
                 <Container>
                     <Row>
                         <Col>
-                            <Status count={count} status={status} handlePagination={handlePagination} currentPage={currentPage} />
+                            <Status count={count} status={status} fetchStatus={fetchStatus} meta={meta} handlePagination={handlePagination} currentPage={currentPage} />
                         </Col>
                     </Row>
                 </Container>

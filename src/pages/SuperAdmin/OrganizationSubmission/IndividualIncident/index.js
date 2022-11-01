@@ -9,6 +9,7 @@ function Index() {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
     const [count, setCount] = useState(1);
+    const [meta, setMeta] = useState(null);
 
 
     const fetchSubmission = useCallback(async (page) => {
@@ -16,7 +17,7 @@ function Index() {
         try {
             let url = `incident/all/specific/?action=stakeholder`;
             const rs = await request(url, 'GET', false);
-            // let dataArray = rs.result.sort(x => x.userId === null);
+            setMeta(rs.paging);
             setOrganizationSubmission(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         } catch (err) {

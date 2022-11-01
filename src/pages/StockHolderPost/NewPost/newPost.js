@@ -49,7 +49,7 @@ const NewIncident = (props) => {
     }
     const fetchPostById = useCallback(async () => {
         try {
-            let url = `sections/admin?pageId=&id=${params.id}`;
+            let url = `sections/admin?pageId=&id=${params?.id}`;
             const rs = await request(url, 'GET', false);
             if (rs.success === true) {
                 setPost(rs.result);
@@ -86,7 +86,7 @@ const NewIncident = (props) => {
         onSubmit: async e => {
             let data = { pageId: 4, title: e.title, content: description, tags: selectedMulti[0].value, media: [], language: 'english', date: new Date() }
 
-            let url = params.id ? `sections?id=${params.id}` : `sections`
+            let url = params?.id ? `sections?id=${params.id}` : `sections`
             try {
                 const rs = await request(url, 'POST', false, data);
                 if (rs.success === true) {
@@ -119,7 +119,10 @@ const NewIncident = (props) => {
     ]
 
     useEffect(() => {
-        fetchPostById();
+
+        if (params?.id !== null && params?.id !== undefined) {
+            fetchPostById();
+        }
     }, [fetchPostById]);
 
     return (
