@@ -6,22 +6,48 @@ import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import Flatpickr from "react-flatpickr"
 import { request } from '../../../services/utilities';
+import toastr from "toastr"
+import "toastr/build/toastr.min.css"
 
 
 const NewEvent = () => {
     const id = ''
     const [selectedFiles, setselectedFiles] = useState([])
+    const [allFiles] = useState([])
+
 
     function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        )
         setselectedFiles(files)
     }
+    const showToast = (error, message) => {
+        let positionClass = "toast-top-right"
+        let toastType
+        let showMethod = 'fadeIn'
 
+        toastr.options = {
+            positionClass: positionClass,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            closeButton: false,
+            debug: false,
+            progressBar: false,
+            preventDuplicates: true,
+            newestOnTop: true,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: showMethod,
+            hideMethod: 'fadeOut',
+            showDuration: 300,
+            hideDuration: 1000
+        }
+
+        // setTimeout(() => toastr.success(`Settings updated `), 300)
+        //Toaster Types
+        // if (toastType === "info") toastr.info(message, title)
+        // else if (toastType === "warning") toastr.warning(message, title)
+        if (error === "error") toastr.error(message)
+        else toastr.success(message)
+    }
     function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return "0 Bytes"
         const k = 1024
@@ -37,34 +63,63 @@ const NewEvent = () => {
 
         initialValues: {
             title: '',
-            description: '',
-            startdate: '',
-            enddate: '',
-            starttime: '',
-            endtime: '',
-            venue: '',
             categories: ''
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Child Name"),
-            description: Yup.string().required("Please Enter Description"),
-            startdate: Yup.string().required("Please Enter Date"),
-            enddate: Yup.string().required("Please Enter Date"),
-            starttime: Yup.string().required("Please Enter Time"),
-            endtime: Yup.string().required("Please Enter Time"),
-            venue: Yup.string().required("Please Enter Venue"),
-            categories: Yup.string().required("Please Select Categories")
+            title: Yup.string().required("Please Enter Title")
+            // categories: Yup.string().required("Please Select Categories")
         }),
-        onSubmit: async (values) => {
-            const data = {}
-            try {
-                let url = ``;
-                const rs = await request(url, 'POST', false, data)
-            } catch (err) {
+        onSubmit: async (e) => {
+            let count = 0;
+            const filteredD = selectedFiles.filter(i => !i.id)
+            const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+            const formData = new FormData();
+            for (let i = 0; i < files_.length; i++) {
+                let file = files_[i];
+                console.log(file)
+                formData.append("file", file);
+                formData.append("upload_preset", "geekyimages");
+                fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+                    method: "POST",
+                    body: formData
+                })
+                    .then((response) => {
+                        console.log(response)
+                        return response.json();
+                    })
+                    .then((data) => {
+                        let dataFile = {
+                            name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
+                                'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : ''
+                        };
+                        if (dataFile?.name !== null) {
+                            allFiles.push(dataFile);
+                        }
+
+                        count++
+                        if (count === files_.length) {
+                            const savePhotoGallery = async () => {
+                                const data = { pageId: 3, content: 'Photo Gallery', title: e.title, media: allFiles };
+                                try {
+                                    let url = `sections`;
+                                    const rs = await request(url, 'POST', false, data);
+                                    if (rs.success === true) {
+                                        showToast('success', 'Successfully Publish');
+                                    }
+                                } catch (err) {
+                                    console.log(err);
+                                    showToast('error', 'Failed to publish');
+                                }
+                            }
+                            savePhotoGallery();
+                        }
+                    });
 
             }
+
         }
     });
+  
 
     return (
         <React.Fragment>
@@ -185,7 +240,7 @@ const NewEvent = () => {
                                                                             height="80"
                                                                             className="avatar-sm rounded bg-light"
                                                                             alt={f.name}
-                                                                            src={f.preview}
+                                                                            src={URL.createObjectURL(f)}
                                                                         />
                                                                     </Col>
                                                                     <Col>

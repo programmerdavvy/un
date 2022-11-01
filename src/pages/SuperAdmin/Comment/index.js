@@ -9,6 +9,11 @@ import { request } from '../../../services/utilities'
 function Index() {
 
     const [comment, setComment] = useState([]);
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [count, setCount] = useState(1);
+    const [meta, setMeta] = useState(null);
+
 
     const showToast = (error, message) => {
         let positionClass = "toast-top-right"
@@ -39,11 +44,15 @@ function Index() {
         if (error === "error") toastr.error(message)
         else toastr.success(message)
     }
-    const fetchComment = useCallback(async () => {
-        let url = `category?type=gallery`;
+    const fetchComment = useCallback(async page => {
+        const p = page || 1;
+
+        let url = `comments/all/?page=&${p}limit=10`;
         try {
             const rs = await request(url, 'GET', false);
             setComment(rs.result);
+            setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+            setMeta(rs.paging)
             console.log(rs);
         } catch (err) {
             console.log(err);
@@ -52,6 +61,10 @@ function Index() {
         }
     }, []);
 
+    const handlePagination = page => {
+        fetchComment(page.selected + 1);
+        setCurrentPage(page.selected + 1);
+    }
     useEffect(() => {
         fetchComment();
     }, [fetchComment]);
@@ -61,7 +74,7 @@ function Index() {
             <div className='page-content'>
                 <Container fluid>
                     <Breadcrumbs title="comment" breadcrumbItem="Comments" />
-                    <Comment />
+                    <Comment comments={comment} currentPage={currentPage} count={count} meta={meta} handlePagination={handlePagination} />
                 </Container>
             </div>
         </React.Fragment>

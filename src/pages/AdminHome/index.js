@@ -54,6 +54,10 @@ const Dashboard = () => {
   const [organizationCount, setOrganizationCount] = useState(0);
 
   const [totalSubmission, setTotalSubmission] = useState(0);
+  const [openincidentotal, setopenincidenttotal] = useState(0);
+  const [closeincidentotal, setcloseincidenttotal] = useState(0);
+
+
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [count, setCount] = useState(1);
@@ -66,10 +70,17 @@ const Dashboard = () => {
       const url = `incident/get/count/?action=mobile`;
       const url_individual_sub = `incident/all/specific/?action=individual`;
       const url_organization_sub = `incident/all/specific/?action=individual`;
+      const url_open = `incident/openclose/count/?action=open`
+      const url_close = `incident/openclose/count/?action=close`
+
 
       const rs = await request(url, 'GET', false);
       const rs_individual = await request(url_individual_sub, 'GET', false);
       const rs_organization = await request(url_organization_sub, 'GET', false);
+      const rs_open = await request(url_open, 'GET', false);
+      const rs_close = await request(url_close, 'GET', false);
+      setopenincidenttotal(rs_open.result?.totalCount);
+      setcloseincidenttotal(rs_close.result?.totalCount);
       setOrganizationCount(rs_organization.paging.total);
       setIndividualCount(rs_individual.paging.total);
       const total = rs_individual.paging.total + rs_organization.paging.total;
@@ -83,7 +94,7 @@ const Dashboard = () => {
   const fetchAwaitingPosts = useCallback(async page => {
     const p = page || 1;
     try {
-      const url = `sections/admin?pageId=3&page=${p}&limit=5`;
+      const url = `sections/admin?pageId=4&page=${p}&limit=5`;
       const rs = await request(url, 'GET', false);
       setPosts(rs.result);
       setCount(Math.ceil(rs.paging?.total / rowsPerPage));
@@ -203,7 +214,7 @@ const Dashboard = () => {
       casereported: 2
     }
   ]
-  const series = [1, 1]
+  const series = [closeincidentotal, openincidentotal]
 
   const options = {
     labels: ["Closed", "Open"],

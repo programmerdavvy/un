@@ -50,7 +50,7 @@ const Dashboard = () => {
 
   const fetchPosts = useCallback(async (page) => {
     let p = page || 1;
-    let url = `sections/admin?pageId=3&page=${p}&limit=10`;
+    let url = `sections/admin?pageId=4&page=${p}&limit=10`;
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {

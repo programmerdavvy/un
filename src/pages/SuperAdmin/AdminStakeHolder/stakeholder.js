@@ -14,17 +14,25 @@ const StakeHolder = (props) => {
     const [organization, setOrganization] = useState(null)
     const [id, setId] = useState(null);
     const [isEdit, setIsedit] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [position, setPosition] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
+
 
     const updateStakeholder = async () => {
-        const data = {};
+        const data = { firstName, lastName, email, position, stakeholderId: organization, phone };
+        console.log(data);
         try {
             const url = `users?id=${id}`;
             const rs = await request(url, 'PATCH', false, data);
-            console.log(rs);
             if (rs.success === true) {
                 props.showToast('success', 'Updated successfully');
                 props.fetchStakeholders();
                 setIsedit(false);
+                clearForm();
                 setmodal(!modal);
             }
         } catch (err) {
@@ -33,24 +41,7 @@ const StakeHolder = (props) => {
 
         }
     }
-    const saveStakeholder = async () => {
-        const data = {};
-        try {
-            const url = `users/register`;
-            const rs = await request(url, 'POST', false, data);
-            if (rs.success === true) {
-                props.showToast('success', 'Saved successfully');
-                props.fetchStakeholders();
-                setIsedit(false);
-                setmodal(!modal);
 
-            }
-        } catch (err) {
-            console.log(err);
-            props.showToast('error', 'Failed to save');
-
-        }
-    }
     const onClickDelete = async (id) => {
         if (window.confirm('Are you sure')) {
             try {
@@ -75,11 +66,11 @@ const StakeHolder = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            firstname: '',
-            lastname: '',
-            email: '',
-            phone: '',
-            position: '',
+            firstname: firstName,
+            lastname: isEdit === true ? lastName : '',
+            email: isEdit === true ? email : '',
+            phone: isEdit === true ? phone : '',
+            position: isEdit === true ? position : '',
             // organization: '',
         },
         validationSchema: Yup.object({
@@ -97,35 +88,53 @@ const StakeHolder = (props) => {
 
         }),
         onSubmit: async e => {
-            const data = { firstName: e.firstname, lastname: e.lastname, email: e.email, phone: e.phone, position: e.position, stakeholderId: parseInt(organization) };
-            try {
-                let url = `users/register`;
-                const rs = await request(url, 'POST', false, data);
-                if (rs.success === true) {
-                    props.showToast('success', 'Registered successfully');
-                    props.fetchStakeholders();
-                    setIsedit(false);
-                    setmodal(!modal);
-                }
+            if (isEdit === true) {
+                updateStakeholder();
+            } else {
+                const data = { firstName: e.firstname, lastname: e.lastname, email: e.email, phone: e.phone, position: e.position, stakeholderId: parseInt(organization) };
+                try {
+                    let url = `users/register`;
+                    const rs = await request(url, 'POST', false, data);
+                    if (rs.success === true) {
+                        props.showToast('success', 'Registered successfully');
+                        props.fetchStakeholders();
+                        setIsedit(false);
+                        clearForm();
+                        setmodal(!modal);
+                    }
 
-            } catch (err) {
-                console.log(err);
-                props.showToast('error', 'Failed to register');
+                } catch (err) {
+                    console.log(err);
+                    props.showToast('error', 'Failed to register');
+                }
             }
+
         }
     });
 
     const setEditValues = i => {
         const e = props.stakeholders[i];
-        console.log(e.email)
-        validation.values.firstname = e.firstName;
-        validation.values.lastname = e.lastname;
-        validation.values.email = e.email;
-        validation.initialValues.phone = e.phone;
-        validation.initialValues.position = e.position;
+        setFirstName(e.firstName);
+        setLastName(e.lastname);
+        setEmail(e.email)
+        setPhone(e.phone);
+        setPosition(e.position);
+        setOrganization(e.stakeholderId);
+        setId(e.id);
         setIsedit(true);
         setmodal(!modal);
     }
+
+    const clearForm = () => {
+        setFirstName('');
+        setLastName('');
+        setEmail('')
+        setPhone('');
+        setPosition('');
+        setOrganization(null);
+        setId(null);
+    }
+
     return (
 
         <Row>
@@ -165,7 +174,10 @@ const StakeHolder = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={(e) => {
+                                                    setFirstName(e.target.value);
+                                                    // validation.handleChange();
+                                                }}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.firstname || ""}
                                                 invalid={
@@ -186,7 +198,10 @@ const StakeHolder = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom02"
-                                                onChange={validation.handleChange}
+                                                onChange={e => {
+                                                    setLastName(e.target.value);
+                                                    // validation.handleChange
+                                                }}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.lastname || ""}
                                                 invalid={
@@ -209,7 +224,10 @@ const StakeHolder = (props) => {
                                                 type="email"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e =>
+                                                    setEmail(e.target.value)
+                                                    // validation.handleChange
+                                                }
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.email || ""}
                                                 invalid={
@@ -230,7 +248,10 @@ const StakeHolder = (props) => {
                                                 type="phone"
                                                 className="form-control"
                                                 id="validationCustom02"
-                                                onChange={validation.handleChange}
+                                                onChange={e =>
+                                                    setPhone(e.target.value)
+                                                    // validation.handleChange
+                                                }
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.phone || ""}
                                                 invalid={
@@ -253,7 +274,10 @@ const StakeHolder = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e =>
+                                                    setPhone(e.target.value)
+                                                    // validation.handleChange
+                                                }
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.position || ""}
                                                 invalid={

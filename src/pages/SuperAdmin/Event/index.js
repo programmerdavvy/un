@@ -4,7 +4,8 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import Event from './event';
 
 
-function index() {
+function Index() {
+    
     return (
         <React.Fragment>
             <div className='page-content'>
@@ -17,4 +18,4 @@ function index() {
     )
 }
 
-export default index
+export default Index

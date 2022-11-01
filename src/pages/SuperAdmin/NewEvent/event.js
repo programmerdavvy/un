@@ -5,7 +5,9 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import Flatpickr from "react-flatpickr"
-
+import { request } from '../../../services/utilities';
+import toastr from "toastr"
+import "toastr/build/toastr.min.css"
 
 const NewEvent = () => {
     const id = ''
@@ -20,9 +22,7 @@ const NewEvent = () => {
         )
         setselectedFiles(files)
     }
-    /**
-     * Formats the size
-     */
+
     function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return "0 Bytes"
         const k = 1024
@@ -56,10 +56,59 @@ const NewEvent = () => {
             venue: Yup.string().required("Please Enter Venue"),
             categories: Yup.string().required("Please Select Categories")
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (e) => {
+            const data = {
+                pageId: 4, title: e.title, description: e.description,
+                // startdate: e.startdate, enddate: e.enddate, startdate: e.startdate, endtime: e.endtime,
+                media: [], venue: e.venue
+            };
+            console.log(data);
+            try {
+                let url = `sections`;
+                const rs = await request(url, 'POST', false, data);
+                console.log(rs);
+                if (rs.result === 'success') {
+                    showToast('success', 'Successfully Saved');
+                }
+
+            } catch (err) {
+                console.log(err);
+                showToast('error', 'Failed to save');
+
+            }
         }
     });
+
+    const showToast = (error, message) => {
+        let positionClass = "toast-top-right"
+        let toastType
+        let showMethod = 'fadeIn'
+
+        toastr.options = {
+            positionClass: positionClass,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            closeButton: false,
+            debug: false,
+            progressBar: false,
+            preventDuplicates: true,
+            newestOnTop: true,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: showMethod,
+            hideMethod: 'fadeOut',
+            showDuration: 300,
+            hideDuration: 1000
+        }
+
+        // setTimeout(() => toastr.success(`Settings updated `), 300)
+        //Toaster Types
+        // if (toastType === "info") toastr.info(message, title)
+        // else if (toastType === "warning") toastr.warning(message, title)
+        if (error === "error") toastr.error(message)
+        else toastr.success(message)
+    }
+
     return (
         <React.Fragment>
 
