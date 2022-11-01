@@ -9,6 +9,7 @@ import Dashboard from "../pages/Dashboard/index"
 import Home from "../pages/Home/index"
 import About from "../pages/About/index"
 import News from "../pages/News/index"
+import NewsPage from "../pages/NewsPage/index"
 import Footprints from "../pages/Footprints/index"
 import Dangers from "../pages/Dangers/index"
 import Index from "../pages/Index/index"
@@ -145,6 +146,7 @@ const userRoutes = [
   { path: "/home", component: Home },
   { path: "/about", component: About },
   { path: "/news", component: News },
+  { path: "/news/:id/:title", component: NewsPage },
   { path: "/footprints", component: Footprints },
   { path: "/dangers", component: Dangers },
   { path: "/index", component: Index },

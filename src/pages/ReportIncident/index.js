@@ -110,7 +110,6 @@ const Dashboard = () => {
         "https://unirp.herokuapp.com/incident/create",
         payLoad
       )
-      // console.log('joel test', response)
       setLoading(false)
       if (response?.data?.success) {
         setReferenceId(response?.data.result.referenceId)

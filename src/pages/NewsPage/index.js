@@ -9,7 +9,7 @@ import {
   CardImg,
   CardText,
 } from "reactstrap"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import newImage1 from "../../assets/images/un/children.png"
 
 //Import Breadcrumb
@@ -41,16 +41,17 @@ import SeeAlso from "../../components/Common/SeeAlso"
 import TopRead from "../../components/Common/TopRead"
 import axios from "axios"
 
-
 const Dashboard = () => {
-  const [news, setNews] = useState()
+  const param = useParams()
+  const [individualNews, setIndividualNews] = useState()
+  
+  // console.log('aboki', param)
   useEffect(() => {
     const fetchAllNews = async () => {
       const response = await axios.get(
         "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
       )
-      setNews(response?.data?.result)
-      
+      // setIndividualNews(response?.data?.result)
     }
     fetchAllNews()
   }, [])
@@ -65,17 +66,31 @@ const Dashboard = () => {
               <Slidewithcontrol />
             </Col>
           </Row>
-          <Row>
-            <Title title="LATEST" />
-            <NewsCard news={news}/>
-          </Row>
 
           <Row>
             <Col xl={8}>
-              <Col className="me-3">
-                <Title title="SEE ALSO" />
-                <SeeAlso news={news}/>
-              </Col>
+                <Title title="NEWS" />
+                  <Card>
+                    <CardImg
+                      top
+                      className="img-fluid"
+                      src={newImage1}
+                      alt="Card image cap"
+                    />
+                    <CardBody>
+                      <CardTitle className="h4 mt-0">Card title</CardTitle>
+                      <CardText>
+                        Some quick example text to build on the card title and
+                        make up the bulk of the card&apos;s content.
+                      </CardText>
+                      <Link
+                        to="#"
+                        className="btn btn-primary waves-effect waves-light"
+                      >
+                        Button
+                      </Link>
+                    </CardBody>
+                  </Card>
             </Col>
             <Col xl={4}>
               <Title title="VIDEO GALLERY" />
@@ -84,8 +99,8 @@ const Dashboard = () => {
               <EventsCard />
             </Col>
             <Col xl={12}>
-            <Title title="TOP READ" />
-            <TopRead/>
+              <Title title="TOP READ" />
+              <TopRead />
             </Col>
           </Row>
         </Container>
