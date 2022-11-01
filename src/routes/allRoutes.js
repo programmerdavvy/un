@@ -173,41 +173,6 @@ const userRoutes = [
 
   // superadmin route
   { path: "/home", component: Home },
-  { path: "/admin", component: AdminHome },
-  { path: "/admin-posts", component: StockHolderPost },
-  { path: "/admin-edit-post/:id", component: StockHolderAddPost },
-  { path: "/admin-new-post", component: StockHolderAddPost },
-  { path: "/admin-new-incident", component: StockHolderAddIncident },
-  { path: "/admin-categories", component: StockHolderCategoryList },
-
-  { path: "/individual-submission", component: SuperAdminIndividualSubmission },
-  { path: "/organization-submission", component: SuperAdminOrganizationSubmission },
-  { path: "/admin-status", component: SuperAdminStatus },
-  { path: "/admin-stakeholder", component: SuperAdminStakeHolder },
-  { path: "/stakeholder-post", component: StakeHolderPostList },
-
-
-  { path: "/new-stakeholder", component: SuperAdminAddStakeHolder },
-  { path: "/organization", component: SuperAdminOrganization },
-  { path: "/events", component: SuperAdminEvent },
-
-  { path: "/new-event", component: SuperAdminNewEvent },
-  { path: "/event-category", component: SuperAdminEventCategory },
-  { path: "/admin-gallery", component: SuperAminGallery },
-  { path: "/new-gallery", component: SuperAminAddGallery },
-  { path: "/gallery-category", component: SuperAminGalleryCategory },
-
-  { path: "/admin-video", component: SuperAminVideoGallery },
-  { path: "/new-video", component: SuperAminAddVideoGallery },
-  { path: "/video-category", component: SuperAminVideoCategory },
-  { path: "/admin-comments", component: SuperAminComment },
-
-
-  //   
-  // 
-  // 
-
-  // end of superadmin route
 
   { path: "/about", component: About },
   { path: "/news", component: News },
@@ -335,6 +300,38 @@ const userRoutes = [
     component: () => <Redirect to="/admin" />
   },
 ];
+// note the route is vice versa
+
+const StakeHolderRoutes = [
+  { path: "/admin", component: AdminHome },
+  { path: "/admin-posts", component: StockHolderPost },
+  { path: "/admin-edit-post/:id", component: StockHolderAddPost },
+  { path: "/admin-new-post", component: StockHolderAddPost },
+  { path: "/admin-new-incident", component: StockHolderAddIncident },
+  { path: "/admin-categories", component: StockHolderCategoryList },
+
+  { path: "/individual-submission", component: SuperAdminIndividualSubmission },
+  { path: "/organization-submission", component: SuperAdminOrganizationSubmission },
+  { path: "/admin-status", component: SuperAdminStatus },
+  { path: "/admin-stakeholder", component: SuperAdminStakeHolder },
+  { path: "/stakeholder-post", component: StakeHolderPostList },
+
+
+  { path: "/new-stakeholder", component: SuperAdminAddStakeHolder },
+  { path: "/organization", component: SuperAdminOrganization },
+  { path: "/events", component: SuperAdminEvent },
+
+  { path: "/new-event", component: SuperAdminNewEvent },
+  { path: "/event-category", component: SuperAdminEventCategory },
+  { path: "/admin-gallery", component: SuperAminGallery },
+  { path: "/new-gallery", component: SuperAminAddGallery },
+  { path: "/gallery-category", component: SuperAminGalleryCategory },
+
+  { path: "/admin-video", component: SuperAminVideoGallery },
+  { path: "/new-video", component: SuperAminAddVideoGallery },
+  { path: "/video-category", component: SuperAminVideoCategory },
+  { path: "/admin-comments", component: SuperAminComment },
+]
 const superAdminRoutes = [
   { path: "/stakeholder", component: StockHolderAdminHome },
   { path: "/stakeholder-documents", component: StackHolderDocument },
@@ -365,4 +362,4 @@ const authRoutes = [
   { path: "/auth-lock-screen", component: LockScreen },
 ]
 
-export { userRoutes, superAdminRoutes, authRoutes }
+export { userRoutes, superAdminRoutes, StakeHolderRoutes, authRoutes }

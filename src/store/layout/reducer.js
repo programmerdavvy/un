@@ -32,7 +32,7 @@ const INIT_STATE = {
   isPreloader: false,
   showRightSidebar: false,
   isMobile: false,
-  showSidebar: true,
+  showSidebar: false,
   leftMenu: false,
 };
 

@@ -50,7 +50,19 @@ const IndividualSubmission = (props) => {
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>
                                                 <td>
-                                                    <img src={e.media_file} className='img-thumbnail' width='50' alt='evidence' />
+                                                    <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' />
+                                                    {e.media[0]?.type === 'image' ? <div>
+                                                        <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
+                                                    </div> : e.type === 'video' ? <div>
+                                                        <video>
+                                                            <source src={e.link} type="video/mp4" />
+                                                        </video>
+                                                    </div> : e.type === 'audio' ? <div>
+                                                        <audio controls>
+                                                            <source src={e.link} type="audio/mpeg" />
+                                                        </audio>
+                                                    </div> : ''
+                                                    }
                                                 </td>
                                                 <td>
                                                     {e.status}

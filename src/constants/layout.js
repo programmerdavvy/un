@@ -1,5 +1,5 @@
 const layoutTypes = {
-  HORIZONTAL: "vertical",
+  HORIZONTAL: "horizontal", 
   VERTICAL: "vertical",
 }
 
