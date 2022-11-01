@@ -31,7 +31,7 @@ function Statistics(props) {
                                 <h1 className="mb-1 mt-1" style={{ fontWeight: '700', fontSize: '23px' }}>
                                     {report.title}
                                 </h1>
-                                <h1 className=" mb-1 mt-1" style={{ fontWeight: '700', fontSize: '23px' }}>{report.rate}</h1>
+                                <h1 className=" mb-1 mt-1" style={{ fontWeight: '700', fontSize: '23px' }}>{report.value}</h1>
                             </div>
                             <p className="text-muted mt-5 mb-0">{report.desc}</p>
                         </CardBody>

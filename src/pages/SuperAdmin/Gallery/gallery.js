@@ -43,17 +43,31 @@ const IndividualSubmission = () => {
                                         <td>
                                             <div className="d-flex gap-3 users">
                                                 <ul className="list-inline font-size-20 contact-links mb-0">
-
                                                     <li className="list-inline-item">
                                                         <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
+                                                            to="#"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                            <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
+                                                            <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                View Details
+                                                            </UncontrolledTooltip>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="list-inline-item">
+                                                        <Link
+                                                            to="/#"
+                                                            className="text-dark"
+                                                        // onClick={() => {
+                                                        //   const users = cellProps.row.original
+                                                        //   // handleUserClick(users)
+                                                        // }}
+                                                        >
+                                                            <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
                                                                 Edit
                                                             </UncontrolledTooltip>
@@ -62,11 +76,12 @@ const IndividualSubmission = () => {
                                                     <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
+                                                            // onClick={() => {
+                                                            //   const users = cellProps.row.original
+                                                            //   onClickDelete(users)
+                                                            // }}
+                                                            className="text-dark"
+
                                                         >
                                                             <i
                                                                 className="uil uil-trash-alt font-size-18"

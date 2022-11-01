@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container, Row, Col, CardBody, Card } from "reactstrap";
 import { Link } from "react-router-dom";
 import ReactApexChart from "react-apexcharts"
@@ -12,7 +12,9 @@ import Statistics from "./Statistics";
 import CaseAnalysis from "./CaseAnalysis";
 import Analysis from "./Analysis";
 import AwaitingApproval from "./Post/awaitingapproval";
-
+import TopUsers from './topuser';
+import PostTable from './latest-transaction';
+import { request } from "../../services/utilities";
 
 const series2 = [10];
 
@@ -47,14 +49,67 @@ const options2 = {
 
 
 const Dashboard = () => {
+  const [mobileCount, setMobileCount] = useState(0);
+  const [individualCount, setIndividualCount] = useState(0);
+  const [organizationCount, setOrganizationCount] = useState(0);
+
+  const [totalSubmission, setTotalSubmission] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [count, setCount] = useState(1);
+  const [posts, setPosts] = useState([]);
+  const [meta, setMeta] = useState(null);
+
+
+  const fetchMobileCount = useCallback(async () => {
+    try {
+      const url = `incident/get/count/?action=mobile`;
+      const url_individual_sub = `incident/all/specific/?action=individual`;
+      const url_organization_sub = `incident/all/specific/?action=individual`;
+
+      const rs = await request(url, 'GET', false);
+      const rs_individual = await request(url_individual_sub, 'GET', false);
+      const rs_organization = await request(url_organization_sub, 'GET', false);
+      setOrganizationCount(rs_organization.paging.total);
+      setIndividualCount(rs_individual.paging.total);
+      const total = rs_individual.paging.total + rs_organization.paging.total;
+      setTotalSubmission(total);
+      setMobileCount(rs.result.totalCount);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const fetchAwaitingPosts = useCallback(async page => {
+    const p = page || 1;
+    try {
+      const url = `sections/admin?pageId=3&page=${p}&limit=5`;
+      const rs = await request(url, 'GET', false);
+      setPosts(rs.result);
+      setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+      setMeta(rs.paging);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [rowsPerPage]);
+
+  const handlePagination = page => {
+    fetchAwaitingPosts(page.selected + 1)
+    setCurrentPage(page.selected + 1)
+  }
+  useEffect(() => {
+    fetchAwaitingPosts();
+    fetchMobileCount();
+  }, [fetchAwaitingPosts, fetchMobileCount]);
+
 
   const reports = [
     {
       id: 1,
       icon: "uil-signal-alt-3",
       title: "Total Submissions",
-      rate: 88,
-      value: 5643,
+      rate: totalSubmission,
+      value: totalSubmission,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -71,8 +126,8 @@ const Dashboard = () => {
       id: 2,
       icon: "uil-file-info-alt",
       title: "Individual Submissions",
-      rate: 34,
-      value: 5643,
+      rate: individualCount,
+      value: individualCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -88,8 +143,8 @@ const Dashboard = () => {
       id: 3,
       icon: "uil-coins",
       title: "Organization Submissions",
-      rate: 54,
-      value: 5643,
+      rate: organizationCount,
+      value: organizationCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -106,8 +161,8 @@ const Dashboard = () => {
       id: 3,
       icon: "uil-phone",
       title: "Mobile submissions",
-      rate: 37,
-      value: 5643,
+      rate: mobileCount,
+      value: mobileCount,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
@@ -151,28 +206,28 @@ const Dashboard = () => {
   const series = [1, 1]
 
   const options = {
-      labels: ["Closed", "Open"],
-      colors: ["#228e68", "#5b73e8", "#f95000"],
-      legend: {
-          show: !0,
-          position: 'right',
-          horizontalAlign: 'center',
-          verticalAlign: 'middle',
-          floating: !1,
-          fontSize: '14px',
-          offsetX: 0
-      },
-      responsive: [{
-          breakpoint: 600,
-          options: {
-              chart: {
-                  height: 240
-              },
-              legend: {
-                  show: !1
-              },
-          }
-      }]
+    labels: ["Closed", "Open"],
+    colors: ["#228e68", "#5b73e8", "#f95000"],
+    legend: {
+      show: !0,
+      position: 'right',
+      horizontalAlign: 'center',
+      verticalAlign: 'middle',
+      floating: !1,
+      fontSize: '14px',
+      offsetX: 0
+    },
+    responsive: [{
+      breakpoint: 600,
+      options: {
+        chart: {
+          height: 240
+        },
+        legend: {
+          show: !1
+        },
+      }
+    }]
   }
   return (
     <React.Fragment>
@@ -184,32 +239,51 @@ const Dashboard = () => {
           <Row>
             <Col xl={12}>
               <Row>
-                <Statistics reports={reports} />
-              </Row>
-              <Row className="mb-3">
-                <Col xl={3} className='mb-0 p-0'>
-                  <Card className='p-4 mb-0'
-                  // style={{ height: '220px' }}
-                  >
-                    <CardBody className='p-2'>
-                      <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
-                      {/* <p className='text-center fs-4'></p> */}
-                      <ReactApexChart
-                        options={options}
-                        series={series}
-                        type="donut"
-                        height="220"
-                        className="apex-charts"
-                      />
+                <Col>
+                  <Row>
+                    <Statistics reports={reports} />
+                    <Col xl={3}>
+                      <Card
+                      // style={{ height: '220px' }}
+                      >
+                        <CardBody className='p-2'>
+                          <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
+                          {/* <p className='text-center fs-4'></p> */}
+                          <ReactApexChart
+                            options={options}
+                            series={series}
+                            type="donut"
+                            height="180"
+                            className="apex-charts"
+                          />
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row className="mt-4">
+                    <Col>
+                      <PostTable posts={posts} currentPage={currentPage} handlePagination={handlePagination} count={count} meta={meta} />
+                    </Col>
+                    <Col xl={3}>
+                      <TopUsers />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={3} className="d-none">
+                  <Card >
+                    <CardBody>
+                      <h2 style={{ fontWeight: '700' }}> Recent Updates Case Analytics by State</h2>
                     </CardBody>
                   </Card>
+
                 </Col>
               </Row>
-              <Row>
-                <AwaitingApproval /> 
-              </Row>
+
+              {/* <Row>
+                <AwaitingApproval />
+              </Row> */}
               <div className="d-none">
-              <Analysis />
+                <Analysis />
               </div>
 
             </Col>

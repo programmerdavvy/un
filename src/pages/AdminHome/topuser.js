@@ -4,7 +4,7 @@ import { Card, CardBody, DropdownToggle, DropdownMenu, DropdownItem, Table, Unco
 import FeatherIcon from "feather-icons-react"
 //Simple bar
 import SimpleBar from "simplebar-react"
-
+import { Link } from "react-router-dom"
 //Import Image
 import avatar1 from "../../assets/images/users/avatar-1.jpg"
 import avatar2 from "../../assets/images/users/avatar-2.jpg"
@@ -19,7 +19,7 @@ const TopUser = () => {
         <React.Fragment>
             <Card>
                 <CardBody>
-                    <div className="float-end">
+                    {/* <div className="float-end">
                         <UncontrolledDropdown>
                             <DropdownToggle tag="a" className="text-reset" id="dropdownMenuButton5" caret>
                                 <span className="text-muted">All Members<i className="mdi mdi-chevron-down ms-1"></i></span>
@@ -30,92 +30,74 @@ const TopUser = () => {
                                 <DropdownItem href="#">Join Date</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
-                    </div>
-                    <h4 className="card-title mb-4">Top Users</h4>
-                    <SimpleBar style={{ maxHeight: "336px" }}>
+                    </div> */}
+                    <h4 className="card-title mb-4">Recent Updates Case Analytics by State</h4>
+                    <SimpleBar>
                         <div className="table-responsive">
                             <Table className="table-borderless table-centered table-nowrap">
                                 <tbody>
                                     <tr>
-                                        <td style={{ width: "20px" }}><img src={avatar4} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Glenn Holden</h6>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Enugu State</h6>
                                             <p className="text-muted font-size-13 mb-0">
-                                                <i className="mdi mdi-map-marker"></i> Nevada</p>
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-danger font-size-12">Cancel</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />$250.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><img src={avatar5} className="avatar-xs rounded-circle " alt="..." /></td>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Lolita Hamill</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> Texas</p>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Benue State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-success font-size-12">Success</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-down" className="icon-xs icon me-2 text-danger" />$110.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />10 cases in total
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src={avatar6} className="avatar-xs rounded-circle " alt="..." /></td>
+                                    </tr>  <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Robert Mercer</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> California</p>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Kaduna State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-info font-size-12">Active</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />$420.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src={avatar7} className="avatar-xs rounded-circle " alt="..." /></td>
+                                    </tr>  <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Marie Kim</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> Montana</p>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-warning font-size-12">Pending</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-down" className="icon-xs icon me-2 text-danger" />$120.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src={avatar8} className="avatar-xs rounded-circle " alt="..." /></td>
+                                    </tr>  <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Sonya Henshaw</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> Colorado</p>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Nasarawa State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-info font-size-12">Active</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />$112.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />5 cases in total
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src={avatar2} className="avatar-xs rounded-circle " alt="..." /></td>
+                                    </tr>  <tr>
                                         <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Marie Kim</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> Australia</p>
+                                            <h6 className="font-size-15 mb-1 fw-normal">Imo State</h6>
+                                            <p className="text-muted font-size-13 mb-0">
+                                                <i className="mdi mdi-map-marker"></i> </p>
                                         </td>
-                                        <td><span className="badge bg-soft-success font-size-12">Success</span></td>
                                         <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-down" className="icon-xs icon me-2 text-danger" />$120.00
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src={avatar1} className="avatar-xs rounded-circle " alt="..." /></td>
-                                        <td>
-                                            <h6 className="font-size-15 mb-1 fw-normal">Sonya Henshaw</h6>
-                                            <p className="text-muted font-size-13 mb-0"><i className="mdi mdi-map-marker"></i> India</p>
-                                        </td>
-                                        <td><span className="badge bg-soft-danger font-size-12">Cancel</span></td>
-                                        <td className="text-muted fw-semibold text-end">
-                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />$112.00
+                                            <FeatherIcon icon="trending-up" className="icon-xs icon me-2 text-success" />3 cases in total
                                         </td>
                                     </tr>
                                 </tbody>
                             </Table>
+                            <Link to="#" className="float-end has-arrow waves-effect">
+                                {/* <i className="uil-apps"></i> */}
+                                load more</Link>
+
                         </div>
                     </SimpleBar>
                 </CardBody>

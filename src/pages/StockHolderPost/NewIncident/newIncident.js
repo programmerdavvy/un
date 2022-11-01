@@ -4,19 +4,54 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
+import { request } from '../../../services/utilities';
 
-const NewPost = () => {
+const NewPost = (props) => {
     const id = ''
     const [selectedFiles, setselectedFiles] = useState([])
+    const [allFiles] = useState([])
 
     function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        )
         setselectedFiles(files)
+        // files.map(file =>
+        //     Object.assign(file, {
+        //         preview: URL.createObjectURL(file),
+        //         formattedSize: formatBytes(file.size),
+        //     })
+        // )
+        // 
+        // const formData = new FormData();
+        // let file = files[0];
+        // console.log(file)
+        // formData.append("file", file);
+        // formData.append("upload_preset", "geekyimages");
+        // fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+        //     method: "POST",
+        //     body: formData
+        // })
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        // let dataFile = { name: data.original_filename, file: data.secure_url };
+        // if (dataFile?.name !== null) {
+        //     allFiles.push(dataFile);
+        // }
+        // console.log(data)
+        // count++
+        // console.log(count);
+        // if (count === files_.length) {
+        //     alert('upload sucessffully')
+        //     // setLoading(false);
+        //     // return MySwal.fire({
+        //     //     text: 'Files Uploaded Successfully!',
+        //     //     icon: 'success',
+        //     //     showConfirmButton: false,
+        //     //     timer: 2000
+        //     // })
+        // }
+        // });
+
     }
     /**
      * Formats the size
@@ -30,6 +65,51 @@ const NewPost = () => {
         const i = Math.floor(Math.log(bytes) / Math.log(k))
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
+    const uploadedFiles = () => {
+        // setLoading(true);
+        let count = 0;
+        const filteredD = selectedFiles.filter(i => !i.id)
+        const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+        const formData = new FormData();
+        for (let i = 0; i < files_.length; i++) {
+            let file = files_[i];
+            console.log(file)
+            formData.append("file", file);
+            formData.append("upload_preset", "geekyimages");
+            fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+                method: "POST",
+                body: formData
+            })
+                .then((response) => {
+                    console.log(response)
+                    return response.json();
+                })
+                .then((data) => {
+                    let dataFile = {
+                        name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
+                            'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : ''
+                    };
+                    if (dataFile?.name !== null) {
+                        allFiles.push(dataFile);
+                    }
+                    count++
+                    console.log(count);
+                    if (count === files_.length) {
+                        alert('upload sucessffully')
+                        // setLoading(false);
+                        // return MySwal.fire({
+                        //     text: 'Files Uploaded Successfully!',
+                        //     icon: 'success',
+                        //     showConfirmButton: false,
+                        //     timer: 2000
+                        // })
+                    }
+                });
+
+        }
+    }
+
+  
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
@@ -62,13 +142,33 @@ const NewPost = () => {
                 .max(255)
                 .required("Email is required"),
             phone: Yup.string()
-                .max(12)
+                .max(10)
+                .min(10)
                 .required("Phone number is required"),
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (e) => {
+            let data = {
+                childname: e.title, categoryId: 2, sex: "M", age: 20, description: e.description, child_address: "mm", landmark: e.landmark, city: e.city, state: e.state, lga: e.lga,
+                isMobile: false, reporter_phone: e.phone.toString(), reporter_name: e.rname, media_file: "media_file", reporter_mail: e.email, media: allFiles
+            };
+            let url = `incident/create`;
+            console.log(data)
+            try {
+                const rs = await request(url, 'POST', false, data);
+                console.log(rs);
+                if (rs.success === true) {
+                    props.showToast('success', 'Successfully saved'); 
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to save');
+            }
         }
     });
+
+    const onChange = e => {
+        console.log(e.target.files);
+    }
     return (
         <React.Fragment>
 
@@ -115,7 +215,7 @@ const NewPost = () => {
                                                     className="form-select"
                                                     id="floatingSelectGrid"
                                                     // aria-label="Select Categories"
-                                                    name="category"
+                                                    name="categories"
                                                     style={{ height: '30px' }}
                                                     // id="validationCustom01"
                                                     onChange={validation.handleChange}
@@ -205,7 +305,7 @@ const NewPost = () => {
                                                                             height="80"
                                                                             className="avatar-sm rounded bg-light"
                                                                             alt={f.name}
-                                                                            src={f.preview}
+                                                                            src={URL.createObjectURL(f)}
                                                                         />
                                                                     </Col>
                                                                     <Col>
@@ -227,16 +327,14 @@ const NewPost = () => {
                                             </div>
                                         </Form>
 
-                                        {/* <div className="text-center mt-4">
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-primary waves-effect waves-light"
-                                                            >
-                                                                Upload Document
-                                                            </button>
-                                                        </div> */}
-                                        {/* </CardBody>
-                                                </Card> */}
+                                        <div className="float-end mt-4">
+                                            <button
+                                                type="button" onClick={() => uploadedFiles()}
+                                                className="btn btn-success waves-effect waves-light" >
+                                                Upload Document
+                                            </button>
+                                        </div>
+                                      
                                     </Col>
                                 </Row>
                                 <h5>Address where child is found</h5>

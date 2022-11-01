@@ -2,16 +2,32 @@ import React from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { request } from "../../../services/utilities";
 
 
-const IndividualSubmission = (props) => {
+const IncidentReported = (props) => {
 
+    const onClickDelete = async id => {
+        let url = ``;
+        try {
+            const rs = await request(url, 'DELETE', false);
+            console.log(rs)
+            if (rs.success === true) {
+                props.fetchIncidents()
+                props.showToast('success', 'Deleted successfully ');
+            }
+        } catch (err) {
+            console.log(err);
+            props.showToast('error', 'Failed to delete ');
+
+        }
+    }
     return (
         <Row>
             <Col lg={12}>
                 <Card>
                     <CardBody>
-                        <CardTitle className="h4 mb-4">Individual Submission</CardTitle>
+                        <CardTitle className="h4 mb-4">Incidents Reported</CardTitle>
                         <div className="table-responsive">
                             <Table className="table-centered table-nowrap mb-0">
                                 <thead className="table-light">
@@ -29,7 +45,7 @@ const IndividualSubmission = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {props.submission?.map((e, i) => {
+                                    {props.incidents?.map((e, i) => {
                                         return (
                                             <tr key={i} className='text-capitalize'>
                                                 <td><Link to="#" className="text-body fw-bold">#{e.referenceId}</Link> </td>
@@ -51,18 +67,6 @@ const IndividualSubmission = (props) => {
                                                 </td>
                                                 <td>
                                                     <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' />
-                                                    {e.media[0]?.type === 'image' ? <div>
-                                                        <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
-                                                    </div> : e.type === 'video' ? <div>
-                                                        <video>
-                                                            <source src={e.link} type="video/mp4" />
-                                                        </video>
-                                                    </div> : e.type === 'audio' ? <div>
-                                                        <audio controls>
-                                                            <source src={e.link} type="audio/mpeg" />
-                                                        </audio>
-                                                    </div> : ''
-                                                    }
                                                 </td>
                                                 <td>
                                                     {e.status}
@@ -103,10 +107,9 @@ const IndividualSubmission = (props) => {
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   onClickDelete(users)
-                                                                    // }}
+                                                                    onClick={() => {
+                                                                        onClickDelete(e.id);
+                                                                    }}
                                                                     className="text-dark"
 
                                                                 >
@@ -161,4 +164,4 @@ const IndividualSubmission = (props) => {
     );
 };
 
-export default IndividualSubmission;
+export default IncidentReported;
