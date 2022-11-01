@@ -10,6 +10,9 @@ import AdminHome from "../pages/AdminHome/index"
 import StockHolderAdminHome from "../pages/StockHolderHome/index"
 
 import StockHolderPost from "../pages/StockHolderPost/PostList/index"
+import AdminViewPost from "../pages/StockHolderPost/ViewPost/viewPost";
+import AdminViewIncident from "../pages/StockHolderPost/ViewIncident/viewIncident";
+
 import StakeHolderPostList from '../pages/SuperAdmin/StakeHolderPostList/index'
 import StockHolderAddPost from "../pages/StockHolderPost/NewPost/index"
 import StockHolderAddIncident from '../pages/StockHolderPost/NewIncident/index'
@@ -306,6 +309,9 @@ const StakeHolderRoutes = [
   { path: "/admin", component: AdminHome },
   { path: "/admin-posts", component: StockHolderPost },
   { path: "/admin-edit-post/:id", component: StockHolderAddPost },
+  { path: "/admin-view-post/:id", component: AdminViewPost },
+  { path: "/admin-view-incident/:id", component: AdminViewIncident },
+
   { path: "/admin-new-post", component: StockHolderAddPost },
   { path: "/admin-new-incident", component: StockHolderAddIncident },
   { path: "/admin-categories", component: StockHolderCategoryList },

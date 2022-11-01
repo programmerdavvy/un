@@ -72,7 +72,7 @@ const IndividualSubmission = (props) => {
                                                         <ul className="list-inline font-size-20 contact-links mb-0">
                                                             <li className="list-inline-item">
                                                                 <Link
-                                                                    to="/view-post/1"
+                                                                    to={`/admin-view-incident/${e.referenceId}`}
                                                                     className="text-dark"
                                                                 // onClick={() => {
                                                                 //   const users = cellProps.row.original
@@ -87,7 +87,7 @@ const IndividualSubmission = (props) => {
                                                             </li>
                                                             <li className="list-inline-item">
                                                                 <Link
-                                                                    to="/edit-post/1"
+                                                                    to="#"
                                                                     className="text-dark"
                                                                 // onClick={() => {
                                                                 //   const users = cellProps.row.original
