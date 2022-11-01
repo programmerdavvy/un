@@ -32,9 +32,9 @@ const ProfileMenu = props => {
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
         const obj = JSON.parse(localStorage.getItem("authUser"))
-        if(obj.username){
+        if (obj.username) {
           setusername(obj.username)
-        }else{
+        } else {
           setusername(obj.name)
         }
       }
@@ -58,27 +58,14 @@ const ProfileMenu = props => {
             src={user4}
             alt="Header Avatar"
           />
-          <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">{username}</span>{" "}
-          <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+          <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">{'admin'}</span>{" "}
+          {/* <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i> */}
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem tag="a" href="/profile">
             {" "}
             <i className="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i>
             {props.t("View Profile")}{" "}
-          </DropdownItem>
-          <DropdownItem tag="a" href="/">
-            <i className="uil uil-wallet font-size-18 align-middle me-1 text-muted"></i>
-            {props.t("My Wallet")}
-          </DropdownItem>
-          <DropdownItem tag="a" href="#">
-            <i className="uil uil-cog font-size-18 align-middle me-1 text-muted"></i>
-            {props.t("Settings")}
-            <span className="badge bg-soft-success rounded-pill mt-1 ms-2">03</span>
-          </DropdownItem>
-          <DropdownItem tag="a" href="auth-lock-screen">
-            <i className="uil uil-lock-alt font-size-18 align-middle me-1 text-muted"></i>
-            {props.t("Lock screen")}
           </DropdownItem>
           <div className="dropdown-divider" />
           <Link to="/login" className="dropdown-item">

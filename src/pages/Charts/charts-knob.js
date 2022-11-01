@@ -96,8 +96,8 @@ const ChartsKnob = () => {
                       <div className="text-center" dir="ltr">
                         <h5 className="font-size-14 mb-3">Angle offset</h5>
                         <Knob
-                          value={angle}
-                          fgColor="#f1b44c"
+                          value={80}
+                          fgColor="#5b73e8"
                           lineCap="round"
                           height={200}
                           step={1000}

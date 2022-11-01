@@ -209,7 +209,7 @@ function DatatableTables() {
       {
         Header: "Status",
         accessor: "status",
-        filterable: true,
+        filterable: false,
         Cell: (cellProps) => {
           return <InvoiceStatus {...cellProps} />;
         },

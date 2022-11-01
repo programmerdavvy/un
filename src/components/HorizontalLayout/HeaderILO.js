@@ -276,7 +276,7 @@ const HeaderILO = props => {
 
           
 
-          {/* <div className="dropdown d-inline-block">
+          <div className="dropdown d-inline-block">
             <button
               onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar);
@@ -286,7 +286,7 @@ const HeaderILO = props => {
             >
               <i className="uil-cog"></i>
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -6,6 +6,33 @@ import Chat from "../pages/Chat/Chat"
 
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
+import AdminHome from "../pages/AdminHome/index"
+import StockHolderAdminHome from "../pages/StockHolderHome/index"
+
+import StockHolderPost from "../pages/StockHolderPost/PostList/index"
+import StakeHolderPostList from '../pages/SuperAdmin/StakeHolderPostList/index'
+import StockHolderAddPost from "../pages/StockHolderPost/NewPost/index"
+import StockHolderAddIncident from '../pages/StockHolderPost/NewIncident/index'
+import StackHolderDocument from '../pages/StakeHolderDocument/index'
+import StockHolderCategoryList from '../pages/StockHolderPost/CategoryList/index'
+import SuperAdminIndividualSubmission from "../pages/SuperAdmin/IndividualIncident/index"
+import SuperAdminOrganizationSubmission from "../pages/SuperAdmin/OrganizationSubmission/IndividualIncident/index"
+import SuperAdminStatus from '../pages/SuperAdmin/Status/index'
+import SuperAdminStakeHolder from '../pages/SuperAdmin/AdminStakeHolder/index'
+import SuperAdminAddStakeHolder from '../pages/SuperAdmin/AddStakeHolder/index'
+import SuperAdminOrganization from '../pages/SuperAdmin/Organization/index'
+import SuperAdminEvent from '../pages/SuperAdmin/Event/index'
+import SuperAdminNewEvent from '../pages/SuperAdmin/NewEvent/index'
+import SuperAdminEventCategory from '../pages/SuperAdmin/EventCategory/index'
+import SuperAminGallery from '../pages/SuperAdmin/Gallery/index'
+import SuperAminAddGallery from "../pages/SuperAdmin/NewGallery/index"
+import SuperAminGalleryCategory from '../pages/SuperAdmin/GalleryCategory/index'
+
+import SuperAminVideoCategory from '../pages/SuperAdmin/VideoCategory/index'
+import SuperAminAddVideoGallery from "../pages/SuperAdmin/NewVideo/index"
+import SuperAminVideoGallery from '../pages/SuperAdmin/Video/index'
+import SuperAminComment from '../pages/SuperAdmin/Comment/index'
+
 import Home from "../pages/Home/index"
 import About from "../pages/About/index"
 import News from "../pages/News/index"
@@ -143,7 +170,45 @@ import UserProfile from "../pages/Authentication/user-profile"
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
+
+  // superadmin route
   { path: "/home", component: Home },
+  { path: "/admin", component: AdminHome },
+  { path: "/admin-posts", component: StockHolderPost },
+  { path: "/admin-edit-post/:id", component: StockHolderAddPost },
+  { path: "/admin-new-post", component: StockHolderAddPost },
+  { path: "/admin-new-incident", component: StockHolderAddIncident },
+  { path: "/admin-categories", component: StockHolderCategoryList },
+
+  { path: "/individual-submission", component: SuperAdminIndividualSubmission },
+  { path: "/organization-submission", component: SuperAdminOrganizationSubmission },
+  { path: "/admin-status", component: SuperAdminStatus },
+  { path: "/admin-stakeholder", component: SuperAdminStakeHolder },
+  { path: "/stakeholder-post", component: StakeHolderPostList },
+
+
+  { path: "/new-stakeholder", component: SuperAdminAddStakeHolder },
+  { path: "/organization", component: SuperAdminOrganization },
+  { path: "/events", component: SuperAdminEvent },
+
+  { path: "/new-event", component: SuperAdminNewEvent },
+  { path: "/event-category", component: SuperAdminEventCategory },
+  { path: "/admin-gallery", component: SuperAminGallery },
+  { path: "/new-gallery", component: SuperAminAddGallery },
+  { path: "/gallery-category", component: SuperAminGalleryCategory },
+
+  { path: "/admin-video", component: SuperAminVideoGallery },
+  { path: "/new-video", component: SuperAminAddVideoGallery },
+  { path: "/video-category", component: SuperAminVideoCategory },
+  { path: "/admin-comments", component: SuperAminComment },
+
+
+  //   
+  // 
+  // 
+
+  // end of superadmin route
+
   { path: "/about", component: About },
   { path: "/news", component: News },
   { path: "/news/:id/:title", component: NewsPage },
@@ -268,10 +333,18 @@ const userRoutes = [
     path: "/",
     exact: true,
     // component: () => <Redirect to="/dashboard" />
-    component: () => <Redirect to="/home" />
-  }, 
+    component: () => <Redirect to="/admin" />
+  },
 ];
-
+const superAdminRoutes = [
+  { path: "/stakeholder", component: StockHolderAdminHome },
+  { path: "/stakeholder-documents", component: StackHolderDocument },
+  { path: "/posts", component: StockHolderPost },
+  { path: "/edit-post/:id", component: StockHolderAddPost },
+  { path: "/new-post", component: StockHolderAddPost },
+  { path: "/new-incident", component: StockHolderAddIncident },
+  { path: "/categories", component: StockHolderCategoryList },
+]
 const authRoutes = [
 
   { path: "/logout", component: Logout },
@@ -291,4 +364,4 @@ const authRoutes = [
   { path: "/auth-lock-screen", component: LockScreen },
 ]
 
-export { userRoutes, authRoutes }
+export { userRoutes, superAdminRoutes, authRoutes }
