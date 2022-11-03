@@ -13,14 +13,15 @@ function Categories(props) {
     const isSuperAdmin = false
 
     const addCategory = async () => {
-        let data = { name, type: 'Post' };
+        let data = { name, pageId: 4 };
         let url = `category`;
-        console.log(data);
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
-                setmodal(!modal);
+                props.fetchCategories();
                 props.showToast('success', 'Saved successfully ');
+                setName('');
+                setmodal(!modal);
             }
 
         } catch (err) {
@@ -36,6 +37,7 @@ function Categories(props) {
             if (rs.success === true) {
                 setIsedit(false);
                 props.fetchCategories();
+                setName('');
                 setmodal(!modal);
                 props.showToast('success', 'Updated successfully ');
             }
@@ -74,6 +76,7 @@ function Categories(props) {
                 <ModalHeader
                     className=""
                     toggle={() => {
+                        setName('');
                         setmodal(!modal)
                         setIsedit(false);
                     }}
@@ -216,21 +219,7 @@ function Categories(props) {
                                                 2
                                             </PaginationLink>
                                         </PaginationItem>
-                                        <PaginationItem disabled>
-                                            <PaginationLink href="#">
-                                                3
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                4
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                5
-                                            </PaginationLink>
-                                        </PaginationItem>
+
                                         <PaginationItem>
                                             <PaginationLink
                                                 href="#"

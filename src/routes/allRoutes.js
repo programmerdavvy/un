@@ -18,6 +18,8 @@ import StockHolderAddPost from "../pages/StockHolderPost/NewPost/index"
 import StockHolderAddIncident from '../pages/StockHolderPost/NewIncident/index'
 import StackHolderDocument from '../pages/StakeHolderDocument/index'
 import StockHolderCategoryList from '../pages/StockHolderPost/CategoryList/index'
+import StockHolderIncidentCategoryList from '../pages/SuperAdmin/IncidentCategoryList/index'
+
 import StakeHolderReportedIncident from '../pages/StockHolderPost/ReportedIncident/index'
 import SuperAdminIndividualSubmission from "../pages/SuperAdmin/IndividualIncident/index"
 import SuperAdminOrganizationSubmission from "../pages/SuperAdmin/OrganizationSubmission/IndividualIncident/index"
@@ -315,6 +317,8 @@ const StakeHolderRoutes = [
   { path: "/admin-new-post", component: StockHolderAddPost },
   { path: "/admin-new-incident", component: StockHolderAddIncident },
   { path: "/admin-categories", component: StockHolderCategoryList },
+  { path: "/admin-incident-categories", component: StockHolderIncidentCategoryList },
+
 
   { path: "/individual-submission", component: SuperAdminIndividualSubmission },
   { path: "/organization-submission", component: SuperAdminOrganizationSubmission },

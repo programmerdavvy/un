@@ -19,7 +19,8 @@ const NewIncident = (props) => {
     const [selectedMulti, setselectedMulti] = useState(null)
     const [tags, setTags] = useState('');
     const [description, setDescription] = useState('');
-    const [post, setPost] = useState(null)
+    const [post, setPost] = useState(null);
+    const [selectedCategory, setselectedCategory] = useState(null)
     // let { id } = useParams();
 
     function handleAcceptedFiles(files) {
@@ -54,6 +55,7 @@ const NewIncident = (props) => {
             if (rs.success === true) {
                 setPost(rs.result);
                 setDescription(rs.result.content);
+                setselectedCategory(rs.result.categoryId)
                 // let tag = rs.result.tags.split(',');
                 // let tags = 
                 // console.log(tag)
@@ -84,9 +86,25 @@ const NewIncident = (props) => {
             // zip: Yup.string().required("Please Enter Your Zip"),
         }),
         onSubmit: async e => {
-            let data = { pageId: 4, title: e.title, content: description, tags: selectedMulti[0].value, media: [], language: 'english', date: new Date() }
+            let data = {
+                pageId: 4, title: e.title, content: description, tags: selectedMulti[0].value,
+                media: [{
+                    name: 'media one',
+                    link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
+                    type: 'image',
+                    extension: 'png'
+                },
+                {
+                    link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
+                    name: 'media two',
+                    type: 'video',
+                    extension: 'mp4'
+                }
+                ], language: 'english', date: new Date(),
+                categoryId: selectedCategory
+            }
 
-            let url = params?.id ? `sections?id=${params.id}` : `sections`
+            let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
             try {
                 const rs = await request(url, 'POST', false, data);
                 if (rs.success === true) {
@@ -95,7 +113,6 @@ const NewIncident = (props) => {
             } catch (err) {
                 console.log(err);
                 props.showToast('error', 'Failed to save')
-
             }
         }
     });
@@ -117,7 +134,6 @@ const NewIncident = (props) => {
             ],
         },
     ]
-
     useEffect(() => {
 
         if (params?.id !== null && params?.id !== undefined) {
@@ -196,6 +212,15 @@ const NewIncident = (props) => {
                                                             type="checkbox"
                                                             className="form-check-input"
                                                             id={`invalidCheck${e.id}`}
+                                                            onChange={() => {
+                                                                let id = document.getElementById(`invalidCheck${e.id}`);
+                                                                if (id.checked === true) {
+                                                                    setselectedCategory(e.id);
+                                                                } else {
+                                                                    setselectedCategory(null);
+
+                                                                }
+                                                            }}
                                                         />
                                                         <Label
                                                             className="form-check-label text-capitalize"
@@ -383,7 +408,7 @@ const NewIncident = (props) => {
                                     </Row>
                                     <div>
                                         <Button color="primary" type="submit">
-                                            {params?.id ? 'Publish' : 'Update'}
+                                            {params?.id === null || params?.id === undefined ? 'Publish' : 'Update'}
                                         </Button>
                                     </div>
                                 </div>

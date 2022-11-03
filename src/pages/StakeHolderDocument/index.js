@@ -264,11 +264,11 @@ function Index() {
                                                                 <img src={e.link} className='img-thumbnail'   width='100%'   alt='uploaded incident' />
                                                             </div> : e.type === 'video' ? <div>
                                                                 <video>
-                                                                    <source src={e.link} type="video/mp4" />
+                                                                    <source src={e.link}  width='100%' type="video/mp4" />
                                                                 </video>
                                                             </div> : e.type === 'audio' ? <div>
                                                                 <audio controls>
-                                                                    <source src={e.link} type="audio/mpeg" />
+                                                                    <source src={e.link}  width='100%' type="audio/mpeg" />
                                                                 </audio>
                                                             </div> : ''
                                                             }

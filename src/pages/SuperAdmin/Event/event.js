@@ -1,8 +1,26 @@
 import React from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
+import { request } from "../../../services/utilities";
 
-const IndividualSubmission = () => {
+const Events = (props) => {
+
+    const onClickDelete = async id => {
+        let url = `sections?id=${id}`
+        try {
+            const rs = await request(url, 'DELETE', false);
+            if (rs.success === true) {
+
+                props.fetchEvents();
+                props.showToast('success', 'Deleted Successfully');
+            }
+        } catch (err) {
+            console.log(err);
+            props.showToast('error', 'Failed to delete');
+
+        }
+    }
+
     return (
         <Row>
             <Col lg={12}>
@@ -22,22 +40,23 @@ const IndividualSubmission = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
-                                                    {/* <li className="list-inline-item">
+                                    {props.events?.map((e, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <td>{e.tile}</td>
+                                                <td>
+                                                    News
+                                                </td>
+                                                <td>
+                                                    {new Date(e.startDate).toISOString()}
+                                                </td>
+                                                <td>
+                                                {new Date(e.endDate).toISOString()}
+                                                </td>
+                                                <td>
+                                                    <div className="d-flex gap-3 users">
+                                                        <ul className="list-inline font-size-20 contact-links mb-0">
+                                                            {/* <li className="list-inline-item">
                                                         <Link
                                                             to="#"
                                                             className="text-dark"
@@ -67,7 +86,7 @@ const IndividualSubmission = () => {
                                                             </UncontrolledTooltip>
                                                         </Link>
                                                     </li> */}
-                                                    <li className="list-inline-item">
+                                                            {/* <li className="list-inline-item">
                                                         <Link
                                                             to="#"
                                                             className="text-dark"
@@ -81,31 +100,32 @@ const IndividualSubmission = () => {
                                                                 Edit
                                                             </UncontrolledTooltip>
                                                         </Link>
-                                                    </li>
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="#"
-                                                            // onClick={() => {
-                                                            //   const users = cellProps.row.original
-                                                            //   onClickDelete(users)
-                                                            // }}
-                                                            className="text-dark"
+                                                    </li> */}
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
+                                                                    onClick={() => {
+                                                                        onClickDelete(e.id)
+                                                                    }}
+                                                                    className="text-dark"
 
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            
-                                        </td>
-                                    </tr>
+                                                                >
+                                                                    <i
+                                                                        className="uil uil-trash-alt font-size-18"
+                                                                        id="deletetooltip"
+                                                                    />
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                        Delete
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </div>
@@ -116,4 +136,4 @@ const IndividualSubmission = () => {
     );
 };
 
-export default IndividualSubmission;
+export default Events;

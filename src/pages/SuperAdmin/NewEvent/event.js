@@ -9,9 +9,19 @@ import { request } from '../../../services/utilities';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 
-const NewEvent = () => {
-    const id = ''
-    const [selectedFiles, setselectedFiles] = useState([])
+const NewEvent = (props) => {
+
+    const [selectedFiles, setselectedFiles] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState([])
+
+    const [description, setDescription] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState('');
+    const [starttime, setStartTime] = useState('');
+    const [endTime, setEndTime] = useState('');
+    const [venue, setVenue] = useState('');
+    const [title, setTitle] = useState('');
+
 
     function handleAcceptedFiles(files) {
         files.map(file =>
@@ -37,30 +47,45 @@ const NewEvent = () => {
         enableReinitialize: true,
 
         initialValues: {
-            title: '',
-            description: '',
-            startdate: '',
-            enddate: '',
-            starttime: '',
-            endtime: '',
-            venue: '',
-            categories: ''
+            title: title,
+            description: description,
+            startdate: startDate,
+            enddate: endDate,
+            starttime: starttime,
+            endtime: endTime,
+            venue: venue,
+            // categories: ''
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Child Name"),
             description: Yup.string().required("Please Enter Description"),
-            startdate: Yup.string().required("Please Enter Date"),
-            enddate: Yup.string().required("Please Enter Date"),
-            starttime: Yup.string().required("Please Enter Time"),
-            endtime: Yup.string().required("Please Enter Time"),
+            // startate: Yup.date().required("Please Enter Date"),
+            // enddate: Yup.date().required("Please Enter Date"),
+            // starttime: Yup.date().required("Please Enter Time"),
+            // endtime: Yup.date().required("Please Enter Time"),
             venue: Yup.string().required("Please Enter Venue"),
-            categories: Yup.string().required("Please Select Categories")
+            // categories: Yup.string().required("Please Select Categories")
         }),
         onSubmit: async (e) => {
             const data = {
-                pageId: 4, title: e.title, description: e.description,
-                // startdate: e.startdate, enddate: e.enddate, startdate: e.startdate, endtime: e.endtime,
-                media: [], venue: e.venue
+                pageId: 2, title: e.title, content: e.description,
+                startDate: e.startdate, endDate: e.enddate,
+                // startdate: e.startdate, endtime: e.endtime,
+                media: [{
+                    name: 'media one',
+                    link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
+                    type: 'image',
+                    extension: 'png'
+                },
+                {
+                    link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
+                    name: 'media two',
+                    type: 'video',
+                    extension: 'mp4'
+                }
+                ],
+                // venue: e.venue,
+                categoryId: parseInt(selectedCategory)
             };
             console.log(data);
             try {
@@ -194,23 +219,24 @@ const NewEvent = () => {
                                                 <InputGroup>
                                                     <Flatpickr
                                                         name='startdate'
-                                                        className="form-control d-block"
+                                                        className="form-control d-block bg-white"
                                                         placeholder="dd M,yyyy"
                                                         options={{
                                                             altInput: true,
                                                             altFormat: "F j, Y",
                                                             dateFormat: "Y-m-d",
                                                         }}
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.startdate || ""}
-                                                        invalid={
-                                                            validation.touched.startdate && validation.errors.startdate ? true : false
-                                                        }
+                                                        onChange={e => setStartDate(e)}
+                                                    // onChange={validation.handleChange}
+                                                    // onBlur={validation.handleBlur}
+                                                    // value={validation.values.startdate || ""}
+                                                    // invalid={
+                                                    //     validation.touched.startdate && validation.errors.startdate ? true : false
+                                                    // }
                                                     />
-                                                    {validation.touched.startdate && validation.errors.startdate ? (
+                                                    {/* {validation.touched.startdate && validation.errors.startdate ? (
                                                         <FormFeedback type="invalid">{validation.errors.startdate}</FormFeedback>
-                                                    ) : null}
+                                                    ) : null} */}
                                                 </InputGroup>
                                             </Col>
                                             <Col xl={6}>
@@ -230,16 +256,18 @@ const NewEvent = () => {
                                                         dateFormat: "H:i",
                                                         time_24hr: true
                                                     }}
-                                                    onChange={validation.handleChange}
-                                                    onBlur={validation.handleBlur}
-                                                    value={validation.values.starttime || ""}
-                                                    invalid={
-                                                        validation.touched.starttime && validation.errors.starttime ? true : false
-                                                    }
+                                                    // onChange={validation.handleChange}
+                                                    // onBlur={validation.handleBlur}
+                                                    // value={validation.values.starttime || ""}
+                                                    // invalid={
+                                                    //     validation.touched.starttime && validation.errors.starttime ? true : false
+                                                    // }
+                                                    onChange={e => setStartTime(e)}
+
                                                 />
-                                                {validation.touched.starttime && validation.errors.starttime ? (
+                                                {/* {validation.touched.starttime && validation.errors.starttime ? (
                                                     <FormFeedback type="invalid">{validation.errors.starttime}</FormFeedback>
-                                                ) : null}
+                                                ) : null} */}
                                             </Col>
                                         </Row>
                                     </Col>
@@ -265,23 +293,25 @@ const NewEvent = () => {
                                                 <InputGroup>
                                                     <Flatpickr
                                                         name='enddate'
-                                                        className="form-control d-block"
+                                                        className="form-control d-block bg-white"
                                                         placeholder="dd M,yyyy"
                                                         options={{
                                                             altInput: true,
                                                             altFormat: "F j, Y",
                                                             dateFormat: "Y-m-d",
                                                         }}
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.enddate || ""}
-                                                        invalid={
-                                                            validation.touched.enddate && validation.errors.enddate ? true : false
-                                                        }
+                                                        // onChange={validation.handleChange}
+                                                        // onBlur={validation.handleBlur}
+                                                        // value={validation.values.enddate || ""}
+                                                        // invalid={
+                                                        //     validation.touched.enddate && validation.errors.enddate ? true : false
+                                                        // }
+                                                        onChange={e => setEndDate(e)}
+
                                                     />
-                                                    {validation.touched.enddate && validation.errors.enddate ? (
+                                                    {/* {validation.touched.enddate && validation.errors.enddate ? (
                                                         <FormFeedback type="invalid">{validation.errors.enddate}</FormFeedback>
-                                                    ) : null}
+                                                    ) : null} */}
                                                 </InputGroup>
                                             </Col>
 
@@ -302,12 +332,14 @@ const NewEvent = () => {
                                                         dateFormat: "H:i",
                                                         time_24hr: true
                                                     }}
-                                                    onChange={validation.handleChange}
-                                                    onBlur={validation.handleBlur}
-                                                    value={validation.values.endtime || ""}
-                                                    invalid={
-                                                        validation.touched.endtime && validation.errors.endtime ? true : false
-                                                    }
+                                                    // onChange={validation.handleChange}
+                                                    // onBlur={validation.handleBlur}
+                                                    // value={validation.values.endtime || ""}
+                                                    // invalid={
+                                                    //     validation.touched.endtime && validation.errors.endtime ? true : false
+                                                    // }
+                                                    onChange={e => setEndTime(e)}
+
                                                 />
                                                 {validation.touched.endtime && validation.errors.endtime ? (
                                                     <FormFeedback type="invalid">{validation.errors.endtime}</FormFeedback>
@@ -320,7 +352,7 @@ const NewEvent = () => {
                                     <Col>
                                         <FormGroup className="mb-3">
                                             <Label htmlFor="validationCustom01"> Event Categories</Label>
-                                            <div className="form-floating mb-3">
+                                            <div className="mb-3">
                                                 <select
                                                     className="form-select"
                                                     id="floatingSelectGrid"
@@ -328,24 +360,26 @@ const NewEvent = () => {
                                                     name="category"
                                                     style={{ height: '30px' }}
                                                     // id="validationCustom01"
-                                                    onChange={validation.handleChange}
-                                                    onBlur={validation.handleBlur}
-                                                    value={validation.values.categories || ""}
-                                                    invalid={
-                                                        validation.touched.categories && validation.errors.categories ? true : false
-                                                    }
+                                                    onChange={e => setSelectedCategory(e.target.value)}
+                                                // onBlur={validation.handleBlur}
+                                                // value={validation.values.categories || ""}
+                                                // invalid={
+                                                //     validation.touched.categories && validation.errors.categories ? true : false
+                                                // }
                                                 >
                                                     <option>Select Categories</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                    {props.categories?.map(e => {
+                                                        return (
+                                                            <option key={e.id} value={e.id}>{e.name}</option>
+                                                        )
+                                                    })}
                                                 </select>
-                                                {validation.touched.categories && validation.errors.categories ? (
+                                                {/* {validation.touched.categories && validation.errors.categories ? (
                                                     <FormFeedback type="invalid">{validation.errors.categories}</FormFeedback>
-                                                ) : null}
-                                                <label htmlFor="floatingSelectGrid">
+                                                ) : null} */}
+                                                {/* <label htmlFor="floatingSelectGrid">
                                                     Categories
-                                                </label>
+                                                </label> */}
                                             </div>
 
                                         </FormGroup>

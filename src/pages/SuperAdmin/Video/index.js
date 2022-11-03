@@ -8,6 +8,11 @@ import { request } from '../../../services/utilities'
 
 function Index() {
 
+    const [videos, setVideos] = useState([]);
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [count, setCount] = useState(1);
+    const [meta, setMeta] = useState(null);
     const [categories, setCategories] = useState([]);
 
     const showToast = (error, message) => {
@@ -39,12 +44,28 @@ function Index() {
         if (error === "error") toastr.error(message)
         else toastr.success(message)
     }
+    const fetchVideos = useCallback(async (page) => {
+        const p = page || 1
+        let url = `sections/admin?pageId=11&page=${p}&limit=10`;
+        try {
+            const rs = await request(url, 'GET', false);
+            if (rs.success === true) {
+                setVideos(rs.result);
+                setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+                setMeta(rs.paging)
+            }
+        } catch (err) {
+            console.log(err);
+            showToast('error', 'Failed to fetch');
+
+        }
+    }, [rowsPerPage]);
+
     const fetchCategories = useCallback(async () => {
-        let url = `category?type=gallery`;
+        let url = `category?pageId=11`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
-            console.log(rs);
         } catch (err) {
             console.log(err);
             showToast('error', 'Failed to fetch');
@@ -52,9 +73,15 @@ function Index() {
         }
     }, []);
 
+    const handlePagination = page => {
+        fetchVideos(page.selected + 1)
+        setCurrentPage(page.selected + 1)
+    }
+
     useEffect(() => {
+        fetchVideos();
         fetchCategories();
-    }, [fetchCategories]);
+    }, [fetchVideos]);
 
     return (
         <React.Fragment>
@@ -62,7 +89,7 @@ function Index() {
                 <Breadcrumbs title="gallery" breadcrumbItem="Video Gallery" />
 
                 <Container>
-                    <Gallery categories={categories} showToast={showToast} />
+                    <Gallery videos={videos} categories={categories} showToast={showToast} meta={meta} handlePagination={handlePagination} fetchVideos={fetchVideos} count={count} currentPage={currentPage} />
                 </Container>
             </div>
         </React.Fragment>

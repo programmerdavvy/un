@@ -1,10 +1,14 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { Container } from 'reactstrap'
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import Gallery from './video';
+import React from 'react'
+import { useState } from 'react'
+import { Row, Col, Container } from 'reactstrap'
+import Breadcrumb from '../../../components/Common/Breadcrumb'
+import Categories from './categories'
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
-import { request } from "../../../services/utilities";
+import { request } from '../../../services/utilities'
+import { useCallback } from 'react'
+import { useEffect } from 'react'
+
 
 function Index() {
     const [categories, setCategories] = useState([]);
@@ -38,26 +42,33 @@ function Index() {
         if (error === "error") toastr.error(message)
         else toastr.success(message)
     }
-
     const fetchCategories = useCallback(async () => {
-        let url = `category?pageId=11`;
+        let url = `category?type=incident`;
         try {
             const rs = await request(url, 'GET', false);
-            setCategories(rs.result)
+            setCategories(rs.result);
         } catch (err) {
             console.log(err);
+            showToast('error', 'Failed to fetch');
+
         }
     }, []);
 
     useEffect(() => {
         fetchCategories();
     }, [fetchCategories]);
+
+
     return (
         <React.Fragment>
             <div className='page-content'>
-                <Breadcrumbs title="video" breadcrumbItem="Add Video" />
+                <Breadcrumb title="Categories" breadcrumbItem="All Categories" />
                 <Container>
-                    <Gallery showToast={showToast} categories={categories}  />
+                    <Row>
+                        <Col>
+                            <Categories categories={categories} fetchCategories={fetchCategories} showToast={showToast} />
+                        </Col>
+                    </Row>
                 </Container>
             </div>
         </React.Fragment>
