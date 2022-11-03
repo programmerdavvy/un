@@ -261,14 +261,21 @@ function Index() {
                                                         </td>
                                                         <td width='50%'>
                                                             {e.type === 'image' ? <div>
-                                                                <img src={e.link} className='img-thumbnail'   width='100%'   alt='uploaded incident' />
+                                                                <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
                                                             </div> : e.type === 'video' ? <div>
-                                                                <video>
+                                                                {/* <video>
                                                                     <source src={e.link}  width='100%' type="video/mp4" />
-                                                                </video>
+                                                                </video> */}
+                                                                <div className="ratio ratio-4x3">
+                                                                    <iframe
+                                                                        title={e.name}
+                                                                        allowFullScreen
+                                                                        src={e.link}
+                                                                    />
+                                                                </div>
                                                             </div> : e.type === 'audio' ? <div>
                                                                 <audio controls>
-                                                                    <source src={e.link}  width='100%' type="audio/mpeg" />
+                                                                    <source src={e.link} width='100%' type="audio/mpeg" />
                                                                 </audio>
                                                             </div> : ''
                                                             }

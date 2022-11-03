@@ -71,6 +71,7 @@ const NewEvent = (props) => {
                 pageId: 2, title: e.title, content: e.description,
                 startDate: e.startdate, endDate: e.enddate,
                 // startdate: e.startdate, endtime: e.endtime,
+                date: new Date(),
                 media: [{
                     name: 'media one',
                     link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
@@ -84,7 +85,7 @@ const NewEvent = (props) => {
                     extension: 'mp4'
                 }
                 ],
-                // venue: e.venue,
+                location: e.venue,
                 categoryId: parseInt(selectedCategory)
             };
             console.log(data);
