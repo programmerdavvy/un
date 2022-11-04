@@ -40,7 +40,7 @@ function Index() {
     }
 
     const fetchCategories = useCallback(async () => {
-        let url = `category?pageId=2`;
+        let url = `category?pageId=3`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result)

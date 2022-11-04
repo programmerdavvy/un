@@ -40,7 +40,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchCategories = useCallback(async () => {
-        let url = `category?type=gallery`;
+        let url = `category?pageId=3`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
@@ -63,7 +63,7 @@ function Index() {
                 <Container>
                     <Row>
                         <Col> 
-                            <GalleryCategory categories={categories} showToast={showToast} />
+                            <GalleryCategory categories={categories} fetchCategories={fetchCategories} showToast={showToast} />
                         </Col>
                     </Row>
                 </Container>

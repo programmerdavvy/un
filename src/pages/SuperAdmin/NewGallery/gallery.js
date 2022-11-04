@@ -10,10 +10,11 @@ import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 
 
-const NewEvent = () => {
+const NewEvent = props => {
     const id = ''
-    const [selectedFiles, setselectedFiles] = useState([])
-    const [allFiles] = useState([])
+    const [selectedFiles, setselectedFiles] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [allFiles] = useState([]);
 
 
     function handleAcceptedFiles(files) {
@@ -60,7 +61,6 @@ const NewEvent = () => {
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
-
         initialValues: {
             title: '',
             categories: ''
@@ -76,7 +76,6 @@ const NewEvent = () => {
             const formData = new FormData();
             for (let i = 0; i < files_.length; i++) {
                 let file = files_[i];
-                console.log(file)
                 formData.append("file", file);
                 formData.append("upload_preset", "geekyimages");
                 fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
@@ -84,7 +83,6 @@ const NewEvent = () => {
                     body: formData
                 })
                     .then((response) => {
-                        console.log(response)
                         return response.json();
                     })
                     .then((data) => {
@@ -99,7 +97,7 @@ const NewEvent = () => {
                         count++
                         if (count === files_.length) {
                             const savePhotoGallery = async () => {
-                                const data = { pageId: 3, content: 'Photo Gallery', title: e.title, media: allFiles };
+                                const data = { pageId: 3, content: 'Photo Gallery', title: e.title, media: allFiles, categoryId: selectedCategory };
                                 try {
                                     let url = `sections`;
                                     const rs = await request(url, 'POST', false, data);
@@ -116,10 +114,9 @@ const NewEvent = () => {
                     });
 
             }
-
         }
     });
-  
+
 
     return (
         <React.Fragment>
@@ -174,7 +171,7 @@ const NewEvent = () => {
                                                     name="category"
                                                     style={{ height: '30px' }}
                                                     // id="validationCustom01"
-                                                    onChange={validation.handleChange}
+                                                    onChange={e => setSelectedCategory(e.target.value)}
                                                     onBlur={validation.handleBlur}
                                                     value={validation.values.categories || ""}
                                                     invalid={
@@ -182,9 +179,9 @@ const NewEvent = () => {
                                                     }
                                                 >
                                                     <option>Select Categories</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
+                                                    {props.categories?.map(e => (
+                                                        <option value={e.id}>{e.name}</option>
+                                                    ))}
                                                 </select>
                                                 {validation.touched.categories && validation.errors.categories ? (
                                                     <FormFeedback type="invalid">{validation.errors.categories}</FormFeedback>
