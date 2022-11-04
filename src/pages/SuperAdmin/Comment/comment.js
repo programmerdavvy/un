@@ -2,9 +2,38 @@ import React from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip, Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { request } from "../../../services/utilities";
 
 
 const Comment = (props) => {
+
+    const approveComment = async id => {
+        const url = `comments/approve/?id=${id}`;
+        try {
+            const rs = await request(url, 'PATCH', false);
+            if (rs.success === true) {
+                props.showToast('success', 'Comment approved successfully');
+            }
+        } catch (err) {
+            console.log(err);
+            props.showToast('error', 'Failed to approve')
+        }
+    }
+    const onClickDelete = async id => {
+        const url = `comments/delete/?id=${id}`;
+        if (window.confirm('Are you sure')) {
+            try {
+                const rs = await request(url, 'DELETE', false);
+                if (rs.success === true) {
+                    props.fetchComment();
+                    props.showToast('success', 'Deleted  successfully');
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to delete')
+            }
+        }
+    }
     return (
         <Row>
             <Col lg={12}>
@@ -59,10 +88,9 @@ const Comment = (props) => {
                                                                 <Link
                                                                     to="#"
                                                                     className="text-dark"
-                                                                // onClick={() => {
-                                                                //   const users = cellProps.row.original
-                                                                //   // handleUserClick(users)
-                                                                // }}
+                                                                    onClick={() => {
+                                                                        approveComment(e.id);
+                                                                    }}
                                                                 >
                                                                     <i className="uil-check font-size-18" id="edittooltip" />
                                                                     <UncontrolledTooltip placement="top" target="edittooltip">
@@ -89,10 +117,9 @@ const Comment = (props) => {
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   onClickDelete(users)
-                                                                    // }}
+                                                                    onClick={() => {
+                                                                        onClickDelete(e.id);
+                                                                    }}
                                                                     className="text-dark"
 
                                                                 >

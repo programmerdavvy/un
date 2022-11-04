@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
 import { request } from "../../../services/utilities";
+import ReactPaginate from "react-paginate";
+
 
 const Events = (props) => {
 
@@ -43,15 +45,15 @@ const Events = (props) => {
                                     {props.events?.map((e, i) => {
                                         return (
                                             <tr key={i}>
-                                                <td>{e.tile}</td>
+                                                <td>{e.title}</td>
                                                 <td>
                                                     News
                                                 </td>
                                                 <td>
-                                                    {new Date(e.startDate).toISOString()}
+                                                    {new Date(e.startDate).toUTCString()}
                                                 </td>
                                                 <td>
-                                                {new Date(e.endDate).toISOString()}
+                                                    {new Date(e.endDate).toUTCString()}
                                                 </td>
                                                 <td>
                                                     <div className="d-flex gap-3 users">
@@ -128,6 +130,31 @@ const Events = (props) => {
                                     })}
                                 </tbody>
                             </Table>
+                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                                <div>Showing 1 to 10 of {props.meta?.total} entries</div>
+
+                                <div>
+                                    <ReactPaginate
+                                        nextLabel='Next'
+                                        breakLabel='...'
+                                        previousLabel='Prev'
+                                        pageCount={props.count}
+                                        activeClassName='active'
+                                        breakClassName='page-item'
+                                        pageClassName={'page-item'}
+                                        breakLinkClassName='page-link'
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                        nextClassName={'page-item next'}
+                                        previousLinkClassName={'page-link'}
+                                        previousClassName={'page-item prev'}
+                                        onPageChange={page => props.handlePagination(page)}
+                                        forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                        containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                    />
+                                </div>
+
+                            </div>
                         </div>
                     </CardBody>
                 </Card>

@@ -53,7 +53,6 @@ function Index() {
             setComment(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
             setMeta(rs.paging)
-            console.log(rs);
         } catch (err) {
             console.log(err);
             showToast('error', 'Failed to fetch');
@@ -74,7 +73,7 @@ function Index() {
             <div className='page-content'>
                 <Container fluid>
                     <Breadcrumbs title="comment" breadcrumbItem="Comments" />
-                    <Comment comments={comment} currentPage={currentPage} count={count} meta={meta} handlePagination={handlePagination} />
+                    <Comment comments={comment} currentPage={currentPage} count={count} meta={meta} handlePagination={handlePagination} showToast={showToast} fetchComment={fetchComment} />
                 </Container>
             </div>
         </React.Fragment>

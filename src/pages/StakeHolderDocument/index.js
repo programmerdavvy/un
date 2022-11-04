@@ -263,9 +263,7 @@ function Index() {
                                                             {e.type === 'image' ? <div>
                                                                 <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
                                                             </div> : e.type === 'video' ? <div>
-                                                                {/* <video>
-                                                                    <source src={e.link}  width='100%' type="video/mp4" />
-                                                                </video> */}
+                                                              
                                                                 <div className="ratio ratio-4x3">
                                                                     <iframe
                                                                         title={e.name}

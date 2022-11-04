@@ -44,14 +44,15 @@ function Index() {
     }
     const fetchEvents = useCallback(async (page) => {
         const p = page || 1
-        let url = `sections/admin?pageId=2`;
+        let url = `sections/admin?pageId=2&events=past`;
         // &page=${p}&limit=10
         try {
             const rs = await request(url, 'GET', false);
             if (rs.success === true) {
                 setEvents(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
-                setMeta(rs.paging)
+                setMeta(rs.paging);
+                console.log(rs);
             }
         } catch (err) {
             console.log(err);
@@ -75,7 +76,7 @@ function Index() {
             <div className='page-content'>
                 <Breadcrumbs title="event" breadcrumbItem="Events" />
                 <Container >
-                    <Event showToast={showToast} fetchEvents={fetchEvents} currentPage={currentPage} meta={meta} count={count} handlePagination={handlePagination} />
+                    <Event showToast={showToast} events={events} fetchEvents={fetchEvents} currentPage={currentPage} meta={meta} count={count} handlePagination={handlePagination} />
                 </Container>
             </div>
         </React.Fragment>
