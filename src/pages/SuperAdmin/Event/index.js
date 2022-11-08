@@ -44,7 +44,7 @@ function Index() {
     }
     const fetchEvents = useCallback(async (page) => {
         const p = page || 1
-        let url = `sections/admin?pageId=2&events=past`;
+        let url = `sections/admin?pageId=2`;
         // &page=${p}&limit=10
         try {
             const rs = await request(url, 'GET', false);
@@ -52,7 +52,6 @@ function Index() {
                 setEvents(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
                 setMeta(rs.paging);
-                console.log(rs);
             }
         } catch (err) {
             console.log(err);

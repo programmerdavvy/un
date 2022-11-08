@@ -9,17 +9,19 @@ const Events = (props) => {
 
     const onClickDelete = async id => {
         let url = `sections?id=${id}`
-        try {
-            const rs = await request(url, 'DELETE', false);
-            if (rs.success === true) {
+        if (window.confirm('Are you sure')) {
+            try {
+                const rs = await request(url, 'DELETE', false);
+                if (rs.success === true) {
 
-                props.fetchEvents();
-                props.showToast('success', 'Deleted Successfully');
+                    props.fetchEvents();
+                    props.showToast('success', 'Deleted Successfully');
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to delete');
+
             }
-        } catch (err) {
-            console.log(err);
-            props.showToast('error', 'Failed to delete');
-
         }
     }
 

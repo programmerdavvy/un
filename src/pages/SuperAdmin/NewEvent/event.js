@@ -6,13 +6,14 @@ import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import Flatpickr from "react-flatpickr"
 import { request } from '../../../services/utilities';
+import moment from 'moment';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 
 const NewEvent = (props) => {
 
     const [selectedFiles, setselectedFiles] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null)
 
     const [description, setDescription] = useState('');
     const [startDate, setStartDate] = useState(null);
@@ -66,45 +67,44 @@ const NewEvent = (props) => {
             venue: Yup.string().required("Please Enter Venue"),
             // categories: Yup.string().required("Please Select Categories")
         }),
-        onSubmit: async (e) => {
-            const data = {
-                pageId: 2, title: e.title, content: e.description,
-                startDate: e.startdate, endDate: e.enddate,
-                // startdate: e.startdate, endtime: e.endtime,
-                date: new Date(),
-                media: [{
-                    name: 'media one',
-                    link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
-                    type: 'image',
-                    extension: 'png'
-                },
-                {
-                    link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
-                    name: 'media two',
-                    type: 'video',
-                    extension: 'mp4'
-                }
-                ],
-                location: e.venue,
-                categoryId: parseInt(selectedCategory)
-            };
-            console.log(data);
-            try {
-                let url = `sections`;
-                const rs = await request(url, 'POST', false, data);
-                console.log(rs);
-                if (rs.result === 'success') {
-                    showToast('success', 'Successfully Saved');
-                }
 
-            } catch (err) {
-                console.log(err);
-                showToast('error', 'Failed to save');
-
-            }
-        }
+        onSubmit: e => saveEvent()
     });
 
+    const saveEvent = async () => {
+
+        const data = {
+            pageId: 2, title: title, content: description, startDate, endDate, date: startDate,
+            media: [{
+                name: 'media one',
+                link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
+                type: 'image',
+                extension: 'png'
+            },
+            {
+                link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
+                name: 'media two',
+                type: 'video',
+                extension: 'mp4'
+            }
+            ],
+            location: venue,
+            categoryId: parseInt(selectedCategory)
+        };
+        console.log(data);
+        try {
+            let url = `sections`;
+            const rs = await request(url, 'POST', false, data);
+            console.log(rs);
+            if (rs.result === 'success') {
+                showToast('success', 'Successfully Saved');
+            }
+        } catch (err) {
+            console.log(err);
+            showToast('error', 'Failed to save');
+
+        }
+    }
     const showToast = (error, message) => {
         let positionClass = "toast-top-right"
         let toastType
@@ -161,7 +161,7 @@ const NewEvent = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setTitle(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.title || ""}
                                                 invalid={
@@ -186,7 +186,7 @@ const NewEvent = (props) => {
                                                 className="form-control"
                                                 id="validationCustom02"
                                                 rows="10"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setDescription(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.description || ""}
                                                 invalid={
@@ -209,69 +209,42 @@ const NewEvent = (props) => {
                                 <Row className="row row-cols-lg-auto gx-3 gy-2 align-items-center mt-2 mb-4">
 
                                     <Col xl={5}>
-                                        <Row>
-                                            <Col xl={6}>
-                                                <Label
-                                                    className="visually-hidden"
-                                                    htmlFor="specificSizeInputName"
-                                                >
-                                                    Date
-                                                </Label>
-                                                <InputGroup>
-                                                    <Flatpickr
-                                                        name='startdate'
-                                                        className="form-control d-block bg-white"
-                                                        placeholder="dd M,yyyy"
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "F j, Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
-                                                        onChange={e => setStartDate(e)}
-                                                    // onChange={validation.handleChange}
-                                                    // onBlur={validation.handleBlur}
-                                                    // value={validation.values.startdate || ""}
-                                                    // invalid={
-                                                    //     validation.touched.startdate && validation.errors.startdate ? true : false
-                                                    // }
-                                                    />
-                                                    {/* {validation.touched.startdate && validation.errors.startdate ? (
+                                        <Label
+                                            className="visually-hidden"
+                                            htmlFor="specificSizeInputName"
+                                        >
+                                            Date & Time
+                                        </Label>
+                                        <InputGroup>
+                                            <Flatpickr
+                                                name='startdate'
+                                                className="form-control d-block bg-white"
+                                                placeholder="dd M,yyyy hh:M:ss"
+                                                options={{
+                                                    enableTime: true,
+                                                    dateFormat: "Y-m-d H:i",
+                                                    minDate: "today"
+                                                }}
+                                                onChange={e => {
+                                                    const datetime = moment(new Date(e)).format(
+                                                        'YYYY-MM-DD HH:mm:ss'
+                                                    );
+                                                    setStartDate(datetime)
+                                                }}
+                                            // onChange={validation.handleChange}
+                                            // onBlur={validation.handleBlur}
+                                            // value={validation.values.startdate || ""}
+                                            // invalid={
+                                            //     validation.touched.startdate && validation.errors.startdate ? true : false
+                                            // }
+                                            />
+                                            {/* {validation.touched.startdate && validation.errors.startdate ? (
                                                         <FormFeedback type="invalid">{validation.errors.startdate}</FormFeedback>
                                                     ) : null} */}
-                                                </InputGroup>
-                                            </Col>
-                                            <Col xl={6}>
-                                                <Label
-                                                    className="visually-hidden"
-                                                    htmlFor="specificSizeInputGroupUsername"
-                                                >
-                                                    Time
-                                                </Label>
-                                                <Flatpickr
-                                                    name='starttime'
-                                                    className="form-control d-block"
-                                                    placeholder="00:00"
-                                                    options={{
-                                                        enableTime: true,
-                                                        noCalendar: true,
-                                                        dateFormat: "H:i",
-                                                        time_24hr: true
-                                                    }}
-                                                    // onChange={validation.handleChange}
-                                                    // onBlur={validation.handleBlur}
-                                                    // value={validation.values.starttime || ""}
-                                                    // invalid={
-                                                    //     validation.touched.starttime && validation.errors.starttime ? true : false
-                                                    // }
-                                                    onChange={e => setStartTime(e)}
-
-                                                />
-                                                {/* {validation.touched.starttime && validation.errors.starttime ? (
-                                                    <FormFeedback type="invalid">{validation.errors.starttime}</FormFeedback>
-                                                ) : null} */}
-                                            </Col>
-                                        </Row>
+                                        </InputGroup>
                                     </Col>
+
+
                                     <Col xl={2}>
                                         <div className="form-check text-center">
                                             <Label
@@ -282,70 +255,41 @@ const NewEvent = (props) => {
                                             </Label>
                                         </div>
                                     </Col>
-                                    <Col xl={5}>
-                                        <Row>
-                                            <Col xl={6}>
-                                                <Label
-                                                    className="visually-hidden"
-                                                    htmlFor="specificSizeInputName"
-                                                >
-                                                    Date
-                                                </Label>
-                                                <InputGroup>
-                                                    <Flatpickr
-                                                        name='enddate'
-                                                        className="form-control d-block bg-white"
-                                                        placeholder="dd M,yyyy"
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "F j, Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
-                                                        // onChange={validation.handleChange}
-                                                        // onBlur={validation.handleBlur}
-                                                        // value={validation.values.enddate || ""}
-                                                        // invalid={
-                                                        //     validation.touched.enddate && validation.errors.enddate ? true : false
-                                                        // }
-                                                        onChange={e => setEndDate(e)}
 
-                                                    />
-                                                    {/* {validation.touched.enddate && validation.errors.enddate ? (
+                                    <Col xl={5}>
+                                        <Label
+                                            className="visually-hidden"
+                                            htmlFor="specificSizeInputName"
+                                        >
+                                            Date
+                                        </Label>
+                                        <InputGroup>
+                                            <Flatpickr
+                                                name='enddate'
+                                                className="form-control d-block bg-white"
+                                                placeholder="dd M,yyyy hh:M:ss"
+                                                options={{
+                                                    enableTime: true,
+                                                    dateFormat: "Y-m-d H:i",
+                                                    minDate: "today"
+                                                }}
+                                                onChange={e => {
+                                                    const datetime = moment(new Date(e)).format(
+                                                        'YYYY-MM-DD HH:mm:ss'
+                                                    );
+                                                    setEndDate(datetime)
+                                                }}
+                                            // onChange={validation.handleChange}
+                                            // onBlur={validation.handleBlur}
+                                            // value={validation.values.enddate || ""}
+                                            // invalid={
+                                            //     validation.touched.enddate && validation.errors.enddate ? true : false
+                                            // }
+                                            />
+                                            {/* {validation.touched.enddate && validation.errors.enddate ? (
                                                         <FormFeedback type="invalid">{validation.errors.enddate}</FormFeedback>
                                                     ) : null} */}
-                                                </InputGroup>
-                                            </Col>
-
-                                            <Col xl={6}>
-                                                <Label
-                                                    className="visually-hidden"
-                                                    htmlFor="specificSizeInputGroupUsername"
-                                                >
-                                                    Time
-                                                </Label>
-                                                <Flatpickr
-                                                    name='endtime'
-                                                    className="form-control d-block"
-                                                    placeholder="00:00"
-                                                    options={{
-                                                        enableTime: true,
-                                                        noCalendar: true,
-                                                        dateFormat: "H:i",
-                                                        time_24hr: true
-                                                    }}
-                                                    // onChange={validation.handleChange}
-                                                    // onBlur={validation.handleBlur}
-                                                    // value={validation.values.endtime || ""}
-                                                    // invalid={
-                                                    //     validation.touched.endtime && validation.errors.endtime ? true : false
-                                                    // }
-                                                    onChange={e => setEndTime(e)}
-
-                                                />
-                                                {validation.touched.endtime && validation.errors.endtime ? (
-                                                    <FormFeedback type="invalid">{validation.errors.endtime}</FormFeedback>
-                                                ) : null}                                            </Col>
-                                        </Row>
+                                        </InputGroup>
                                     </Col>
                                 </Row>
 
@@ -394,7 +338,7 @@ const NewEvent = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setVenue(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.venue || ""}
                                                 invalid={

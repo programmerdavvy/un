@@ -16,7 +16,7 @@ function EventCategory(props) {
 
 
     const addCategory = async () => {
-        let data = { name, type: 'event', pageId: 2 };
+        let data = { name, pageId: 2 };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
