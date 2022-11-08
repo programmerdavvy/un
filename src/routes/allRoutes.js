@@ -349,7 +349,9 @@ const superAdminRoutes = [
   { path: "/edit-post/:id", component: StockHolderAddPost },
   { path: "/new-post", component: StockHolderAddPost },
   { path: "/new-incident", component: StockHolderAddIncident },
-  { path: "/reported-incident", component: StakeHolderReportedIncident },
+  { path: "/reported-incident", component: StakeHolderReportedIncident }, 
+  { path: "/stakeholder-view-post/:id", component: AdminViewPost },
+  { path: "/stakeholder-view-incident/:id", component: AdminViewIncident },
 
   { path: "/categories", component: StockHolderCategoryList },
 ]

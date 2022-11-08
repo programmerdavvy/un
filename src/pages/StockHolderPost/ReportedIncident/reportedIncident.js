@@ -76,7 +76,7 @@ const IncidentReported = (props) => {
                                                         <ul className="list-inline font-size-20 contact-links mb-0">
                                                             <li className="list-inline-item">
                                                                 <Link
-                                                                    to="/view-post/1"
+                                                                    to={`/stakeholder-view-incident/${e.referenceId}`}
                                                                     className="text-dark"
                                                                 // onClick={() => {
                                                                 //   const users = cellProps.row.original
