@@ -50,16 +50,16 @@ const IndividualSubmission = (props) => {
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>
                                                 <td>
-                                                    <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' />
+                                                    {/* <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' /> */}
                                                     {e.media[0]?.type === 'image' ? <div>
-                                                        <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
-                                                    </div> : e.type === 'video' ? <div>
+                                                        <img src={e.media[0]?.link} className='img-thumbnail' width='100' alt='uploaded incident' />
+                                                    </div> : e.media[0]?.type === 'video' ? <div>
                                                         <video>
-                                                            <source src={e.link} type="video/mp4" />
+                                                            <source src={e.media[0]?.link} type="video/mp4" />
                                                         </video>
-                                                    </div> : e.type === 'audio' ? <div>
+                                                    </div> : e.media[0]?.type === 'audio' ? <div>
                                                         <audio controls>
-                                                            <source src={e.link} type="audio/mpeg" />
+                                                            <source src={e.media[0]?.link} type="audio/mpeg" />
                                                         </audio>
                                                     </div> : ''
                                                     }
@@ -79,8 +79,8 @@ const IndividualSubmission = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip1" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip1">
                                                                         View Details
                                                                     </UncontrolledTooltip>
                                                                 </Link>
@@ -94,8 +94,8 @@ const IndividualSubmission = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip2" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip2">
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
@@ -112,9 +112,9 @@ const IndividualSubmission = (props) => {
                                                                 >
                                                                     <i
                                                                         className="uil uil-trash-alt font-size-18"
-                                                                        id="deletetooltip"
+                                                                        id="deletetooltip3"
                                                                     />
-                                                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip3">
                                                                         Delete
                                                                     </UncontrolledTooltip>
                                                                 </Link>

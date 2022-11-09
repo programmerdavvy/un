@@ -60,14 +60,18 @@ const ViewIncident = props => {
       let url_c = `incident/comment/add`;
       let url_s = `incident/edit/statustype/?id=${incident?.id}`
       const rs = await request(url_c, 'POST', false, data_c);
-      const rs_s = await request(url_s, 'PATCH', false, data_s);
-      // const rs_s = await request(url_s, 'PATCH', false, data_s);
-      console.log(rs, rs_s)
-      if (rs.success === true && rs_s.success === true) {
+      if (selectedStatus !== null) {
+        const rs_s = await request(url_s, 'PATCH', false, data_s);
+
+      }
+      if (rs.success === true) {
         setComment('');
         showToast('success', 'Successfully Saved');
       }
     } catch (err) {
+      if (err.message === '') {
+        showToast('success', 'Successfully Saved');
+      }
       console.log(err);
       showToast('error', 'Failed to save')
 
@@ -81,13 +85,14 @@ const ViewIncident = props => {
     try {
       const rs = await request(url, 'POST', false, data);
       const rs2 = await request(url2, 'GET', false);
-
+      console.log(rs)
       if (rs.success === true && rs2.success === true) {
         setIncident(rs.result);
         setStatus(rs2.result);
+        // setSelectedStatus(rs.result?.status);
       }
-      console.log(rs);
     } catch (err) {
+
       console.log(err);
     }
   }, [params.params?.id]);
@@ -163,19 +168,22 @@ const ViewIncident = props => {
                     <Row className="mt-2">
                       <h5 className="font-size-15">Comments</h5>
 
-                      {incident?.comment?.length >= 1 ? <Table className="table-nowrap table-centered mb-0">
+                      {incident?.comments?.length >= 1 ? <Table className="table-nowrap table-centered mb-0">
                         <thead>
                           <tr>
+                            <th style={{ width: "70px" }}>#</th>
                             <th style={{ width: "70px" }}>Date</th>
                             <th>Comment</th>
                           </tr>
                         </thead>
                         <tbody>
 
-                          {incident?.comment?.map(e => {
+                          {incident?.comments?.map(e => {
                             return (
                               <tr key={e.id}>
-
+                                <td>
+                                  {e.id}
+                                </td>
                                 <td>
                                   {new Date(e.createdAt).toDateString()}
                                 </td>

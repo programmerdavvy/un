@@ -45,12 +45,12 @@ function Status(props) {
 
     const saveStatus = async () => {
         const data = { name };
-        console.log(data);
-
         try {
             const url = `status`;
             const rs = await request(url, 'POST', false, data);
-            console.log(rs);
+            props.fetchStatus();
+            setName('');
+            setmodal(!modal);
             showToast('success', 'successfully saved');
 
         } catch (err) {
@@ -79,15 +79,18 @@ function Status(props) {
     const updateStatus = async () => {
         try {
             const url = `status?id=1`;
-            const rs = await request(url, 'DELETE', false);
+            const rs = await request(url, 'PATCH', false);
             if (rs.success === true) {
-                showToast('success', 'Deleted  successfully');
+                props.fetchStatus();
+                setName('');
+                setmodal(!modal);
+                showToast('success', 'Updated  successfully');
 
             }
 
         } catch (err) {
             console.log(err);
-            showToast('error', 'Failed to save');
+            showToast('error', 'Failed to update');
 
         }
     }
@@ -104,6 +107,7 @@ function Status(props) {
                 <ModalHeader
                     className=""
                     toggle={() => {
+                        setName('');
                         setIsedit(false);
                         setmodal(!modal);
                     }}
@@ -132,7 +136,7 @@ function Status(props) {
                                 <Row>
                                     <Col lg={12}>
                                         <div className="text-end">
-                                            <button type="button" onClick={saveStatus} className="btn btn-success">
+                                            <button type="button" onClick={isEdit === false ? saveStatus : updateStatus} className="btn btn-success">
                                                 {isEdit === true ? 'Update' : 'Save'}
                                             </button>
                                         </div>
@@ -269,7 +273,7 @@ function Status(props) {
                     
                 </Col> */}
             </Row>
-        </React.Fragment>)
+        </React.Fragment >)
 }
 
 export default Status;

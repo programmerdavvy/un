@@ -83,8 +83,8 @@ const IncidentReported = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip1" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip1">
                                                                         View Details
                                                                     </UncontrolledTooltip>
                                                                 </Link>
@@ -98,8 +98,8 @@ const IncidentReported = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip2" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip2">
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
@@ -115,9 +115,9 @@ const IncidentReported = (props) => {
                                                                 >
                                                                     <i
                                                                         className="uil uil-trash-alt font-size-18"
-                                                                        id="deletetooltip"
+                                                                        id="deletetooltip3"
                                                                     />
-                                                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip3">
                                                                         Delete
                                                                     </UncontrolledTooltip>
                                                                 </Link>
