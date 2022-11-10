@@ -85,14 +85,13 @@ const ViewIncident = props => {
     try {
       const rs = await request(url, 'POST', false, data);
       const rs2 = await request(url2, 'GET', false);
-      console.log(rs)
       if (rs.success === true && rs2.success === true) {
         setIncident(rs.result);
         setStatus(rs2.result);
         // setSelectedStatus(rs.result?.status);
       }
     } catch (err) {
-
+      showToast('error', 'Failed to fetch, kindly try again later');
       console.log(err);
     }
   }, [params.params?.id]);
