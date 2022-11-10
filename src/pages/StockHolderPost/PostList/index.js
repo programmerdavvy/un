@@ -54,7 +54,7 @@ const Dashboard = () => {
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
-        console.log(rs.result)
+        // console.log(rs.result)
         setPosts(rs.result);
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         setMeta(rs.paging);

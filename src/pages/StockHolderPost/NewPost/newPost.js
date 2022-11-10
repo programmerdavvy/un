@@ -15,22 +15,55 @@ const NewIncident = (props) => {
         match: { params },
     } = props;
     const id = '';
-    const [selectedFiles, setselectedFiles] = useState([]);
+    const [selectedFiles, setselectedFiles] = useState(null);
+    const [selectedDocuments, setselectedDocuments] = useState([]);
+    const [isChecked, setIsChecked] = useState(false)
     const [selectedMulti, setselectedMulti] = useState(null)
     const [tags, setTags] = useState('');
     const [description, setDescription] = useState('');
     const [post, setPost] = useState(null);
-    const [selectedCategory, setselectedCategory] = useState(null)
-    // let { id } = useParams();
+    const [selectedCategory, setselectedCategory] = useState(null);
+    const [title, setTitle] = useState('');
+    const [allFiles, setAllFiles] = useState([])
 
     function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
+        // setselectedFiles(files)
+    }
+
+    const uploadedFiles = () => {
+        let count = 0;
+        const filteredD = selectedFiles.filter(i => !i.id)
+        const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+        const formData = new FormData();
+        for (let i = 0; i < files_.length; i++) {
+            let file = files_[i];
+            // console.log(file)
+            formData.append("file", file);
+            formData.append("upload_preset", "geekyimages");
+            fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+                method: "POST",
+                body: formData
             })
-        )
-        setselectedFiles(files)
+                .then((response) => {
+                    console.log(response)
+                    return response.json();
+                })
+                .then((data) => {
+                    let dataFile = {
+                        name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
+                            'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : ''
+                    };
+                    if (dataFile?.name !== null) {
+                        allFiles.push(dataFile);
+                    }
+                    count++
+                    if (count === files_.length) {
+                        // props.showToast('success', 'Successfully uploaded');
+                        savePost();
+                    }
+                });
+
+        }
     }
     /**
      * Formats the size
@@ -54,8 +87,10 @@ const NewIncident = (props) => {
             const rs = await request(url, 'GET', false);
             if (rs.success === true) {
                 setPost(rs.result);
-                setDescription(rs.result.content);
-                setselectedCategory(rs.result.categoryId)
+                setDescription(rs.result?.content);
+                setselectedCategory(rs.result?.categoryId);
+                setTitle(rs.result?.title);
+                setAllFiles(rs.result?.media)
                 // let tag = rs.result.tags.split(',');
                 // let tags = 
                 // console.log(tag)
@@ -72,7 +107,7 @@ const NewIncident = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            title: params.id ? post?.title : '',
+            title
             // description: ''
             // city: '',
             // state: '',
@@ -85,37 +120,28 @@ const NewIncident = (props) => {
             // state: Yup.string().required("Please Enter Your State"),
             // zip: Yup.string().required("Please Enter Your Zip"),
         }),
-        onSubmit: async e => {
-            let data = {
-                pageId: 4, title: e.title, content: description, tags: selectedMulti[0].value,
-                media: [{
-                    name: 'media one',
-                    link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
-                    type: 'image',
-                    extension: 'png'
-                },
-                {
-                    link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
-                    name: 'media two',
-                    type: 'video',
-                    extension: 'mp4'
-                }
-                ], language: 'english', date: new Date(),
-                categoryId: selectedCategory
-            }
-
-            let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
-            try {
-                const rs = await request(url, 'POST', false, data);
-                if (rs.success === true) {
-                    props.showToast('success', 'Saved Successfully')
-                }
-            } catch (err) {
-                console.log(err);
-                props.showToast('error', 'Failed to save')
-            }
-        }
+        onSubmit: e => uploadedFiles(e)
     });
+    const savePost = async e => {
+        let data = {
+            pageId: 4, title, content: description, tags: selectedMulti[0].value,
+            media: allFiles, language: 'english', date: new Date(),
+            categoryId: selectedCategory
+        }
+        // console.log(data)
+        let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
+        try {
+            const rs = await request(url, 'POST', false, data);
+            // console.log(rs)
+
+            if (rs.success === true) {
+                props.showToast('success', params?.id === undefined || params?.id === null ? 'Updated Successfully' : 'Saved Successfully')
+            }
+        } catch (err) {
+            console.log(err);
+            props.showToast('error', 'Failed to save')
+        }
+    }
     const optionGroup = [
         {
             label: "Picnic",
@@ -134,6 +160,14 @@ const NewIncident = (props) => {
             ],
         },
     ]
+
+    const onChangeDocument = e => {
+        setselectedFiles(e)
+    }
+    const onChangeImage = e => {
+        let x = [...selectedFiles, ...e]
+        setselectedFiles(x);
+    }
     useEffect(() => {
 
         if (params?.id !== null && params?.id !== undefined) {
@@ -167,7 +201,7 @@ const NewIncident = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setTitle(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.title || ""}
                                                 invalid={
@@ -212,19 +246,23 @@ const NewIncident = (props) => {
                                                             type="checkbox"
                                                             className="form-check-input"
                                                             id={`invalidCheck${e.id}`}
-                                                            onChange={() => {
+                                                            // checked={selectedCategory === e.id ? true : isChecked}
+                                                            onClick={() => {
+                                                                // setIsChecked(!isChecked)
                                                                 let id = document.getElementById(`invalidCheck${e.id}`);
                                                                 if (id.checked === true) {
                                                                     setselectedCategory(e.id);
                                                                 } else {
                                                                     setselectedCategory(null);
+                                                                    setIsChecked(false)
+
 
                                                                 }
                                                             }}
                                                         />
                                                         <Label
                                                             className="form-check-label text-capitalize"
-                                                            htmlFor="invalidCheck"
+                                                            htmlFor={`invalidCheck${e.id}`}
                                                         >
                                                             {" "}
                                                             {e.name}
@@ -327,7 +365,7 @@ const NewIncident = (props) => {
                                                     </div>
                                                 )}
                                             </Dropzone>
-                                            <div className="dropzone-previews mt-3" id="file-previews">
+                                            {/* <div className="dropzone-previews mt-3" id="file-previews">
                                                 {selectedFiles.map((f, i) => {
                                                     return (
                                                         <Card
@@ -361,7 +399,7 @@ const NewIncident = (props) => {
                                                         </Card>
                                                     )
                                                 })}
-                                            </div>
+                                            </div> */}
                                         </Form>
                                         {/* <div className="text-center mt-4">
                                                             <button
@@ -376,11 +414,11 @@ const NewIncident = (props) => {
                                     </Col>
                                     <Col>
                                         <Label>Add Documents</Label>
-                                        <Input type='file' />
+                                        <Input type='file' onChange={e => onChangeDocument(e.target.files)} multiple />
                                     </Col>
                                     <Col>
                                         <Label>Add Feature Image</Label>
-                                        <Input type='file' />
+                                        <Input type='file' onChange={e => onChangeImage(e.target.files)} accept="image/*" multiple />
 
                                     </Col>
                                 </Row>
@@ -506,7 +544,7 @@ const NewIncident = (props) => {
                                                 </div>
                                             )}
                                         </Dropzone>
-                                        <div className="dropzone-previews mt-3" id="file-previews">
+                                        {/* <div className="dropzone-previews mt-3" id="file-previews">
                                             {selectedFiles.map((f, i) => {
                                                 return (
                                                     <Card
@@ -540,7 +578,7 @@ const NewIncident = (props) => {
                                                     </Card>
                                                 )
                                             })}
-                                        </div>
+                                        </div> */}
                                     </Form>
 
                                     <div className="text-center mt-4">
