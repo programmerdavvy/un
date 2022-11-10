@@ -55,10 +55,9 @@ const ViewIncident = props => {
     const data_c = { comment, incidentId: incident?.id, statusId: selectedStatus };
     const data_s = { statusId: selectedStatus }
 
-    console.log(data_c, data_s)
     try {
       let url_c = `incident/comment/add`;
-      let url_s = `incident/edit/statustype/?id=${incident?.id}`
+      let url_s = `incident/change/status?id=${incident?.id}`
       const rs = await request(url_c, 'POST', false, data_c);
       if (selectedStatus !== null) {
         const rs_s = await request(url_s, 'PATCH', false, data_s);
@@ -69,12 +68,13 @@ const ViewIncident = props => {
         showToast('success', 'Successfully Saved');
       }
     } catch (err) {
-      if (err.message === '') {
-        showToast('success', 'Successfully Saved');
+      if (err.message === 'all fields are Required') {
+        showToast('error', 'Status and comment is required');
+      } else {
+        showToast('error', 'Failed to save');
+
       }
       console.log(err);
-      showToast('error', 'Failed to save')
-
     }
   }
   const fetchIncident = useCallback(async () => {
