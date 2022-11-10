@@ -59,7 +59,7 @@ const ViewPost = props => {
 
     let url_addc = `sections/comment`;
     let url_ap = `sections/approve?sectionId=${params.params?.id}`;
-    let url_can = `sections/comment/status?sectionId=${params.params?.id}&canComment=${canComment}`;
+    let url_can = `sections/comment/status?sectionId=${params.params?.id}&canComment=${canComment === true ? 1 : 0}`;
     console.log(canComment)
 
     try {
@@ -102,7 +102,6 @@ const ViewPost = props => {
         setCanComment(rs.canComment);
         setIncident(rs.result);
       }
-      console.log(rs)
     } catch (err) {
       showToast('error', 'Failed to fetch, kindly try again later');
       console.log(err);
