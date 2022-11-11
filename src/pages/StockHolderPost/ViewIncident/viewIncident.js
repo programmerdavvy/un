@@ -58,15 +58,16 @@ const ViewIncident = props => {
     try {
       let url_c = `incident/comment/add`;
       let url_s = `incident/change/status?id=${incident?.id}`
-      const rs = await request(url_c, 'POST', false, data_c);
+      if (comment !== null && comment !== null) {
+        const rs = await request(url_c, 'POST', false, data_c);
+        setComment('');
+      }
       if (selectedStatus !== null) {
         const rs_s = await request(url_s, 'PATCH', false, data_s);
 
       }
-      if (rs.success === true) {
-        setComment('');
-        showToast('success', 'Successfully Saved');
-      }
+      showToast('success', 'Successfully Saved');
+
     } catch (err) {
       if (err.message === 'all fields are Required') {
         showToast('error', 'Status and comment is required');

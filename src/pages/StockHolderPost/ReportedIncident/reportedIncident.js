@@ -8,18 +8,20 @@ import { request } from "../../../services/utilities";
 const IncidentReported = (props) => {
 
     const onClickDelete = async id => {
-        let url = ``;
-        try {
-            const rs = await request(url, 'DELETE', false);
-            console.log(rs)
-            if (rs.success === true) {
-                props.fetchIncidents()
-                props.showToast('success', 'Deleted successfully ');
-            }
-        } catch (err) {
-            console.log(err);
-            props.showToast('error', 'Failed to delete ');
+        if (window.confirm('Are you sure!')) {
+            let url = ``;
+            try {
+                const rs = await request(url, 'DELETE', false);
+                console.log(rs)
+                if (rs.success === true) {
+                    props.fetchIncidents()
+                    props.showToast('success', 'Deleted successfully ');
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to delete ');
 
+            }
         }
     }
     return (
@@ -66,7 +68,18 @@ const IncidentReported = (props) => {
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>
                                                 <td>
-                                                    <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' />
+                                                    <td style={{ width: '140px' }}>
+                                                        {e.media[0]?.type !== 'image' ?
+                                                            <iframe
+                                                                width='50%'
+                                                                // height='400px'
+                                                                title={e?.media[0]?.name}
+                                                                className="embed-responsive-item"
+                                                                src={e?.media[0]?.link}
+                                                            /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
+                                                        }
+
+                                                    </td>
                                                 </td>
                                                 <td>
                                                     {e.status}
@@ -89,7 +102,7 @@ const IncidentReported = (props) => {
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li>
-                                                            <li className="list-inline-item">
+                                                            {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="/edit-post/1"
                                                                     className="text-dark"
@@ -103,7 +116,7 @@ const IncidentReported = (props) => {
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
-                                                            </li>
+                                                            </li> */}
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"

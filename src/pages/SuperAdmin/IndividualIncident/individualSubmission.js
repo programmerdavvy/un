@@ -49,20 +49,17 @@ const IndividualSubmission = (props) => {
                                                 <td>
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>
-                                                <td>
-                                                    {/* <img src={e.media[0]?.link} className='img-thumbnail' width='50' alt='evidence' /> */}
-                                                    {e.media[0]?.type === 'image' ? <div>
-                                                        <img src={e.media[0]?.link} className='img-thumbnail' width='100' alt='uploaded incident' />
-                                                    </div> : e.media[0]?.type === 'video' ? <div>
-                                                        <video>
-                                                            <source src={e.media[0]?.link} type="video/mp4" />
-                                                        </video>
-                                                    </div> : e.media[0]?.type === 'audio' ? <div>
-                                                        <audio controls>
-                                                            <source src={e.media[0]?.link} type="audio/mpeg" />
-                                                        </audio>
-                                                    </div> : ''
+                                                <td  style={{ width: '140px' }}>
+                                                    {e.media[0]?.type !== 'image' ?
+                                                        <iframe
+                                                            width='50%'
+                                                            // height='400px'
+                                                            title={e?.media[0]?.name}
+                                                            className="embed-responsive-item"
+                                                        src={e?.media[0]?.link}
+                                                        /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
                                                     }
+
                                                 </td>
                                                 <td>
                                                     {e.status}
@@ -85,7 +82,7 @@ const IndividualSubmission = (props) => {
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li>
-                                                            <li className="list-inline-item">
+                                                            {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
                                                                     className="text-dark"
@@ -99,7 +96,7 @@ const IndividualSubmission = (props) => {
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
-                                                            </li>
+                                                            </li> */}
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"

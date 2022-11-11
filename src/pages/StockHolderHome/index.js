@@ -12,38 +12,11 @@ import CaseAnalysis from "./CaseAnalysis";
 import Analysis from "./Analysis";
 import IncidentPost from "./IncidentPost";
 import { request } from "../../services/utilities";
+import MiniWidget from "./mini-widget";
 
 
 
-const series2 = [10];
 
-const options2 = {
-  fill: {
-    colors: ['#34c38f']
-  },
-  chart: {
-    sparkline: {
-      enabled: !0
-    }
-  },
-  dataLabels: {
-    enabled: !1
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: '60%'
-      },
-      track: {
-        margin: 0
-      },
-      dataLabels: {
-        show: !1
-      }
-    }
-  }
-};
 
 
 
@@ -54,6 +27,8 @@ const Dashboard = () => {
   const [count, setCount] = useState(1);
   const [totalreportedincident, setTotalreportedincident] = useState(0);
   const [totalreportedpost, setTotalreportedpost] = useState(0);
+  const [totalreportedincidentbypercent, setTotalreportedincidentbypercent] = useState(0);
+  const [totalreportedpostbypercent, setTotalreportedpostbypercent] = useState(0);
 
   const [meta, setMeta] = useState(null);
 
@@ -64,6 +39,7 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
 
   const [totaldocument, setTotaldocument] = useState(0);
+  const [totaldocumentbypercent, setTotaldocumentbypercent] = useState(0);
 
 
   const fetchIncident = useCallback(async page => {
@@ -74,7 +50,10 @@ const Dashboard = () => {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
         setIncidents(rs.result);
-        setTotalreportedincident(rs.paging?.total)
+        setTotalreportedincident(rs.paging?.total);
+        let x = rs.paging.total / 30;
+        let z = x * 100;
+        setTotalreportedincidentbypercent(z.toFixed(2))
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         setMeta(rs.paging);
       }
@@ -90,10 +69,12 @@ const Dashboard = () => {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
         setPosts(rs.result);
-        setTotalreportedpost(rs.paging.total)
+        setTotalreportedpost(rs.paging?.total);
+        let x = rs.paging.total / 30;
+        let z = x * 100;
+        setTotalreportedpostbypercent(z.toFixed(2))
         setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
         setMetaP(rs.paging);
-        console.log(rs);
       }
     } catch (err) {
       console.log(err);
@@ -107,20 +88,24 @@ const Dashboard = () => {
     let url = `media?pageId=&id=&page=${p}&limit=5`;
     try {
       const rs = await request(url, 'GET', false);
-      setTotaldocument(rs.paging.total);
-
+      if (rs.success === true) {
+        setTotaldocument(rs.paging?.total);
+        let x = rs.paging?.total / 30;
+        let z = x * 100;
+        setTotaldocumentbypercent(z.toFixed(2))
+      }
     } catch (err) {
       console.log(err);
     }
   }, [])
 
   const handlePagination = page => {
-    fetchIncident(page.selected + 1)
-    setCurrentPage(page.selected + 1)
+    fetchIncident(page.selected + 1);
+    setCurrentPage(page.selected + 1);
   }
   const handlePaginationP = page => {
-    fetchPosts(page.selected + 1)
-    setCurrentPageP(page.selected + 1)
+    fetchPosts(page.selected + 1);
+    setCurrentPageP(page.selected + 1);
   }
 
   useEffect(() => {
@@ -129,12 +114,41 @@ const Dashboard = () => {
     fetchDocuments()
   }, [fetchIncident, fetchPosts, fetchDocuments])
 
+  const series2 = [40];
+
+  const options2 = {
+    fill: {
+      colors: ['#5b73e8']
+    },
+    chart: {
+      sparkline: {
+        enabled: !0
+      }
+    },
+    dataLabels: {
+      enabled: !1
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 0,
+          size: '60%'
+        },
+        track: {
+          margin: 0
+        },
+        dataLabels: {
+          show: !1
+        }
+      }
+    }
+  };
   const reports = [
     {
       id: 1,
       icon: "uil-signal-alt-3",
       title: "Total Document Uploaded",
-      rate: totaldocument,
+      // rate: totaldocument,
       value: totaldocument,
       decimal: 0,
       charttype: "radialBar",
@@ -142,7 +156,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${totaldocumentbypercent}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -152,15 +166,15 @@ const Dashboard = () => {
       id: 2,
       icon: "uil-file-info-alt",
       title: "Total Approved Reports",
-      rate: totalreportedpost,
-      value: totalreportedpost,
+      // rate: totalreportedpostbypercent,
+      value: 5643,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${totalreportedpostbypercent}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -177,7 +191,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${totalreportedincidentbypercent}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -217,9 +231,10 @@ const Dashboard = () => {
         <Container fluid>
 
           <Row>
-            <Col xl={10}>
+            <Col xl={12}>
               <Row>
-                <Statistics reports={reports} />
+                {/* <Statistics reports={reports} /> */}
+                <MiniWidget reports={reports} />
               </Row>
 
             </Col>

@@ -10,7 +10,20 @@ const NewPost = (props) => {
     const id = ''
     const [selectedFiles, setselectedFiles] = useState([])
     const [allFiles] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [housenumber, setHousenumber] = useState('');
+    const [landmark, setLandmark] = useState('');
+    const [lga, setLga] = useState('');
+    const [rname, setRname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
+
+
     function handleAcceptedFiles(files) {
         setselectedFiles(files)
         // files.map(file =>
@@ -73,7 +86,6 @@ const NewPost = (props) => {
         const formData = new FormData();
         for (let i = 0; i < files_.length; i++) {
             let file = files_[i];
-            console.log(file)
             formData.append("file", file);
             formData.append("upload_preset", "geekyimages");
             fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
@@ -93,16 +105,8 @@ const NewPost = (props) => {
                         allFiles.push(dataFile);
                     }
                     count++
-                    console.log(count);
                     if (count === files_.length) {
-                        alert('upload sucessffully')
-                        // setLoading(false);
-                        // return MySwal.fire({
-                        //     text: 'Files Uploaded Successfully!',
-                        //     icon: 'success',
-                        //     showConfirmButton: false,
-                        //     timer: 2000
-                        // })
+                        saveIncident();
                     }
                 });
 
@@ -115,16 +119,16 @@ const NewPost = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            title: '',
-            description: '',
-            city: '',
-            state: '',
-            housenumber: '',
-            landmark: '',
-            lga: '',
-            rname: '',
-            email: '',
-            phone: '',
+            title,
+            description,
+            city,
+            state,
+            housenumber,
+            landmark,
+            lga,
+            rname,
+            email,
+            phone,
             // categories: ''
         },
         validationSchema: Yup.object({
@@ -146,25 +150,32 @@ const NewPost = (props) => {
                 .min(10)
                 .required("Phone number is required"),
         }),
-        onSubmit: async (e) => {
-            let data = {
-                childname: e.title, categoryId: parseInt(selectedCategory), sex: "M", age: 20, description: e.description, child_address: "mm", landmark: e.landmark, city: e.city, state: e.state, lga: e.lga,
-                isMobile: false, reporter_phone: e.phone.toString(), reporter_name: e.rname, media_file: "media_file", reporter_mail: e.email, media: allFiles
-            };
-            let url = `incident/create`;
-            try {
-                const rs = await request(url, 'POST', false, data);
-                // console.log(rs);
-                if (rs.success === true) {
-                    props.showToast('success', 'Successfully saved');
-                }
-            } catch (err) {
-                console.log(err);
+        onSubmit: e => uploadedFiles()
+
+    });
+    const saveIncident = async e => {
+        let data = {
+            childname: title, categoryId: parseInt(selectedCategory), sex: "M", age: 20, description, child_address: "mm", landmark, city, state, lga,
+            isMobile: false, reporter_phone: phone.toString(), reporter_name: rname, media_file: "media_file", reporter_mail: email, media: allFiles
+        };
+        let url = `incident/create`;
+        try {
+            const rs = await request(url, 'POST', false, data);
+            // console.log(rs);
+            if (rs.success === true) {
+                props.showToast('success', 'Successfully saved');
+            }
+        } catch (err) {
+            console.log(err);
+            if (err.message === 'SMS Sending error Occured (check if you added a proper phone digit)') {
+                props.showToast('error', err.message);
+
+            } else {
                 props.showToast('error', 'Failed to save');
+
             }
         }
-    });
-
+    }
     const onChange = e => {
         console.log(e.target.files);
     }
@@ -194,7 +205,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setTitle(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.title || ""}
                                                 invalid={
@@ -257,7 +268,7 @@ const NewPost = (props) => {
                                                 className="form-control"
                                                 id="validationCustom02"
                                                 rows="10"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setDescription(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.description || ""}
                                                 invalid={
@@ -332,13 +343,13 @@ const NewPost = (props) => {
                                             </div>
                                         </Form>
 
-                                        <div className="float-end mt-4">
+                                        {/* <div className="float-end mt-4">
                                             <button
                                                 type="button" onClick={() => uploadedFiles()}
                                                 className="btn btn-success waves-effect waves-light" >
                                                 Upload Document
                                             </button>
-                                        </div>
+                                        </div> */}
 
                                     </Col>
                                 </Row>
@@ -353,7 +364,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setHousenumber(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.housenumber || ""}
                                                 invalid={
@@ -374,7 +385,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setLandmark(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.landmark || ""}
                                                 invalid={
@@ -397,7 +408,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setCity(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.city || ""}
                                                 invalid={
@@ -418,7 +429,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setState(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.state || ""}
                                                 invalid={
@@ -441,7 +452,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setLga(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.lga || ""}
                                                 invalid={
@@ -466,7 +477,7 @@ const NewPost = (props) => {
                                                 type="text"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setRname(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.rname || ""}
                                                 invalid={
@@ -491,7 +502,7 @@ const NewPost = (props) => {
                                                 type="email"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setEmail(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.email || ""}
                                                 invalid={
@@ -512,7 +523,7 @@ const NewPost = (props) => {
                                                 type="number"
                                                 className="form-control"
                                                 id="validationCustom01"
-                                                onChange={validation.handleChange}
+                                                onChange={e => setPhone(e.target.value)}
                                                 onBlur={validation.handleBlur}
                                                 value={validation.values.phone || ""}
                                                 invalid={

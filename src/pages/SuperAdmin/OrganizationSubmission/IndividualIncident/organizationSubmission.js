@@ -54,7 +54,18 @@ const OrganizationSubmission = (props) => {
                                                         {new Date(e.createdAt).toDateString()}
                                                     </td>
                                                     <td>
-                                                        <img src={e.media_file} className='img-thumbnail' width='50' alt='evidence' />
+                                                        <td style={{ width: '140px' }}>
+                                                            {e.media[0]?.type !== 'image' ?
+                                                                <iframe
+                                                                    width='50%'
+                                                                    // height='400px'
+                                                                    title={e?.media[0]?.name}
+                                                                    className="embed-responsive-item"
+                                                                    src={e?.media[0]?.link}
+                                                                /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
+                                                            }
+
+                                                        </td>
                                                     </td>
                                                     <td>
                                                         {e.status}
@@ -77,7 +88,7 @@ const OrganizationSubmission = (props) => {
                                                                         </UncontrolledTooltip>
                                                                     </Link>
                                                                 </li>
-                                                                <li className="list-inline-item">
+                                                                {/* <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
                                                                         className="text-dark"
@@ -91,7 +102,7 @@ const OrganizationSubmission = (props) => {
                                                                             Edit
                                                                         </UncontrolledTooltip>
                                                                     </Link>
-                                                                </li>
+                                                                </li> */}
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"

@@ -36,9 +36,9 @@ const LatestTransaction = (props) => {
                                                     James John
                                                 </td>
                                                 <td>
-                                                    <Button type="button" color="primary" className="btn-sm btn-rounded waves-effect waves-light">
+                                                    <Link to={`admin-view-post/${e.id}`} className="btn-sm btn-primary btn btn-rounded waves-effect waves-light">
                                                         View Details
-                                                    </Button>
+                                                    </Link>
                                                 </td>
                                             </tr>
                                         )
