@@ -160,9 +160,15 @@ import MapsLeaflet from "../pages/Maps/MapsLeaflet"
 
 // Authentication related pages
 import Login from "../pages/Authentication/Login"
+import AdminLogin from "../pages/Authentication/AdminLogin"
+import StakeHolderLogin from "../pages/Authentication/StakeholderLogin"
+
 import Logout from "../pages/Authentication/Logout"
 import Register from "../pages/Authentication/Register"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
+import AdminForgetPwd from "../pages/Authentication/AdminForgetPassword"
+import StakeholderForgetPwd from "../pages/Authentication/StakeholderForgetPassword"
+
 
 //  // Inner Authentication
 import Login1 from "../pages/AuthenticationInner/Login"
@@ -349,7 +355,7 @@ const superAdminRoutes = [
   { path: "/edit-post/:id", component: StockHolderAddPost },
   { path: "/new-post", component: StockHolderAddPost },
   { path: "/new-incident", component: StockHolderAddIncident },
-  { path: "/reported-incident", component: StakeHolderReportedIncident }, 
+  { path: "/reported-incident", component: StakeHolderReportedIncident },
   { path: "/stakeholder-view-post/:id", component: AdminViewPost },
   { path: "/stakeholder-view-incident/:id", component: AdminViewIncident },
 
@@ -359,7 +365,13 @@ const authRoutes = [
 
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
+  { path: "/admin-login", component: AdminLogin },
+  { path: "/stakeholder-login", component: StakeHolderLogin },
+
   { path: "/forgot-password", component: ForgetPwd },
+  { path: "/admin-forgot-password", component: AdminForgetPwd },
+  { path: "/stakeholder-forgot-password", component: StakeholderForgetPwd },
+
   { path: "/register", component: Register },
 
   { path: "/pages-maintenance", component: PagesMaintenance },

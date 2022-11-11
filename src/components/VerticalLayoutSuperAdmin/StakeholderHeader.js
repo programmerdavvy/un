@@ -12,7 +12,7 @@ import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 // Import menuDropdown
 import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown";
-import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
+import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenuStakeholder";
 
 import logoSm from "../../assets/images/logo-sm.png";
 import logoDark from "../../assets/images/logo-dark.png";
@@ -99,7 +99,7 @@ const Header = (props) => {
               <i className="fa fa-fw fa-bars" />
             </button>
             <div className='px-4'>
-              <h1 className='text-capitalize' style={{ fontWeight: '900' }}>{location === 'stakeholder' ? 'Dashboard' :  ''}</h1>
+              <h1 className='text-capitalize' style={{ fontWeight: '900' }}>{location === 'stakeholder' ? 'Dashboard' : ''}</h1>
             </div>
           </div>
 

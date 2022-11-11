@@ -64,7 +64,7 @@ const Dashboard = () => {
 
   const fetchPosts = useCallback(async (page) => {
     let p = page || 1;
-    let url = `sections/admin?pageId=4&page=${p}&limit=5`;
+    let url = `sections/?pageId=4&page=${p}&limit=5`;
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
@@ -167,7 +167,7 @@ const Dashboard = () => {
       icon: "uil-file-info-alt",
       title: "Total Approved Reports",
       // rate: totalreportedpostbypercent,
-      value: 5643,
+      value: totalreportedpost,
       decimal: 0,
       charttype: "radialBar",
       chartheight: 75,

@@ -21,7 +21,7 @@ const ViewPost = props => {
   const [canComment, setCanComment] = useState(false);
   const [isApprove, setIsApprove] = useState(false);
 
-
+  const [evidence, setEvidence] = useState('');
   const [status, setStatus] = useState([]);
 
 
@@ -98,9 +98,10 @@ const ViewPost = props => {
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
-        setIsApprove(rs.isApproved);
-        setCanComment(rs.canComment);
+        setIsApprove(rs.result.isApproved);
+        setCanComment(rs.result.canComment);
         setIncident(rs.result);
+        setEvidence(rs.result.media[0].link)
       }
     } catch (err) {
       showToast('error', 'Failed to fetch, kindly try again later');
@@ -154,17 +155,30 @@ const ViewPost = props => {
                     {incident?.media?.length >= 1 ? <Row>
                       <Col xl={12}>
 
-                        {incident?.media[0].type === 'video' ? <div className="embed-responsive">
-                          <iframe
-                            width='1090px'
-                            height='400px'
-                            title={incident?.media[0].name}
-                            className="embed-responsive-item"
-                            src={incident?.media[0].link}
-                          />
-                        </div> : <div className="embed-responsive">
-                          <img src={incident?.media[0].link} className='img-fluixzd' width='100%' height='300px' alt="reported incident" />
-                        </div>}
+                        <div className="d-flex">
+                          <div>
+                            {incident?.media.map(e => {
+                              return (
+                                <div style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
+                                  <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
+                                </div>
+                              )
+                            })}
+                          </div>
+                          <div className="mx-4 w-100">
+                            {incident?.media[0].type === 'video' ? <div className="embed-responsive">
+                              <iframe
+                                width='1090px'
+                                height='400px'
+                                title={incident?.media[0].name}
+                                className="embed-responsive-item"
+                                src={incident?.media[0].link}
+                              />
+                            </div> : <div className="embed-responsive">
+                              <img src={evidence} style={{ objectFit: 'contain' }} width='100%' height='300px' alt="reported incident" />
+                            </div>}
+                          </div>
+                        </div>
                       </Col>
                     </Row>
                       : <h5>No Evidence</h5>}

@@ -28,7 +28,7 @@ export const staffname = user =>
 const headers = user => {
     // console.log(user.accessToken)
     if (user) {
-        const jwt = `Bearer ${user.accessToken}`;
+        const jwt = `Bearer ${user.token}`;
         return { ...defaultHeaders, Authorization: jwt };
     } else {
         return defaultHeaders;

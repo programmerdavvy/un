@@ -8,13 +8,15 @@ import { Editor } from "react-draft-wysiwyg"
 import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import { request } from '../../../services/utilities';
-
+import { USER_COOKIE } from '../../../services/constants';
+import SSRStorage from '../../../services/storage';
+const storage = new SSRStorage();
 
 const NewIncident = (props) => {
     const {
         match: { params },
     } = props;
-    const id = '';
+
     const [selectedFiles, setselectedFiles] = useState(null);
     const [selectedDocuments, setselectedDocuments] = useState([]);
     const [isChecked, setIsChecked] = useState(false)
@@ -123,16 +125,16 @@ const NewIncident = (props) => {
         onSubmit: e => uploadedFiles(e)
     });
     const savePost = async e => {
+        const user = await storage.getItem(USER_COOKIE);
         let data = {
             pageId: 4, title, content: description, tags: selectedMulti[0].value,
             media: allFiles, language: 'english', date: new Date(),
-            categoryId: selectedCategory
+            categoryId: selectedCategory, stakeholderId: user.payload.id
         }
-        // console.log(data)
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
             const rs = await request(url, 'POST', false, data);
-            // console.log(rs)
+            console.log(rs)
 
             if (rs.success === true) {
                 props.showToast('success', params?.id === undefined || params?.id === null ? 'Updated Successfully' : 'Saved Successfully')

@@ -5,6 +5,9 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import { request } from '../../../services/utilities';
+import { USER_COOKIE } from '../../../services/constants';
+import SSRStorage from '../../../services/storage';
+const storage = new SSRStorage();
 
 const NewPost = (props) => {
     const id = ''
@@ -154,14 +157,16 @@ const NewPost = (props) => {
 
     });
     const saveIncident = async e => {
+        const user = await storage.getItem(USER_COOKIE);
+        console.log(user);
         let data = {
             childname: title, categoryId: parseInt(selectedCategory), sex: "M", age: 20, description, child_address: "mm", landmark, city, state, lga,
-            isMobile: false, reporter_phone: phone.toString(), reporter_name: rname, media_file: "media_file", reporter_mail: email, media: allFiles
+            isMobile: false, reporter_phone: phone.toString(), reporter_name: rname, media_file: "media_file", reporter_mail: email, media: allFiles, userId: user.payload.id
         };
         let url = `incident/create`;
         try {
             const rs = await request(url, 'POST', false, data);
-            // console.log(rs);
+            console.log(rs);
             if (rs.success === true) {
                 props.showToast('success', 'Successfully saved');
             }

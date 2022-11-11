@@ -67,10 +67,10 @@ const StakeHolder = (props) => {
 
         initialValues: {
             firstname: firstName,
-            lastname: isEdit === true ? lastName : '',
-            email: isEdit === true ? email : '',
-            phone: isEdit === true ? phone : '',
-            position: isEdit === true ? position : '',
+            lastname: lastName,
+            email: email,
+            phone: phone,
+            position: position ,
             // organization: '',
         },
         validationSchema: Yup.object({
@@ -149,6 +149,8 @@ const StakeHolder = (props) => {
                 <ModalHeader
                     className=""
                     toggle={() => {
+                        clearForm();
+                        setIsedit(false);
                         setmodal(!modal);
                     }}
                 >
@@ -275,7 +277,7 @@ const StakeHolder = (props) => {
                                                 className="form-control"
                                                 id="validationCustom01"
                                                 onChange={e =>
-                                                    setPhone(e.target.value)
+                                                    setPosition(e.target.value)
                                                     // validation.handleChange
                                                 }
                                                 onBlur={validation.handleBlur}

@@ -12,7 +12,7 @@ import {
   showRightSidebarAction,
 } from "../../store/actions";
 
-import Header from "./AdminHeader";
+import Header from "./StakeholderHeader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Rightbar from "../CommonForBoth/Rightbar";
@@ -84,7 +84,7 @@ const Layout = (props) => {
       document.getElementById("preloader").style.display = "none";
       document.getElementById("status").style.display = "none";
     }
-  }, [isPreloader,hideRightbar]);
+  }, [isPreloader, hideRightbar]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
