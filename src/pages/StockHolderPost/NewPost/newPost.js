@@ -129,7 +129,8 @@ const NewIncident = (props) => {
         let data = {
             pageId: 4, title, content: description, tags: selectedMulti[0].value,
             media: allFiles, language: 'english', date: new Date(),
-            categoryId: selectedCategory, stakeholderId: user.payload.id
+            categoryId: selectedCategory
+            // stakeholderId: user.payload.id
         }
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
