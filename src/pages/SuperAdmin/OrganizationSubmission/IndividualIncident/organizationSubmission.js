@@ -54,7 +54,18 @@ const OrganizationSubmission = (props) => {
                                                         {new Date(e.createdAt).toDateString()}
                                                     </td>
                                                     <td>
-                                                        <img src={e.media_file} className='img-thumbnail' width='50' alt='evidence' />
+                                                        <td style={{ width: '140px' }}>
+                                                            {e.media[0]?.type !== 'image' ?
+                                                                <iframe
+                                                                    width='50%'
+                                                                    // height='400px'
+                                                                    title={e?.media[0]?.name}
+                                                                    className="embed-responsive-item"
+                                                                    src={e?.media[0]?.link}
+                                                                /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
+                                                            }
+
+                                                        </td>
                                                     </td>
                                                     <td>
                                                         {e.status}
@@ -64,34 +75,34 @@ const OrganizationSubmission = (props) => {
                                                             <ul className="list-inline font-size-20 contact-links mb-0">
                                                                 <li className="list-inline-item">
                                                                     <Link
-                                                                        to="/view-post/1"
+                                                                        to={`/admin-view-incident/${e.referenceId}`}
                                                                         className="text-dark"
                                                                     // onClick={() => {
                                                                     //   const users = cellProps.row.original
                                                                     //   // handleUserClick(users)
                                                                     // }}
                                                                     >
-                                                                        <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        <i className="uil-expand-arrows-alt font-size-18" id="edittooltip1" />
+                                                                        <UncontrolledTooltip placement="top" target="edittooltip1">
                                                                             View Details
                                                                         </UncontrolledTooltip>
                                                                     </Link>
                                                                 </li>
-                                                                <li className="list-inline-item">
+                                                                {/* <li className="list-inline-item">
                                                                     <Link
-                                                                        to="/edit-post/1"
+                                                                        to="#"
                                                                         className="text-dark"
                                                                     // onClick={() => {
                                                                     //   const users = cellProps.row.original
                                                                     //   // handleUserClick(users)
                                                                     // }}
                                                                     >
-                                                                        <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        <i className="uil-edit-alt font-size-18" id="edittooltip2" />
+                                                                        <UncontrolledTooltip placement="top" target="edittooltip2">
                                                                             Edit
                                                                         </UncontrolledTooltip>
                                                                     </Link>
-                                                                </li>
+                                                                </li> */}
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
@@ -104,9 +115,9 @@ const OrganizationSubmission = (props) => {
                                                                     >
                                                                         <i
                                                                             className="uil uil-trash-alt font-size-18"
-                                                                            id="deletetooltip"
+                                                                            id="deletetooltip3"
                                                                         />
-                                                                        <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                        <UncontrolledTooltip placement="top" target="deletetooltip3">
                                                                             Delete
                                                                         </UncontrolledTooltip>
                                                                     </Link>

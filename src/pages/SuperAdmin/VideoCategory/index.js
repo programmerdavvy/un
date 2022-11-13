@@ -40,11 +40,10 @@ function Index() {
         else toastr.success(message)
     }
     const fetchCategories = useCallback(async () => {
-        let url = `category?type=gallery`;
+        let url = `category?pageId=11`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
-            console.log(rs);
         } catch (err) {
             console.log(err);
             showToast('error', 'Failed to fetch');
@@ -64,7 +63,7 @@ function Index() {
                 <Container>
                     <Row>
                         <Col>
-                            <VideoCategory showToast={showToast} categories={categories} />
+                            <VideoCategory showToast={showToast} categories={categories} fetchCategories={fetchCategories} />
                         </Col>
                     </Row>
                 </Container>

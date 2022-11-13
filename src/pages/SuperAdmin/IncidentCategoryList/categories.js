@@ -1,29 +1,27 @@
 import React from 'react'
-import {
-    Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitle, Table, UncontrolledTooltip, Button,
-    Pagination, PaginationItem, PaginationLink
-} from 'reactstrap';
+import { Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitle, Table, UncontrolledTooltip, Button, Pagination, PaginationLink, PaginationItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
 
-
-function EventCategory(props) {
+function Categories(props) {
 
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
-    const [id, setId] = useState(null);
-
+    const [isEdit, setIsedit] = useState(false);
+    const [id, setId] = useState(null)
+    const isSuperAdmin = false
 
     const addCategory = async () => {
-        let data = { name, pageId: 2 };
+        let data = { name, type: 'incident' };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
                 props.fetchCategories();
-                setmodal(!modal);
                 props.showToast('success', 'Saved successfully ');
+                setName('');
+                setmodal(!modal);
             }
 
         } catch (err) {
@@ -37,32 +35,31 @@ function EventCategory(props) {
         try {
             const rs = await request(url, 'PATCH', false, data);
             if (rs.success === true) {
-                setId(null);
-                setName('');
+                setIsedit(false);
                 props.fetchCategories();
+                setName('');
                 setmodal(!modal);
                 props.showToast('success', 'Updated successfully ');
             }
 
         } catch (err) {
+            setIsedit(false);
             console.log(err);
             props.showToast('error', 'Failed to update')
         }
     }
-    const onClickDelete = async (id) => {
-        if (window.confirm('Are you sure')) {
-            let url = `category/delete/?id=${id}`;
+    const onClickDelete = async id => {
+        if (window.confirm('Are you sure!')) {
             try {
+                let url = `category/delete/?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
-                console.log(rs);
                 if (rs.success === true) {
                     props.fetchCategories();
-                    props.showToast('success', 'Deleted successfully ');
+                    props.showToast('success', 'Successfully Deleted');
                 }
-
             } catch (err) {
-                console.log(err);
-                props.showToast('error', 'Failed to delete')
+                console.log(err)
+                props.showToast('error', 'Failed to Delete');
             }
         }
     }
@@ -73,18 +70,18 @@ function EventCategory(props) {
                 className=""
                 isOpen={modal}
                 toggle={() => {
-                    setmodal(!modal)
+                    setmodal(!modal);
                 }}
                 centered={false}>
                 <ModalHeader
                     className=""
                     toggle={() => {
-                        setId(null);
                         setName('');
-                        setmodal(!modal);
+                        setmodal(!modal)
+                        setIsedit(false);
                     }}
                 >
-                    {id === null ? 'Add New Category' : 'Edit Category'}
+                    {isEdit === true ? 'Edit Category' : ' Add New Category'}
                 </ModalHeader>
                 <ModalBody>
                     <Card>
@@ -93,14 +90,14 @@ function EventCategory(props) {
                                 <Row>
                                     <Col>
                                         <div className="mb-3">
-                                            <label className="form-label" htmlFor="name">Event Category</label>
+                                            <label className="form-label" htmlFor="name">Category</label>
                                             <input
                                                 type="text"
-                                                className="form-control"
                                                 onChange={e => setName(e.target.value)}
                                                 value={name}
+                                                className="form-control"
                                                 id="name"
-                                                placeholder="Enter Event Category"
+                                                placeholder="Enter category"
                                             />
                                         </div>
                                     </Col>
@@ -108,8 +105,8 @@ function EventCategory(props) {
                                 <Row>
                                     <Col lg={12}>
                                         <div className="text-end">
-                                            <button type="button" onClick={id === null ? addCategory : updateCategory} className="btn btn-success">
-                                                {id === null ? 'Save' : 'Update'}
+                                            <button type="button" onClick={isEdit === true ? updateCategory : addCategory} className="btn btn-success">
+                                                {isEdit === true ? 'Update' : 'Save'}
                                             </button>
                                         </div>
                                     </Col>
@@ -125,30 +122,30 @@ function EventCategory(props) {
                         <CardBody>
                             <CardTitle className='d-flex justify-content-between'>
                                 <div>
-                                    <h4>Event Category</h4>
+                                    <h4>Categories</h4>
                                 </div>
-                                <div className=''>
-                                    <Button onClick={() => setmodal(!modal)} className="btn" color='primary'>
-                                        Add New
-                                    </Button>
+                                <div>
+                                    <Button color='primary' onClick={() => setmodal(!modal)}>New Category</Button>
                                 </div>
                             </CardTitle>
 
                             <div className="table-responsive">
-                                <Table bordered>
-                                    <thead className="table-light">
+                                <Table bordered striped>
+                                    <thead className="table-light ">
                                         <tr>
-                                            <th>Id</th>
+                                            <th className='w-25'>Category Id</th>
                                             <th> Name</th>
+                                            <th>Count</th>
                                             <th style={{ width: '10rem' }}>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {props.categories?.map((e, i) => {
+                                        {props.categories.map((e, i) => {
                                             return (
-                                                <tr key={i}>
+                                                <tr className='text-capitalize' key={i}>
                                                     <th>{e.id}</th>
-                                                    <td>{e.name || '--'}</td>
+                                                    <td>{e.name}</td>
+                                                    <td>30</td>
                                                     <td>
                                                         <div className="d-flex gap-3 users">
                                                             <ul className="list-inline font-size-20 contact-links mb-0">
@@ -158,9 +155,10 @@ function EventCategory(props) {
                                                                         to="#"
                                                                         className="text-dark"
                                                                         onClick={() => {
-                                                                            setName(e.name);
                                                                             setId(e.id);
-                                                                            setmodal(!modal)
+                                                                            setName(e.name);
+                                                                            setIsedit(true);
+                                                                            setmodal(!modal);
                                                                         }}
                                                                     >
                                                                         <i className="uil-edit-alt font-size-18" id="edittooltip" />
@@ -197,7 +195,7 @@ function EventCategory(props) {
                                     </tbody>
                                 </Table>
                                 <div className="d-flex justify-content-between">
-                                    <div>Showing 1 to 10 of 57 entries</div>
+                                    <div>Showing 1 to 10 of {props.categories?.length} entries</div>
                                     <Pagination aria-label="Page navigation example">
                                         <PaginationItem disabled>
                                             <PaginationLink
@@ -214,6 +212,11 @@ function EventCategory(props) {
                                         <PaginationItem active>
                                             <PaginationLink href="#">
                                                 1
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                        <PaginationItem>
+                                            <PaginationLink href="#">
+                                                2
                                             </PaginationLink>
                                         </PaginationItem>
 
@@ -240,4 +243,4 @@ function EventCategory(props) {
         </React.Fragment>)
 }
 
-export default EventCategory;
+export default Categories;

@@ -15,14 +15,15 @@ function GalleryCategory(props) {
 
 
     const addCategory = async () => {
-        let data = { name, type: 'Gallery' };
+        let data = { name, pageId: 3 };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
-            console.log(rs);
             if (rs.success === true) {
-                setmodal(!modal);
                 props.showToast('success', 'Saved successfully ');
+                props.fetchCategories();
+                setmodal(!modal);
+
             }
 
         } catch (err) {

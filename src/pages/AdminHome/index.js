@@ -15,12 +15,12 @@ import AwaitingApproval from "./Post/awaitingapproval";
 import TopUsers from './topuser';
 import PostTable from './latest-transaction';
 import { request } from "../../services/utilities";
+import MiniWidget from "./mini-widget";
 
-const series2 = [10];
 
 const options2 = {
   fill: {
-    colors: ['#34c38f']
+    colors: ['#5b73e8']
   },
   chart: {
     sparkline: {
@@ -54,27 +54,77 @@ const Dashboard = () => {
   const [organizationCount, setOrganizationCount] = useState(0);
 
   const [totalSubmission, setTotalSubmission] = useState(0);
+  const [openincidentotal, setopenincidenttotal] = useState(0);
+  const [closeincidentotal, setcloseincidenttotal] = useState(0);
+
+
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [count, setCount] = useState(1);
   const [posts, setPosts] = useState([]);
   const [meta, setMeta] = useState(null);
+  const [percentage, setPercentage] = useState([]);
 
 
   const fetchMobileCount = useCallback(async () => {
     try {
       const url = `incident/get/count/?action=mobile`;
       const url_individual_sub = `incident/all/specific/?action=individual`;
-      const url_organization_sub = `incident/all/specific/?action=individual`;
+      const url_organization_sub = `incident/all/specific/?action=stakeholder`;
+      const url_open = `incident/openclose/count/?action=open`
+      const url_close = `incident/openclose/count/?action=close`
+
 
       const rs = await request(url, 'GET', false);
       const rs_individual = await request(url_individual_sub, 'GET', false);
       const rs_organization = await request(url_organization_sub, 'GET', false);
-      setOrganizationCount(rs_organization.paging.total);
-      setIndividualCount(rs_individual.paging.total);
-      const total = rs_individual.paging.total + rs_organization.paging.total;
-      setTotalSubmission(total);
-      setMobileCount(rs.result.totalCount);
+      const rs_open = await request(url_open, 'GET', false);
+      const rs_close = await request(url_close, 'GET', false);
+      if (rs_close.success === true) {
+        setopenincidenttotal(rs_open.result?.totalCount);
+        setcloseincidenttotal(rs_close.result?.totalCount);
+        setOrganizationCount(rs_organization.paging.total);
+        setIndividualCount(rs_individual.paging.total);
+        const total = rs_individual.paging.total + rs_organization.paging.total;
+        setTotalSubmission(total);
+        setMobileCount(rs.result.totalCount);
+
+        let mobilePercent = mobileCount * 30 / 100;
+        let openIncidentCountPercent = openincidentotal * 30 / 100;
+        let closeincidentPercent = closeincidentotal * 30 / 100;
+        let organizationPercent = organizationCount * 30 / 100;
+        let individualPercent = individualCount * 30 / 100;
+        let totalSubmissionPercent = totalSubmission * 30 / 100;
+
+        let array = [{
+          name: 'mobile count',
+          value: mobilePercent
+        },
+        {
+          name: 'open incident count',
+          value: openIncidentCountPercent
+        }, {
+          name: 'close incident count',
+          value: closeincidentPercent
+        },
+        {
+          name: 'organization incident count',
+          value: organizationPercent
+        }, {
+          name: 'individual incident count',
+          value: individualPercent
+        },
+        {
+          name: 'total incident count',
+          value: totalSubmissionPercent
+        },
+
+
+        ]
+        console.log(array)
+        setPercentage(array)
+      }
+
     } catch (err) {
       console.log(err);
     }
@@ -83,7 +133,7 @@ const Dashboard = () => {
   const fetchAwaitingPosts = useCallback(async page => {
     const p = page || 1;
     try {
-      const url = `sections/admin?pageId=3&page=${p}&limit=5`;
+      const url = `sections/admin?pageId=4&page=${p}&limit=5`;
       const rs = await request(url, 'GET', false);
       setPosts(rs.result);
       setCount(Math.ceil(rs.paging?.total / rowsPerPage));
@@ -94,14 +144,16 @@ const Dashboard = () => {
   }, [rowsPerPage]);
 
   const handlePagination = page => {
-    fetchAwaitingPosts(page.selected + 1)
-    setCurrentPage(page.selected + 1)
+    fetchAwaitingPosts(page.selected + 1);
+    setCurrentPage(page.selected + 1);
   }
   useEffect(() => {
     fetchAwaitingPosts();
     fetchMobileCount();
   }, [fetchAwaitingPosts, fetchMobileCount]);
 
+
+  const series2 = [47];
 
   const reports = [
     {
@@ -116,7 +168,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${percentage[5]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -134,7 +186,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${percentage[4]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -151,7 +203,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${percentage[3]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -169,13 +221,14 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: "0.82%",
+      badgeValue: `${percentage[0]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
       options: options2,
     }
   ];
+
   const caseAnalysis = [
     {
       icon: 'uil-file-plus-alt',
@@ -203,62 +256,81 @@ const Dashboard = () => {
       casereported: 2
     }
   ]
-  const series = [1, 1]
 
-  const options = {
-    labels: ["Closed", "Open"],
-    colors: ["#228e68", "#5b73e8", "#f95000"],
-    legend: {
-      show: !0,
-      position: 'right',
-      horizontalAlign: 'center',
-      verticalAlign: 'middle',
-      floating: !1,
-      fontSize: '14px',
-      offsetX: 0
-    },
-    responsive: [{
-      breakpoint: 600,
-      options: {
-        chart: {
-          height: 240
-        },
-        legend: {
-          show: !1
-        },
-      }
-    }]
-  }
+  const openClose = [
+    {
+      id: 4,
+      icon: "uil-coins",
+      title: "Opened  Incidents",
+      rate: mobileCount,
+      value: openincidentotal,
+      decimal: 0,
+      charttype: "radialBar",
+      chartheight: 75,
+      chartwidth: 75,
+      prefix: "",
+      suffix: "",
+      badgeValue: `${percentage[1]?.value}%`,
+      color: "danger",
+      desc: "Last 30 days",
+      series: series2,
+      options: options2,
+    }, {
+      id: 4,
+      icon: "uil-coins",
+      title: "Closed  Incidents",
+      rate: mobileCount,
+      value: closeincidentotal,
+      decimal: 0,
+      charttype: "radialBar",
+      chartheight: 75,
+      chartwidth: 75,
+      prefix: "",
+      suffix: "",
+      badgeValue: `${percentage[2]?.value}%`,
+      color: "danger",
+      desc: "Last 30 days",
+      series: series2,
+      options: options2,
+    }
+  ]
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* <Breadcrumbs title="Minible" breadcrumbItem="Dashboard" /> */}
-
-
           <Row>
             <Col xl={12}>
               <Row>
-                <Col>
+                <Col xl={12}>
                   <Row>
-                    <Statistics reports={reports} />
-                    <Col xl={3}>
-                      <Card
-                      // style={{ height: '220px' }}
-                      >
-                        <CardBody className='p-2'>
-                          <h4 className="card-title mb-2 text-center">Current Position Of Case </h4>
-                          {/* <p className='text-center fs-4'></p> */}
-                          <ReactApexChart
-                            options={options}
-                            series={series}
-                            type="donut"
-                            height="180"
-                            className="apex-charts"
-                          />
-                        </CardBody>
-                      </Card>
-                    </Col>
+                    {/* <Statistics reports={reports} /> */}
+                    <MiniWidget reports={reports} />
+                    {openClose.map(e => {
+                      return (
+                        <Col md={6} xl={2} key={e.id} >
+                          <Card>
+                            <CardBody>
+                              <div className="float-end mt-2">
+                                <ReactApexChart
+                                  options={e.options}
+                                  series={e.series}
+                                  type={'radialBar'}
+                                  height={75}
+                                  width={75}
+                                />
+                              </div>
+                              <div>
+                                <h4 className="mb-1 mt-1"><span> {e.value}</span></h4>
+                                <p className="text-muted mb-0">{e.title}</p>
+                              </div>
+                              <p className="text-muted mt-3 mb-0"><span className={"text-" + e.color + " me-1"}><i className={e.icon + " me-1"}></i>{e.badgeValue}</span>{" "}{e.desc}
+                              </p>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                      )
+                    })}
                   </Row>
                   <Row className="mt-4">
                     <Col>
@@ -269,14 +341,14 @@ const Dashboard = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col xl={3} className="d-none">
+                {/* <Col xl={3} className="d-none">
                   <Card >
                     <CardBody>
                       <h2 style={{ fontWeight: '700' }}> Recent Updates Case Analytics by State</h2>
                     </CardBody>
                   </Card>
 
-                </Col>
+                </Col> */}
               </Row>
 
               {/* <Row>

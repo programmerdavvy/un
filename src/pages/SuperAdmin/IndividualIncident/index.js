@@ -16,7 +16,7 @@ function Index() {
     const fetchSubmission = useCallback(async (page) => {
         const p = page || 1;
         try {
-            let url = `incident/all/specific/?action=individual`;
+            let url = `incident/all/specific/?action=individual&page=${p}&limit=10`;
             const rs = await request(url, 'GET', false);
             // let dataArray = rs.result.sort(x => x.userId !== null);
             setIndividualSubmission(rs.result);
@@ -42,7 +42,7 @@ function Index() {
             <div className='page-content'>
                 <Container fluid>
                     <Breadcrumbs title="submission" breadcrumbItem="Individual Submission" />
-                    <IndividualSubmission submission={individualSubmission} meta={meta}  count={count} handlePagination={handlePagination} currentPage={currentPage} />
+                    <IndividualSubmission submission={individualSubmission} meta={meta} count={count} handlePagination={handlePagination} currentPage={currentPage} />
                 </Container>
             </div>
         </React.Fragment>

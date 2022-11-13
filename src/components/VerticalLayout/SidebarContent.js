@@ -145,7 +145,7 @@ const SidebarContent = props => {
                   <Link to="/admin-status">{props.t("Status ")}</Link>
                 </li>
                 <li>
-                  <Link to="/admin-categories">{props.t("Category ")}</Link>
+                  <Link to="/admin-incident-categories">{props.t("Category ")}</Link>
                 </li>
               </ul>
             </li>

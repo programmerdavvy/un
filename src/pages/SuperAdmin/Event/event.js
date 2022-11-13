@@ -1,8 +1,30 @@
 import React from "react";
 import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
+import { request } from "../../../services/utilities";
+import ReactPaginate from "react-paginate";
 
-const IndividualSubmission = () => {
+
+const Events = (props) => {
+
+    const onClickDelete = async id => {
+        let url = `sections?id=${id}`
+        if (window.confirm('Are you sure')) {
+            try {
+                const rs = await request(url, 'DELETE', false);
+                if (rs.success === true) {
+
+                    props.fetchEvents();
+                    props.showToast('success', 'Deleted Successfully');
+                }
+            } catch (err) {
+                console.log(err);
+                props.showToast('error', 'Failed to delete');
+
+            }
+        }
+    }
+
     return (
         <Row>
             <Col lg={12}>
@@ -22,270 +44,119 @@ const IndividualSubmission = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
-
-                                                    <li className="list-inline-item">
+                                    {props.events?.map((e, i) => {
+                                        return (
+                                            <tr key={i}>
+                                                <td>{e.title}</td>
+                                                <td>
+                                                    News
+                                                </td>
+                                                <td>
+                                                    {new Date(e.startDate).toUTCString()}
+                                                </td>
+                                                <td>
+                                                    {new Date(e.endDate).toUTCString()}
+                                                </td>
+                                                <td>
+                                                    <div className="d-flex gap-3 users">
+                                                        <ul className="list-inline font-size-20 contact-links mb-0">
+                                                            {/* <li className="list-inline-item">
                                                         <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
+                                                            to="#"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                            <i className="uil-check font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                Edit
+                                                                approve
                                                             </UncontrolledTooltip>
                                                         </Link>
                                                     </li>
                                                     <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
-
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                            <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                Edit
+                                                                View Details
                                                             </UncontrolledTooltip>
                                                         </Link>
-                                                    </li>
-                                                    <li className="list-inline-item">
+                                                    </li> */}
+                                                            {/* <li className="list-inline-item">
                                                         <Link
                                                             to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr> <tr>
-
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
-
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
+                                                            className="text-dark"
                                                         // onClick={() => {
                                                         //   const users = cellProps.row.original
                                                         //   // handleUserClick(users)
                                                         // }}
                                                         >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
+                                                            <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                             <UncontrolledTooltip placement="top" target="edittooltip">
                                                                 Edit
                                                             </UncontrolledTooltip>
                                                         </Link>
-                                                    </li>
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr> <tr>
+                                                    </li> */}
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
+                                                                    onClick={() => {
+                                                                        onClickDelete(e.id)
+                                                                    }}
+                                                                    className="text-dark"
 
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
+                                                                >
+                                                                    <i
+                                                                        className="uil uil-trash-alt font-size-18"
+                                                                        id="deletetooltip"
+                                                                    />
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                                                        Delete
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   // handleUserClick(users)
-                                                        // }}
-                                                        >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
-                                                            <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                Edit
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr> <tr>
-
-                                        <td>Birthday Party</td>
-                                        <td>
-                                            News
-                                        </td>
-                                        <td>
-                                            07 Oct, 2019
-                                        </td>
-                                        <td>
-                                            10 Oct, 2019
-                                        </td>
-                                        <td>
-                                            <div className="d-flex gap-3 users">
-                                                <ul className="list-inline font-size-20 contact-links mb-0">
-
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="/admin-edit-post/1"
-                                                            className="text-primary"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   // handleUserClick(users)
-                                                        // }}
-                                                        >
-                                                            <i className="uil uil-pen font-size-18" id="edittooltip" />
-                                                            <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                Edit
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                    <li className="list-inline-item">
-                                                        <Link
-                                                            to="#"
-                                                            className="text-danger"
-                                                        // onClick={() => {
-                                                        //   const users = cellProps.row.original
-                                                        //   onClickDelete(users)
-                                                        // }}
-                                                        >
-                                                            <i
-                                                                className="uil uil-trash-alt font-size-18"
-                                                                id="deletetooltip"
-                                                            />
-                                                            <UncontrolledTooltip placement="top" target="deletetooltip">
-                                                                Delete
-                                                            </UncontrolledTooltip>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
+                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                                <div>Showing 1 to 10 of {props.meta?.total} entries</div>
+
+                                <div>
+                                    <ReactPaginate
+                                        nextLabel='Next'
+                                        breakLabel='...'
+                                        previousLabel='Prev'
+                                        pageCount={props.count}
+                                        activeClassName='active'
+                                        breakClassName='page-item'
+                                        pageClassName={'page-item'}
+                                        breakLinkClassName='page-link'
+                                        nextLinkClassName={'page-link'}
+                                        pageLinkClassName={'page-link'}
+                                        nextClassName={'page-item next'}
+                                        previousLinkClassName={'page-link'}
+                                        previousClassName={'page-item prev'}
+                                        onPageChange={page => props.handlePagination(page)}
+                                        forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                                        containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                    />
+                                </div>
+
+                            </div>
                         </div>
                     </CardBody>
                 </Card>
@@ -294,4 +165,4 @@ const IndividualSubmission = () => {
     );
 };
 
-export default IndividualSubmission;
+export default Events;

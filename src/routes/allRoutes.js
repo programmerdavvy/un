@@ -10,11 +10,16 @@ import AdminHome from "../pages/AdminHome/index"
 import StockHolderAdminHome from "../pages/StockHolderHome/index"
 
 import StockHolderPost from "../pages/StockHolderPost/PostList/index"
+import AdminViewPost from "../pages/StockHolderPost/ViewPost/viewPost";
+import AdminViewIncident from "../pages/StockHolderPost/ViewIncident/viewIncident";
+
 import StakeHolderPostList from '../pages/SuperAdmin/StakeHolderPostList/index'
 import StockHolderAddPost from "../pages/StockHolderPost/NewPost/index"
 import StockHolderAddIncident from '../pages/StockHolderPost/NewIncident/index'
 import StackHolderDocument from '../pages/StakeHolderDocument/index'
 import StockHolderCategoryList from '../pages/StockHolderPost/CategoryList/index'
+import StockHolderIncidentCategoryList from '../pages/SuperAdmin/IncidentCategoryList/index'
+
 import StakeHolderReportedIncident from '../pages/StockHolderPost/ReportedIncident/index'
 import SuperAdminIndividualSubmission from "../pages/SuperAdmin/IndividualIncident/index"
 import SuperAdminOrganizationSubmission from "../pages/SuperAdmin/OrganizationSubmission/IndividualIncident/index"
@@ -156,9 +161,15 @@ import MapsLeaflet from "../pages/Maps/MapsLeaflet"
 
 // Authentication related pages
 import Login from "../pages/Authentication/Login"
+import AdminLogin from "../pages/Authentication/AdminLogin"
+import StakeHolderLogin from "../pages/Authentication/StakeholderLogin"
+
 import Logout from "../pages/Authentication/Logout"
 import Register from "../pages/Authentication/Register"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
+import AdminForgetPwd from "../pages/Authentication/AdminForgetPassword"
+import StakeholderForgetPwd from "../pages/Authentication/StakeholderForgetPassword"
+
 
 //  // Inner Authentication
 import Login1 from "../pages/AuthenticationInner/Login"
@@ -308,9 +319,14 @@ const StakeHolderRoutes = [
   { path: "/admin", component: AdminHome },
   { path: "/admin-posts", component: StockHolderPost },
   { path: "/admin-edit-post/:id", component: StockHolderAddPost },
+  { path: "/admin-view-post/:id", component: AdminViewPost },
+  { path: "/admin-view-incident/:id", component: AdminViewIncident },
+
   { path: "/admin-new-post", component: StockHolderAddPost },
   { path: "/admin-new-incident", component: StockHolderAddIncident },
   { path: "/admin-categories", component: StockHolderCategoryList },
+  { path: "/admin-incident-categories", component: StockHolderIncidentCategoryList },
+
 
   { path: "/individual-submission", component: SuperAdminIndividualSubmission },
   { path: "/organization-submission", component: SuperAdminOrganizationSubmission },
@@ -342,6 +358,8 @@ const superAdminRoutes = [
   { path: "/new-post", component: StockHolderAddPost },
   { path: "/new-incident", component: StockHolderAddIncident },
   { path: "/reported-incident", component: StakeHolderReportedIncident },
+  { path: "/stakeholder-view-post/:id", component: AdminViewPost },
+  { path: "/stakeholder-view-incident/:id", component: AdminViewIncident },
 
   { path: "/categories", component: StockHolderCategoryList },
 ]
@@ -349,7 +367,13 @@ const authRoutes = [
 
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
+  { path: "/admin-login", component: AdminLogin },
+  { path: "/stakeholder-login", component: StakeHolderLogin },
+
   { path: "/forgot-password", component: ForgetPwd },
+  { path: "/admin-forgot-password", component: AdminForgetPwd },
+  { path: "/stakeholder-forgot-password", component: StakeholderForgetPwd },
+
   { path: "/register", component: Register },
 
   { path: "/pages-maintenance", component: PagesMaintenance },

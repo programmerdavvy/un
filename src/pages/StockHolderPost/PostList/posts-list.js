@@ -131,6 +131,21 @@ function PostList(props) {
     }
 
   }
+  const onApprovePost = async id => {
+      let url = `sections/approve?sectionId=${id}`
+      try {
+        const rs = await request(url, 'GET', false);
+        if (rs.success === true) {
+          props.fetchPosts();
+          props.showToast('success', 'Successfully Approved');
+        }
+      } catch (err) {
+        console.log(err);
+        props.showToast('error', 'Failed to Approve');
+
+      }
+    }
+
   return (
     <React.Fragment>
 
@@ -214,7 +229,7 @@ function PostList(props) {
                             News
                           </td>
                           <td>
-                            News
+                            {e.category?.name}
                           </td>
                           <td>
                             {e.tags}
@@ -226,32 +241,46 @@ function PostList(props) {
                           <td>
                             <div className="d-flex gap-3 users">
                               <ul className="list-inline font-size-20 contact-links mb-0">
+                              <li className="list-inline-item">
+                                  <Link
+                                    to={`#`}
+                                    className="text-dark"
+                                  onClick={() => {
+                                    onApprovePost(e.id);
+                                  }}
+                                  >
+                                    <i className="uil-check font-size-18" id="edittooltip1" />
+                                    <UncontrolledTooltip placement="top" target="edittooltip1">
+                                      Approve
+                                    </UncontrolledTooltip>
+                                  </Link>
+                                </li>
                                 <li className="list-inline-item">
                                   <Link
-                                    to={`/view-post/${e.id}`}
+                                    to={`/admin-view-post/${e.id}`}
                                     className="text-dark"
                                   // onClick={() => {
                                   //   const users = cellProps.row.original
                                   //   // handleUserClick(users)
                                   // }}
                                   >
-                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip2" />
+                                    <UncontrolledTooltip placement="top" target="edittooltip2">
                                       View Details
                                     </UncontrolledTooltip>
                                   </Link>
                                 </li>
                                 <li className="list-inline-item">
                                   <Link
-                                    to={`/edit-post/${e.id}`}
+                                    to={`/admin-edit-post/${e.id}`}
                                     className="text-dark"
                                   // onClick={() => {
                                   //   const users = cellProps.row.original
                                   //   // handleUserClick(users)
                                   // }}
                                   >
-                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                    <i className="uil-edit-alt font-size-18" id="edittooltip3" />
+                                    <UncontrolledTooltip placement="top" target="edittooltip3">
                                       Edit
                                     </UncontrolledTooltip>
                                   </Link>
@@ -267,9 +296,9 @@ function PostList(props) {
                                   >
                                     <i
                                       className="uil uil-trash-alt font-size-18"
-                                      id="deletetooltip"
+                                      id="deletetooltip4"
                                     />
-                                    <UncontrolledTooltip placement="top" target="deletetooltip">
+                                    <UncontrolledTooltip placement="top" target="deletetooltip4">
                                       Delete
                                     </UncontrolledTooltip>
                                   </Link>
