@@ -305,7 +305,7 @@ const ResourcesFile = props => {
             to="#"
             className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
           >
-            Read More
+            Load More
           </Link>
         </div>
       </Col>

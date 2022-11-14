@@ -81,7 +81,8 @@ const Dashboard = () => {
         payLoad
       )
       setLoading(false)
-      if (response?.data?.message == "Sent" && phoneNumber.length == 11) {
+      console.log('Length', response)
+      if (response?.data?.message && phoneNumber.length == 11) {
         tog_center()
       }
       if (response?.data?.success) {
@@ -119,6 +120,8 @@ const Dashboard = () => {
       console.log("Send OTP Error", error)
     }
   }
+
+  console.log('Doctor', trackComplain)
 
   return (
     <React.Fragment>
@@ -293,7 +296,7 @@ const Dashboard = () => {
                                       Status :
                                       <cite title="Source Title">
                                         {" "}
-                                        Court Order
+                                        {trackComplain?.status}
                                       </cite>
                                     </footer>
                                   </blockquote>

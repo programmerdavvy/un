@@ -38,6 +38,7 @@
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
     "nouislider-react": "^3.4.0",
+    "podcast-api": "^2.0.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.3.9",
     "react-auto-translate": "^0.0.6",

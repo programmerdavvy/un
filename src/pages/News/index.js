@@ -45,14 +45,18 @@ import axios from "axios"
 const Dashboard = () => {
   const [news, setNews] = useState()
   useEffect(() => {
-    const fetchAllNews = async () => {
-      const response = await axios.get(
-        "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
-      )
-      setNews(response?.data?.result)
-      
+    try {
+      const fetchAllNews = async () => {
+        const response = await axios.get(
+          "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
+        )
+        setNews(response?.data?.result)
+        
+      }
+      fetchAllNews()
+    } catch (error) {
+      console.log('Fetch All News Error', error)
     }
-    fetchAllNews()
   }, [])
 
   return (

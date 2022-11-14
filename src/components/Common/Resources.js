@@ -41,7 +41,7 @@ const Resources = props => {
             <Col xl={12}>
               <div className="d-flex p-2 justify-content-center">
                 <Link
-                  to="#"
+                  to="/resources"
                   className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
                 >
                   <Translate>Read More</Translate>

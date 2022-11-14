@@ -127,13 +127,17 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    const fetchAllCategory = async () => {
-      const response = await axios.get(
-        "https://unirp.herokuapp.com/category?type=incident"
-      )
-      setIncidentCategory(response?.data?.result)
+    try {
+      const fetchAllCategory = async () => {
+        const response = await axios.get(
+          "https://unirp.herokuapp.com/category?type=incident"
+        )
+        setIncidentCategory(response?.data?.result)
+      }
+      fetchAllCategory()
+    } catch (error) {
+      console.log('Fetch All Category Error', error)
     }
-    fetchAllCategory()
   }, [])
 
   return (

@@ -7,6 +7,7 @@ import img5 from "../../../assets/images/un/slidetwo.png"
 import img6 from "../../../assets/images/un/slidethree.png"
 import img7 from "../../../assets/images/un/slidefour.png"
 import { Link } from "react-router-dom"
+import { Translate } from "react-auto-translate"
 
 const items = [
   {
@@ -34,7 +35,7 @@ const items = [
 class Slidewithcontrol extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeIndex: 0 , cases: 0, children: 0}
+    this.state = { activeIndex: 0, cases: 0, children: 0 }
     this.next = this.next.bind(this)
     this.previous = this.previous.bind(this)
     this.goToIndex = this.goToIndex.bind(this)
@@ -45,15 +46,13 @@ class Slidewithcontrol extends Component {
   componentDidMount() {
     fetch("https://unirp.herokuapp.com/incident/getall?page=1&limit=1")
       .then(res => res.json())
-      .then(
-        (result) => this.setState({cases: result?.paging?.total}))
+      .then(result => this.setState({ cases: result?.paging?.total }))
 
     fetch("https://unirp.herokuapp.com/incident/identifychild/?action=count")
       .then(res => res.json())
-      .then(
-        (result) => this.setState({children: result?.result}))
-      }
-      // console.log('hey', result?.paging?.total)
+      .then(result => this.setState({ children: result?.result }))
+  }
+  // console.log('hey', result?.paging?.total)
   onExiting() {
     this.animating = true
   }
@@ -103,23 +102,29 @@ class Slidewithcontrol extends Component {
 
           <div className="carousel-caption h-75 d-inline-block d-flex flex-row justify-content-end">
             <div className="h-100 d-flex flex-column justify-content-evenly m-3">
-              <p className="text-white h6">NUMBER OF CASES REPORTED:</p>
+              <p className="text-white h6">
+                <Translate>NUMBER OF CASES REPORTED</Translate>:
+              </p>
               <h1 className="font-weight-bold text-white display-1">{cases}</h1>
-                <button className="btn text-white border border-white rounded">
-              <Link to="/report-incident" className="w-100 h-100 text-white">
-                  Report A Case
-              </Link>
-                </button>
+              <button className="btn text-white border border-white rounded">
+                <Link to="/report-incident" className="w-100 h-100 text-white">
+                  <Translate>Report A Case</Translate>
+                </Link>
+              </button>
             </div>
 
             <div className="h-100 d-flex flex-column justify-content-evenly m-3">
-              <p className="text-white h6">NUMBER OF CHILDREN IDENTIFIED:</p>
-              <h1 className="font-weight-bold text-white display-1">{children}</h1>
+              <p className="text-white h6">
+                <Translate>NUMBER OF CHILDREN IDENTIFIED</Translate>:
+              </p>
+              <h1 className="font-weight-bold text-white display-1">
+                {children}
+              </h1>
               <button className="btn text-white border border-white rounded">
-              <Link to="/track" className="w-100 h-100 text-white">
-                  Track
-              </Link>
-                </button>
+                <Link to="/track" className="w-100 h-100 text-white">
+                  <Translate>Track</Translate>
+                </Link>
+              </button>
             </div>
           </div>
         </CarouselItem>

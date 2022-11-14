@@ -112,7 +112,7 @@ const NewsCard = props => {
       <Col xl={12}>
         <div className="d-flex p-2 justify-content-center">
           <Link
-            to="#"
+            to="/news"
             className="btn btn-outline-success waves-effect waves-light w-25 text-dark font-weight-bold"
           >
             Read More

@@ -44,7 +44,7 @@ const Podcast = props => {
         </Card>
         <div className="d-flex p-2 justify-content-center">
           <Link
-            to="#"
+            to="/podcasts"
             className="btn btn-outline-success waves-effect waves-light w-50 text-dark font-weight-bold"
           >
             <Translate>View More</Translate>
