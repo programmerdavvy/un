@@ -13,14 +13,17 @@ import Analysis from "./Analysis";
 import IncidentPost from "./IncidentPost";
 import { request } from "../../services/utilities";
 import MiniWidget from "./mini-widget";
+import {
+  updateLoader
+} from "../../store/actions";
 
-
-
+import { useDispatch } from "react-redux";
 
 
 
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const [incidents, setIncidents] = useState([])
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
@@ -64,7 +67,8 @@ const Dashboard = () => {
 
   const fetchPosts = useCallback(async (page) => {
     let p = page || 1;
-    let url = `sections/?pageId=4&page=${p}&limit=5`;
+    let url = `sections/admin?page=${p}&limit=5&type=approved`;
+
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
@@ -83,6 +87,8 @@ const Dashboard = () => {
   }, [rowsPerPageP]);
 
   const fetchDocuments = useCallback(async (page) => {
+    dispatch(updateLoader(''));
+
     let p = page || 1;
 
     let url = `media?pageId=&id=&page=${p}&limit=5`;
@@ -93,8 +99,10 @@ const Dashboard = () => {
         let x = rs.paging?.total / 30;
         let z = x * 100;
         setTotaldocumentbypercent(z.toFixed(2))
+        dispatch(updateLoader('none'));
       }
     } catch (err) {
+      dispatch(updateLoader('none'));
       console.log(err);
     }
   }, [])
@@ -111,7 +119,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchIncident();
     fetchPosts();
-    fetchDocuments()
+    fetchDocuments();
   }, [fetchIncident, fetchPosts, fetchDocuments])
 
   const series2 = [40];

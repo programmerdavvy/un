@@ -3,6 +3,10 @@ import { Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitl
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
+import {
+    updateLoader
+} from "../../../store/actions";
+import { useDispatch } from 'react-redux';
 
 function Categories(props) {
 
@@ -11,27 +15,31 @@ function Categories(props) {
     const [isEdit, setIsedit] = useState(false);
     const [id, setId] = useState(null)
     const isSuperAdmin = false
+    const dispatch = useDispatch();
 
     const addCategory = async () => {
-        let data = { name, pageId: 4 };
-        let url = `category`;
+        dispatch(updateLoader(''))
+        let data = { name, type: 'post' };
+        let url = `pages`;
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
                 props.fetchCategories();
                 props.showToast('success', 'Saved successfully ');
+                dispatch(updateLoader('none'))
                 setName('');
                 setmodal(!modal);
             }
 
         } catch (err) {
             console.log(err);
+            dispatch(updateLoader('none'))
             props.showToast('error', 'Failed to save')
         }
     }
     const updateCategory = async () => {
-        let data = { name, id };
-        let url = `category/edit`;
+        let data = { name };
+        let url = `pages?id=${id}`;
         try {
             const rs = await request(url, 'PATCH', false, data);
             if (rs.success === true) {
@@ -51,7 +59,7 @@ function Categories(props) {
     const onClickDelete = async id => {
         if (window.confirm('Are you sure!')) {
             try {
-                let url = `category/delete/?id=${id}`;
+                let url = `pages/?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchCategories();

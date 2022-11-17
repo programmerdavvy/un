@@ -79,7 +79,6 @@ function Index() {
         let url = `media?pageId=&id=&page=${p}&limit=10`;
         try {
             const rs = await request(url, 'GET', false);
-            console.log(rs);
             if (rs.success === true) {
                 setDocuments(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
@@ -268,22 +267,31 @@ function Index() {
 
                                                                 <div className="ratio ratio-4x3">
                                                                     <iframe
-                                                                        title={e.name}
+                                                                        className="embed-responsive-item"
+                                                                        width="100%"
+                                                                        height="480"
+                                                                        src={`https://www.youtube.com/embed/${documents[i].link.split('=')[1]}`}
+                                                                        frameBorder="0"
+                                                                        // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                        allowFullScreen
+                                                                        title={e.title}
+                                                                    />
+                                                                    {/* <iframe
+                                                                        // title={e.name}
                                                                         allowFullScreen
                                                                         src={e.link}
-                                                                    />
+                                                                    /> */}
                                                                 </div>
                                                             </div> : e.type === 'audio' ? <div>
                                                                 <audio controls>
                                                                     <source src={e.link} width='100%' type="audio/mpeg" />
                                                                 </audio>
-                                                            </div> : ''
-                                                            }
+                                                            </div> : ''}
                                                         </td>
                                                         <td>
                                                             <div className="d-flex gap-3 users">
                                                                 <ul className="list-inline font-size-20 contact-links mb-0">
-                                                                    <li className="list-inline-item">
+                                                                    {/* <li className="list-inline-item">
                                                                         <Link
                                                                             to="#"
                                                                             className="text-dark"
@@ -297,8 +305,8 @@ function Index() {
                                                                                 View Details
                                                                             </UncontrolledTooltip>
                                                                         </Link>
-                                                                    </li>
-                                                                    <li className="list-inline-item">
+                                                                    </li> */}
+                                                                    {/* <li className="list-inline-item">
                                                                         <Link
                                                                             to="#"
                                                                             className="text-dark"
@@ -312,7 +320,7 @@ function Index() {
                                                                                 Edit
                                                                             </UncontrolledTooltip>
                                                                         </Link>
-                                                                    </li>
+                                                                    </li> */}
                                                                     <li className="list-inline-item">
                                                                         <Link
                                                                             to="#"

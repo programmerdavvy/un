@@ -63,14 +63,14 @@ const Comment = (props) => {
                                 <tbody>
                                     {props.comments.map((e, i) => {
                                         return (
-                                            <tr>
+                                            <tr className="text-capitalize">
                                                 <td>
                                                     <div>
-                                                        <span>James John</span>
+                                                        <span>{e.name}</span>
                                                     </div>
-                                                    <div>
+                                                    {/* <div>
                                                         <span>james@gmail.com</span>
-                                                    </div>
+                                                    </div> */}
                                                 </td>
                                                 <td>
                                                     {e.comment}
@@ -92,8 +92,8 @@ const Comment = (props) => {
                                                                         approveComment(e.id);
                                                                     }}
                                                                 >
-                                                                    <i className="uil-check font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-check font-size-18" id="edittooltip1" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip1">
                                                                         approve
                                                                     </UncontrolledTooltip>
                                                                 </Link>
@@ -108,8 +108,8 @@ const Comment = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip2" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip2">
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>

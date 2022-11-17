@@ -16,7 +16,6 @@ import Header from "./StakeholderHeader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Rightbar from "../CommonForBoth/Rightbar";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
 

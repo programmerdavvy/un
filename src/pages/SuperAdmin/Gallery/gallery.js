@@ -21,6 +21,18 @@ const IndividualSubmission = (props) => {
             props.showToast('error', 'Failed to delete');
         }
     }
+    const onApprovePost = async id => {
+        let url = `sections/approve?sectionId=${id}`
+        try {
+            const rs = await request(url, 'GET', false);
+            if (rs.success === true) {
+                props.showToast('success', 'Successfully Approved');
+            }
+        } catch (err) {
+            console.log(err);
+            props.showToast('error', 'Failed to Approve');
+        }
+    }
     return (
         <Row>
             <Col lg={12}>
@@ -59,7 +71,20 @@ const IndividualSubmission = (props) => {
                                                 <td>
                                                     <div className="d-flex gap-3 users">
                                                         <ul className="list-inline font-size-20 contact-links mb-0">
-
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
+                                                                    className="text-dark"
+                                                                    onClick={() => {
+                                                                        onApprovePost(e.id)
+                                                                    }}
+                                                                >
+                                                                    <i className="uil-check font-size-18" id="edittooltip" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        Approve
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
                                                             {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
@@ -71,7 +96,7 @@ const IndividualSubmission = (props) => {
                                                                 >
                                                                     <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                                     <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                        Edit
+                                                                        Approve
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li> */}

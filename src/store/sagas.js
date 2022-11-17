@@ -11,6 +11,8 @@ import chatSaga from "./chat/saga"
 import ecommerceSaga from "./e-commerce/saga"
 import invoiceSaga from "./invoices/saga"
 import contactsSaga from "./contacts/saga"
+import VisibilitySaga from "./visibility/saga"
+
 
 export default function* rootSaga() {
   yield all([
@@ -25,5 +27,6 @@ export default function* rootSaga() {
     fork(ecommerceSaga),
     fork(invoiceSaga),
     fork(contactsSaga),
+    fork(VisibilitySaga)
   ])
 }
