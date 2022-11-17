@@ -16,24 +16,25 @@ import Socials from "./Socials"
 import Tags from "./Tags"
 import { useState } from "react"
 
-const { Client } = require("podcast-api")
-const client = Client({
-  apiKey: process.env.LISTEN_API_KEY || null,
-})
+// const { Client } = 'aa'
+// require("podcast-api")
+// const client = Client({
+//   apiKey: process.env.LISTEN_API_KEY || null,
+// })
 
 const Podcasts = props => {
   const [podCasts, setPodCasts] = useState(null)
-  client
-    .search({
-      q: "elon musk",
-    })
-    .then(response => {
-      setPodCasts(response.data.results)
-    })
-    .catch(error => {
-      console.log("fetch Podcast error", error)
-    })
-  console.log("As Salam 2", podCasts)
+  // client
+  //   .search({
+  //     q: "elon musk", 
+  //   })
+  //   .then(response => {
+  //     setPodCasts(response.data.results)
+  //   })
+  //   .catch(error => {
+  //     console.log("fetch Podcast error", error)
+  //   })
+  // console.log("As Salam 2", podCasts)
   return (
     <Row>
       <Col xl={12} className="m-3">

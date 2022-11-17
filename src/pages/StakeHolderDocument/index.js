@@ -79,10 +79,13 @@ function Index() {
         let url = `media?pageId=&id=&page=${p}&limit=10`;
         try {
             const rs = await request(url, 'GET', false);
-            // console.log(rs);
-            setDocuments(rs.result);
-            setCount(Math.ceil(rs.paging?.total / rowsPerPage));
-            setMeta(rs.paging);
+            console.log(rs);
+            if (rs.success === true) {
+                setDocuments(rs.result);
+                setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+                setMeta(rs.paging);
+            }
+
         } catch (err) {
             console.log(err);
         }
@@ -97,7 +100,6 @@ function Index() {
             let url = `media?id=${id}`;
             try {
                 const rs = await request(url, 'DELETE', false);
-                // console.log(rs);
                 if (rs.success === true) {
                     showToast('success', 'Deleted successfully');
                     fetchDocuments();
@@ -263,7 +265,7 @@ function Index() {
                                                             {e.type === 'image' ? <div>
                                                                 <img src={e.link} className='img-thumbnail' width='100%' alt='uploaded incident' />
                                                             </div> : e.type === 'video' ? <div>
-                                                              
+
                                                                 <div className="ratio ratio-4x3">
                                                                     <iframe
                                                                         title={e.name}
