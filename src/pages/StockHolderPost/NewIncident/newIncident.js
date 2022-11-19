@@ -7,10 +7,12 @@ import { Link, } from 'react-router-dom'
 import { request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
+import { useDispatch } from 'react-redux/es/exports';
+import { updateLoader } from '../../../store/actions';
 const storage = new SSRStorage();
 
 const NewPost = (props) => {
-    const id = ''
+    const dispatch = useDispatch()
     const [selectedFiles, setselectedFiles] = useState([])
     const [allFiles] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -82,7 +84,10 @@ const NewPost = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     const uploadedFiles = () => {
-        // setLoading(true);
+        if (selectedFiles.length >= !1) {
+            props.showToast('error', 'kindly attach a media File');
+        }
+        dispatch(updateLoader(''));
         let count = 0;
         const filteredD = selectedFiles.filter(i => !i.id)
         const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
@@ -109,7 +114,9 @@ const NewPost = (props) => {
                     }
                     count++
                     if (count === files_.length) {
+                        dispatch(updateLoader('none'))
                         saveIncident();
+
                     }
                 });
 
@@ -157,25 +164,32 @@ const NewPost = (props) => {
 
     });
     const saveIncident = async e => {
+        dispatch(updateLoader(''))
+
         const user = await storage.getItem(USER_COOKIE);
-        console.log(user);
+        // console.log(user);
         let data = {
             childname: title, categoryId: parseInt(selectedCategory), sex: "M", age: 20, description, child_address: "mm", landmark, city, state, lga,
             isMobile: false, reporter_phone: phone.toString(), reporter_name: rname, media_file: "media_file", reporter_mail: email, media: allFiles, userId: user.payload.id
+
         };
         let url = `incident/create`;
         try {
             const rs = await request(url, 'POST', false, data);
             console.log(rs);
             if (rs.success === true) {
+                dispatch(updateLoader('none'))
+
                 props.showToast('success', 'Successfully saved');
             }
         } catch (err) {
             console.log(err);
             if (err.message === 'SMS Sending error Occured (check if you added a proper phone digit)') {
+                dispatch(updateLoader('none'))
                 props.showToast('error', err.message);
 
             } else {
+                dispatch(updateLoader('none'))
                 props.showToast('error', 'Failed to save');
 
             }

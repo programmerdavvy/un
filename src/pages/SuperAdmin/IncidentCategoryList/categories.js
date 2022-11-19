@@ -3,9 +3,10 @@ import { Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitl
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 function Categories(props) {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
     const [isEdit, setIsedit] = useState(false);
@@ -13,29 +14,34 @@ function Categories(props) {
     const isSuperAdmin = false
 
     const addCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, type: 'incident' };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
                 props.fetchCategories();
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Saved successfully ');
                 setName('');
                 setmodal(!modal);
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
     }
     const updateCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, id };
         let url = `category/edit`;
         try {
             const rs = await request(url, 'PATCH', false, data);
             if (rs.success === true) {
                 setIsedit(false);
+                dispatch(updateLoader('none'));
                 props.fetchCategories();
                 setName('');
                 setmodal(!modal);
@@ -43,6 +49,7 @@ function Categories(props) {
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             setIsedit(false);
             console.log(err);
             props.showToast('error', 'Failed to update')
@@ -50,14 +57,17 @@ function Categories(props) {
     }
     const onClickDelete = async id => {
         if (window.confirm('Are you sure!')) {
+            dispatch(updateLoader(''));
             try {
                 let url = `category/delete/?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchCategories();
+                    dispatch(updateLoader('none'));
                     props.showToast('success', 'Successfully Deleted');
                 }
             } catch (err) {
+                dispatch(updateLoader('none'));
                 console.log(err)
                 props.showToast('error', 'Failed to Delete');
             }

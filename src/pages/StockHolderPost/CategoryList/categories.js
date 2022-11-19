@@ -38,7 +38,8 @@ function Categories(props) {
         }
     }
     const updateCategory = async () => {
-        let data = { name };
+        dispatch(updateLoader(''))
+        let data = { name, type: 'post' };
         let url = `pages?id=${id}`;
         try {
             const rs = await request(url, 'PATCH', false, data);
@@ -47,10 +48,13 @@ function Categories(props) {
                 props.fetchCategories();
                 setName('');
                 setmodal(!modal);
+                dispatch(updateLoader('none'))
+
                 props.showToast('success', 'Updated successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'))
             setIsedit(false);
             console.log(err);
             props.showToast('error', 'Failed to update')
@@ -58,14 +62,18 @@ function Categories(props) {
     }
     const onClickDelete = async id => {
         if (window.confirm('Are you sure!')) {
+            dispatch(updateLoader(''))
+
             try {
                 let url = `pages/?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchCategories();
+                    dispatch(updateLoader('none'))
                     props.showToast('success', 'Successfully Deleted');
                 }
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err)
                 props.showToast('error', 'Failed to Delete');
             }

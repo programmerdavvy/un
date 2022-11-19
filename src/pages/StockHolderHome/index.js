@@ -46,6 +46,8 @@ const Dashboard = () => {
 
 
   const fetchIncident = useCallback(async page => {
+    dispatch(updateLoader(''));
+
     const p = page || 1;
 
     try {
@@ -59,13 +61,18 @@ const Dashboard = () => {
         setTotalreportedincidentbypercent(z.toFixed(2))
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         setMeta(rs.paging);
+        dispatch(updateLoader('none'));
+
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      dispatch(updateLoader('none'));
+
     }
   }, [rowsPerPage]);
 
   const fetchPosts = useCallback(async (page) => {
+    dispatch(updateLoader(''));
     let p = page || 1;
     let url = `sections/admin?page=${p}&limit=5&type=approved`;
 
@@ -79,8 +86,12 @@ const Dashboard = () => {
         setTotalreportedpostbypercent(z.toFixed(2))
         setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
         setMetaP(rs.paging);
+        dispatch(updateLoader('none'));
+
       }
     } catch (err) {
+      dispatch(updateLoader('none'));
+
       console.log(err);
       // showToast('error', 'Failed to fetch')
     }
@@ -88,7 +99,6 @@ const Dashboard = () => {
 
   const fetchDocuments = useCallback(async (page) => {
     dispatch(updateLoader(''));
-
     let p = page || 1;
 
     let url = `media?pageId=&id=&page=${p}&limit=5`;

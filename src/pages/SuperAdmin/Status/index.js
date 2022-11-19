@@ -6,10 +6,12 @@ import { Row, Col, Container } from 'reactstrap'
 import Breadcrumb from '../../../components/Common/Breadcrumb'
 import { request } from '../../../services/utilities'
 import Status from './status';
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 
 function Index() {
-
+    const dispatch = useDispatch();
     const [status, setStatus] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
@@ -18,6 +20,7 @@ function Index() {
 
 
     const fetchStatus = useCallback(async page => {
+        dispatch(updateLoader(''));
         const p = page || 1
         try {
             const url = `status`;
@@ -25,7 +28,10 @@ function Index() {
             setStatus(rs.result);
             setMeta(rs.paging)
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+            dispatch(updateLoader('none'));
+
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
         }
     }, [rowsPerPage]);

@@ -10,12 +10,17 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import { request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
+import { useDispatch } from 'react-redux';
+import { updateLoader } from '../../../store/actions';
 const storage = new SSRStorage();
+
+
 
 const NewIncident = (props) => {
     const {
         match: { params },
     } = props;
+    const dispatch = useDispatch();
 
     const [selectedFiles, setselectedFiles] = useState(null);
     const [selectedDocuments, setselectedDocuments] = useState([]);
@@ -35,6 +40,8 @@ const NewIncident = (props) => {
     }
 
     const uploadedFiles = () => {
+        dispatch(updateLoader(''));
+
         let count = 0;
         // const filteredD = selectedFiles.filter(i => !i.id)
         // const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
@@ -64,8 +71,9 @@ const NewIncident = (props) => {
                     }
                     count++
                     if (count === files_.length) {
-                        // props.showToast('success', 'Successfully uploaded');
                         savePost();
+                        dispatch(updateLoader('none'));
+
                     }
                 });
 
@@ -99,6 +107,7 @@ const NewIncident = (props) => {
         console.log(selectedMulti, tags)
     }
     const fetchPostById = useCallback(async () => {
+        dispatch(updateLoader(''));
         try {
             let url = `sections/admin?pageId=&id=${params?.id}`;
             const rs = await request(url, 'GET', false);
@@ -108,13 +117,12 @@ const NewIncident = (props) => {
                 setselectedCategory(rs.result?.categoryId);
                 setTitle(rs.result?.title);
                 setAllFiles(rs.result?.media)
-                // let tag = rs.result.tags.split(',');
-                // let tags = 
-                // console.log(tag)
-                // setselectedMulti(rs.result.tags)
+                dispatch(updateLoader('none'));
+
             }
-            console.log(rs);
+            // console.log(rs);
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
         }
     }, [params?.id]);
@@ -140,8 +148,10 @@ const NewIncident = (props) => {
         onSubmit: e => uploadedFiles(e)
     });
     const savePost = async e => {
+        dispatch(updateLoader(''));
+
         const user = await storage.getItem(USER_COOKIE);
-        console.log(user)
+        // console.log(user)
         let data = {
             pageId: selectedCategory, title, content: description, tags,
             media: allFiles, language: 'english', date: new Date()
@@ -155,9 +165,11 @@ const NewIncident = (props) => {
             console.log(rs)
 
             if (rs.success === true) {
-                props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully')
+                dispatch(updateLoader('none'));
+                props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
@@ -186,7 +198,6 @@ const NewIncident = (props) => {
         setselectedFiles(x);
     }
     useEffect(() => {
-
         if (params?.id !== null && params?.id !== undefined) {
             fetchPostById();
         }

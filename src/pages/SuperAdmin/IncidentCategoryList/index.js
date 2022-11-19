@@ -8,9 +8,12 @@ import "toastr/build/toastr.min.css"
 import { request } from '../../../services/utilities'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 
 function Index() {
+    const dispatch = useDispatch();
     const [categories, setCategories] = useState([]);
 
     const showToast = (error, message) => {
@@ -43,11 +46,14 @@ function Index() {
         else toastr.success(message)
     }
     const fetchCategories = useCallback(async () => {
+        dispatch(updateLoader(''));
         let url = `category?type=incident`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
+            dispatch(updateLoader('none'));
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to fetch');
 

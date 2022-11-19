@@ -31,6 +31,7 @@ const ProfileMenu = props => {
   }
   const loggedUser = async () => {
     let user = await storage.getItem(USER_COOKIE);
+    console.log(user)
     let value = user.payload.stakeholder
     setusername(value)
   }

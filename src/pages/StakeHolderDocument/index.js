@@ -10,10 +10,12 @@ import { request } from "../../services/utilities"
 import ReactPaginate from "react-paginate"
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../store/actions";
 
 
 function Index() {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
 
     const [selectedFiles, setselectedFiles] = useState([]);
@@ -74,6 +76,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchDocuments = useCallback(async (page) => {
+        dispatch(updateLoader(''))
         let p = page || 1;
 
         let url = `media?pageId=&id=&page=${p}&limit=10`;
@@ -83,9 +86,12 @@ function Index() {
                 setDocuments(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
                 setMeta(rs.paging);
+                dispatch(updateLoader('none'))
+
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
         }
     }, [rowsPerPage])
@@ -95,6 +101,7 @@ function Index() {
         setCurrentPage(page.selected + 1)
     }
     const onClickDelete = async id => {
+        dispatch(updateLoader(''))
         if (window.confirm('Are you sure!')) {
             let url = `media?id=${id}`;
             try {
@@ -102,8 +109,10 @@ function Index() {
                 if (rs.success === true) {
                     showToast('success', 'Deleted successfully');
                     fetchDocuments();
+                    dispatch(updateLoader('none'))
                 }
             } catch (err) {
+                dispatch(updateLoader('none'))
                 showToast('success', 'Deleted successfully');
                 console.log(err)
             }

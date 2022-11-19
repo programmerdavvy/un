@@ -8,21 +8,26 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import ReactPaginate from "react-paginate";
 import { request } from "../../../services/utilities";
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+
 
 const StakeHolder = (props) => {
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [organization, setOrganization] = useState(null)
     const [id, setId] = useState(null);
     const [isEdit, setIsedit] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [position, setPosition] = useState('');
+    const [position, setPosition] = useState(null);
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(null);
 
 
 
     const updateStakeholder = async () => {
+        dispatch(updateLoader(''))
         const data = { firstName, lastName, email, position, stakeholderId: organization, phone };
         console.log(data);
         try {
@@ -31,11 +36,14 @@ const StakeHolder = (props) => {
             if (rs.success === true) {
                 props.showToast('success', 'Updated successfully');
                 props.fetchStakeholders();
+                dispatch(updateLoader('none'))
+
                 setIsedit(false);
                 clearForm();
                 setmodal(!modal);
             }
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to update');
 
@@ -44,6 +52,7 @@ const StakeHolder = (props) => {
 
     const onClickDelete = async (id) => {
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader('none'))
             try {
                 const url = `users?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
@@ -51,10 +60,12 @@ const StakeHolder = (props) => {
                     props.showToast('success', 'Deleted successfully');
                     setIsedit(false);
                     props.fetchStakeholders();
+                    dispatch(updateLoader('none'))
                     setmodal(false);
 
                 }
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err);
                 props.showToast('error', 'Failed to delete');
 
@@ -70,7 +81,7 @@ const StakeHolder = (props) => {
             lastname: lastName,
             email: email,
             phone: phone,
-            position: position ,
+            position: position,
             // organization: '',
         },
         validationSchema: Yup.object({
@@ -91,6 +102,8 @@ const StakeHolder = (props) => {
             if (isEdit === true) {
                 updateStakeholder();
             } else {
+                dispatch(updateLoader(''))
+
                 const data = { firstName: e.firstname, lastname: e.lastname, email: e.email, phone: e.phone, position: e.position, stakeholderId: parseInt(organization) };
                 try {
                     let url = `users/register`;
@@ -98,12 +111,15 @@ const StakeHolder = (props) => {
                     if (rs.success === true) {
                         props.showToast('success', 'Registered successfully');
                         props.fetchStakeholders();
+                        dispatch(updateLoader('none'))
+
                         setIsedit(false);
                         clearForm();
                         setmodal(!modal);
                     }
 
                 } catch (err) {
+                    dispatch(updateLoader('none'))
                     console.log(err);
                     props.showToast('error', 'Failed to register');
                 }
@@ -247,7 +263,7 @@ const StakeHolder = (props) => {
                                             <Input
                                                 name="phone"
                                                 placeholder="Phone Numner"
-                                                type="phone"
+                                                type="number"
                                                 className="form-control"
                                                 id="validationCustom02"
                                                 onChange={e =>
@@ -294,7 +310,7 @@ const StakeHolder = (props) => {
                                     <Col md="6">
                                         <FormGroup className="mb-3">
                                             <Label htmlFor="validationCustom02">Select Organization</Label>
-                                            <div className="form-floating mb-3">
+                                            <div className=" mb-3">
                                                 <select
                                                     className="form-select"
                                                     id="floatingSelectGrid"
@@ -320,9 +336,7 @@ const StakeHolder = (props) => {
                                                 {/* {validation.touched.organization && validation.errors.organization ? (
                                                     <FormFeedback type="invalid">{validation.errors.organization}</FormFeedback>
                                                 ) : null} */}
-                                                <label htmlFor="floatingSelectGrid">
-                                                    Organization
-                                                </label>
+                                                
                                             </div>
                                         </FormGroup>
                                     </Col>
