@@ -5,8 +5,12 @@ import Gallery from './video';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { request } from '../../../services/utilities'
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+
 
 function Index() {
+    const dispatch = useDispatch();
 
     const [videos, setVideos] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -45,6 +49,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchVideos = useCallback(async (page) => {
+        dispatch(updateLoader(''));
         const p = page || 1
         let url = `sections/admin?pageId=11&page=${p}&limit=10`;
         try {
@@ -52,9 +57,12 @@ function Index() {
             if (rs.success === true) {
                 setVideos(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
-                setMeta(rs.paging)
+                setMeta(rs.paging);
+                dispatch(updateLoader('none'));
+
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to fetch');
 

@@ -5,8 +5,11 @@ import Event from './event';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { request } from '../../../services/utilities';
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function Index() {
+    const dispatch = useDispatch();
     const [events, setEvents] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
@@ -43,6 +46,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchEvents = useCallback(async (page) => {
+        dispatch(updateLoader(''));
         const p = page || 1
         let url = `sections/admin?pageId=2`;
         // &page=${p}&limit=10
@@ -52,8 +56,11 @@ function Index() {
                 setEvents(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
                 setMeta(rs.paging);
+                dispatch(updateLoader('none'));
+
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to fetch');
 

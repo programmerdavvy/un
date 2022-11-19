@@ -3,18 +3,23 @@ import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, Uncon
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { request } from "../../../services/utilities";
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 const Comment = (props) => {
+    const dispatch = useDispatch();
 
     const approveComment = async id => {
+        dispatch(updateLoader(''));
         const url = `comments/approve/?id=${id}`;
         try {
             const rs = await request(url, 'PATCH', false);
             if (rs.success === true) {
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Comment approved successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to approve')
         }
@@ -22,13 +27,16 @@ const Comment = (props) => {
     const onClickDelete = async id => {
         const url = `comments/delete/?id=${id}`;
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''));
             try {
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchComment();
+                dispatch(updateLoader('none'));
                     props.showToast('success', 'Deleted  successfully');
                 }
             } catch (err) {
+                dispatch(updateLoader('none'));
                 console.log(err);
                 props.showToast('error', 'Failed to delete')
             }
@@ -99,7 +107,7 @@ const Comment = (props) => {
                                                                 </Link>
                                                             </li>
 
-                                                            <li className="list-inline-item">
+                                                            {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
                                                                     className="text-dark"
@@ -113,7 +121,7 @@ const Comment = (props) => {
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
-                                                            </li>
+                                                            </li> */}
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"

@@ -6,32 +6,77 @@ import {
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function GalleryCategory(props) {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
+    const [id, setId] = useState(null);
 
 
     const addCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, pageId: 3 };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
-                props.showToast('success', 'Saved successfully ');
                 props.fetchCategories();
+                dispatch(updateLoader('none'))
                 setmodal(!modal);
-
+                props.showToast('success', 'Saved successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
     }
+    const updateCategory = async () => {
+        dispatch(updateLoader(''))
 
+        let data = { name, id };
+        let url = `category/edit`;
+        try {
+            const rs = await request(url, 'PATCH', false, data);
+            if (rs.success === true) {
+                setId(null);
+                setName('');
+                props.fetchCategories();
+                dispatch(updateLoader('none'))
+                setmodal(!modal);
+                props.showToast('success', 'Updated successfully ');
+            }
+
+        } catch (err) {
+            dispatch(updateLoader('none'))
+            console.log(err);
+            props.showToast('error', 'Failed to update')
+        }
+    }
+    const onClickDelete = async (id) => {
+        if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''))
+            let url = `category/delete/?id=${id}`;
+            try {
+                const rs = await request(url, 'DELETE', false);
+                console.log(rs);
+                if (rs.success === true) {
+                    props.fetchCategories();
+                    dispatch(updateLoader('none'))
+                    props.showToast('success', 'Deleted successfully ');
+                }
+
+            } catch (err) {
+                dispatch(updateLoader('none'))
+                console.log(err);
+                props.showToast('error', 'Failed to delete')
+            }
+        }
+    }
     return (
         <React.Fragment>
             <Modal
@@ -45,12 +90,13 @@ function GalleryCategory(props) {
                 <ModalHeader
                     className=""
                     toggle={() => {
-                        setmodal(!modal)
+                        setId(null);
+                        setName('');
+                        setmodal(!modal);
                     }}
                 >
-                    Add New Category
+                    {id === null ? 'Add New Category' : 'Edit Category'}
                 </ModalHeader>
-
                 <ModalBody>
                     <Card>
                         <CardBody>
@@ -63,6 +109,7 @@ function GalleryCategory(props) {
                                                 type="text"
                                                 className="form-control"
                                                 onChange={e => setName(e.target.value)}
+                                                value={name}
                                                 id="name"
                                                 placeholder="Enter Gallery Category"
                                             />
@@ -72,8 +119,8 @@ function GalleryCategory(props) {
                                 <Row>
                                     <Col lg={12}>
                                         <div className="text-end">
-                                            <button type="button" onClick={addCategory} className="btn btn-success">
-                                                Save
+                                            <button type="button" onClick={id === null ? addCategory : updateCategory} className="btn btn-success">
+                                                {id === null ? 'Save' : 'Update'}
                                             </button>
                                         </div>
                                     </Col>
@@ -92,7 +139,7 @@ function GalleryCategory(props) {
                                     <h4>Gallery Category</h4>
                                 </div>
                                 <div className=''>
-                                    <Button onClick={() => setmodal(!modal)} className="btn btn-success">
+                                    <Button onClick={() => setmodal(!modal)} className="btn" color='primary'>
                                         Add New
                                     </Button>
                                 </div>
@@ -116,29 +163,16 @@ function GalleryCategory(props) {
                                                     <td>
                                                         <div className="d-flex gap-3 users">
                                                             <ul className="list-inline font-size-20 contact-links mb-0">
+
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
                                                                         className="text-dark"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   // handleUserClick(users)
-                                                                    // }}
-                                                                    >
-                                                                        <i className="uil-expand-arrows-alt font-size-18" id="edittooltip" />
-                                                                        <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                            View Details
-                                                                        </UncontrolledTooltip>
-                                                                    </Link>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <Link
-                                                                        to="#"
-                                                                        className="text-dark"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   // handleUserClick(users)
-                                                                    // }}
+                                                                        onClick={() => {
+                                                                            setName(e.name);
+                                                                            setId(e.id);
+                                                                            setmodal(!modal)
+                                                                        }}
                                                                     >
                                                                         <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                                         <UncontrolledTooltip placement="top" target="edittooltip">
@@ -149,10 +183,9 @@ function GalleryCategory(props) {
                                                                 <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
-                                                                        // onClick={() => {
-                                                                        //   const users = cellProps.row.original
-                                                                        //   onClickDelete(users)
-                                                                        // }}
+                                                                        onClick={() => {
+                                                                            onClickDelete(e.id)
+                                                                        }}
                                                                         className="text-dark"
 
                                                                     >
@@ -194,26 +227,7 @@ function GalleryCategory(props) {
                                                 1
                                             </PaginationLink>
                                         </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                2
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem disabled>
-                                            <PaginationLink href="#">
-                                                3
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                4
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem>
-                                            <PaginationLink href="#">
-                                                5
-                                            </PaginationLink>
-                                        </PaginationItem>
+
                                         <PaginationItem>
                                             <PaginationLink
                                                 href="#"

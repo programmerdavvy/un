@@ -5,9 +5,11 @@ import { request } from "../../../services/utilities";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import ReactPaginate from "react-paginate";
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 const IndividualSubmission = (props) => {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [id, setId] = useState(null);
@@ -31,6 +33,7 @@ const IndividualSubmission = (props) => {
             // categories: Yup.string().required("Please Select Categories")
         }),
         onSubmit: async (values) => {
+            dispatch(updateLoader(''));
             if (id === null) {
                 let data = {
                     title: values.title,
@@ -48,11 +51,14 @@ const IndividualSubmission = (props) => {
                         setId(null);
                         clearForm();
                         props.fetchVideos()
+                        dispatch(updateLoader('none'));
+
                         props.showToast('success', 'Saved successfully ');
                         setmodal(!modal);
                     }
 
                 } catch (err) {
+                    dispatch(updateLoader('none'));
                     console.log(err);
                     props.showToast('error', 'Failed to save')
                 }
@@ -69,18 +75,22 @@ const IndividualSubmission = (props) => {
         setVideoId(null);
     }
     const onApprovePost = async id => {
+        dispatch(updateLoader(''));
         let url = `sections/approve?sectionId=${id}`
         try {
             const rs = await request(url, 'GET', false);
             if (rs.success === true) {
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Successfully Approved');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to Approve');
         }
     }
     const onClickDelete = async id => {
+        dispatch(updateLoader(''));
         let url = `sections?id=${id}`
         try {
             const rs = await request(url, 'DELETE', false);
@@ -88,15 +98,18 @@ const IndividualSubmission = (props) => {
                 setId(null);
                 clearForm();
                 props.fetchVideos();
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Deleted Successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to delete');
 
         }
     }
     const updateVideo = async () => {
+        dispatch(updateLoader(''));
         let data = { title, categoryId: selectedCategory }
         let data2 = { link }
 
@@ -111,9 +124,11 @@ const IndividualSubmission = (props) => {
                 clearForm();
                 setmodal(!modal);
                 props.fetchVideos();
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Deleted Successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to delete');
 
@@ -295,7 +310,7 @@ const IndividualSubmission = (props) => {
                                                                     to="#"
                                                                     className="text-dark"
                                                                     onClick={() => {
-                                                                       onApprovePost(e.id)
+                                                                        onApprovePost(e.id)
                                                                     }}
                                                                 >
                                                                     <i className="uil-check font-size-18" id="edittooltipe" />

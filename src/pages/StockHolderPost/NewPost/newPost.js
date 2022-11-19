@@ -40,6 +40,10 @@ const NewIncident = (props) => {
     }
 
     const uploadedFiles = () => {
+        if (selectedFiles.length >= !1) {
+            props.showToast('error', 'Kindly attach a media file or document')
+
+        }
         dispatch(updateLoader(''));
 
         let count = 0;

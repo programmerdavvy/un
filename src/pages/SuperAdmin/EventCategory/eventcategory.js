@@ -6,32 +6,38 @@ import {
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function EventCategory(props) {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
     const [id, setId] = useState(null);
 
 
     const addCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, pageId: 2 };
         let url = `category`;
         try {
             const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
                 props.fetchCategories();
+                dispatch(updateLoader('none'))
                 setmodal(!modal);
                 props.showToast('success', 'Saved successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
     }
     const updateCategory = async () => {
+        dispatch(updateLoader(''))
+
         let data = { name, id };
         let url = `category/edit`;
         try {
@@ -40,27 +46,32 @@ function EventCategory(props) {
                 setId(null);
                 setName('');
                 props.fetchCategories();
+                dispatch(updateLoader('none'))
                 setmodal(!modal);
                 props.showToast('success', 'Updated successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to update')
         }
     }
     const onClickDelete = async (id) => {
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''))
             let url = `category/delete/?id=${id}`;
             try {
                 const rs = await request(url, 'DELETE', false);
                 console.log(rs);
                 if (rs.success === true) {
                     props.fetchCategories();
+                    dispatch(updateLoader('none'))
                     props.showToast('success', 'Deleted successfully ');
                 }
 
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err);
                 props.showToast('error', 'Failed to delete')
             }

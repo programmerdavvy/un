@@ -5,9 +5,11 @@ import GalleryCategory from './gallerycategory'
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { request } from '../../../services/utilities'
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function Index() {
+    const dispatch = useDispatch();
     const [categories, setCategories] = useState([]);
 
     const showToast = (error, message) => {
@@ -40,12 +42,15 @@ function Index() {
         else toastr.success(message)
     }
     const fetchCategories = useCallback(async () => {
+        dispatch(updateLoader(''))
         let url = `category?pageId=3`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
-            console.log(rs);
+            // console.log(rs);
+            dispatch(updateLoader('none'))
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             showToast('error', 'Failed to fetch');
 
@@ -62,7 +67,7 @@ function Index() {
                 <Breadcrumb title="gallery category" breadcrumbItem="All Gallery Category" />
                 <Container>
                     <Row>
-                        <Col> 
+                        <Col>
                             <GalleryCategory categories={categories} fetchCategories={fetchCategories} showToast={showToast} />
                         </Col>
                     </Row>
