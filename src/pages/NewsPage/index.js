@@ -158,10 +158,12 @@ const InvoiceDetail = props => {
                     onClick={handleComment}
                   >
                     {loading ? (
-                              <Spinner type="grow" size="sm" color="success" />
+                              <Spinner color="primary" style={{height:'20px', width:'20px'}}/>
                             ) : (
                               <Translate>Post Comment</Translate>
                             )}
+
+                            
                     
                   </Button>
                 </div>

@@ -14,10 +14,12 @@ import {
 import newImage1 from "../../assets/images/un/footprint1.png"
 import newImage2 from "../../assets/images/un/footprint2.png"
 import moment from "moment"
+import { Translate } from "react-auto-translate"
+
 
 const SeeAlso = props => {
   const { news } = props
-  console.log('sabi', news)
+  console.log("sabi", news)
   return (
     <Row>
       {news?.map((news, index) => (
@@ -47,6 +49,14 @@ const SeeAlso = props => {
                 <CardText className="">
                   {news.content.slice(0, 300)}...
                 </CardText>
+                <div className="d-flex p-2 justify-content-start">
+                  <Link
+                    to={`/news/${news?.id}/${news?.title.split(" ").join("-")}`}
+                    className="btn btn-outline-success waves-effect waves-light w-25 text-dark font-weight-bold"
+                  >
+                    <Translate>Read More</Translate>
+                  </Link>
+                </div>
               </CardBody>
             </Col>
           </Row>

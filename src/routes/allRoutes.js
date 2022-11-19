@@ -53,6 +53,7 @@ import Video from "../pages/Video/index"
 import Picture from "../pages/Picture/index"
 import ReportIncident from "../pages/ReportIncident/index"
 import Track from "../pages/Track/index"
+import Event from "../pages/Event/index"
 
 
 
@@ -199,6 +200,7 @@ const userRoutes = [
   { path: "/pictures", component: Picture },
   { path: "/report-incident", component: ReportIncident },
   { path: "/track", component: Track },
+  { path: "/event", component: Event },
 
   { path: "/calendar", component: Calendar },
 
