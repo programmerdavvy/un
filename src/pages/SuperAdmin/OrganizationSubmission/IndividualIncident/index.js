@@ -3,8 +3,12 @@ import { Container } from 'reactstrap'
 import Breadcrumbs from "../../../../components/Common/Breadcrumb";
 import OrganizationSubmission from './organizationSubmission';
 import { request } from '../../../../services/utilities';
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../../store/actions";
+
 
 function Index() {
+    const dispatch = useDispatch();
     const [organizationSubmission, setOrganizationSubmission] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
@@ -13,6 +17,7 @@ function Index() {
 
 
     const fetchSubmission = useCallback(async (page) => {
+        dispatch(updateLoader(''))
         const p = page || 1;
         try {
             let url = `incident/all/specific/?action=stakeholder`;
@@ -20,7 +25,10 @@ function Index() {
             setMeta(rs.paging);
             setOrganizationSubmission(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
+            dispatch(updateLoader('none'))
+
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
         }
     }, [rowsPerPage]);

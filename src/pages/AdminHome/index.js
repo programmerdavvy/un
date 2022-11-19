@@ -16,7 +16,8 @@ import TopUsers from './topuser';
 import PostTable from './latest-transaction';
 import { request } from "../../services/utilities";
 import MiniWidget from "./mini-widget";
-
+import { useDispatch } from "react-redux";
+import { updateLoader } from "../../store/actions";
 
 const options2 = {
   fill: {
@@ -49,6 +50,7 @@ const options2 = {
 
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const [mobileCount, setMobileCount] = useState(0);
   const [individualCount, setIndividualCount] = useState(0);
   const [organizationCount, setOrganizationCount] = useState(0);
@@ -67,6 +69,7 @@ const Dashboard = () => {
 
 
   const fetchMobileCount = useCallback(async () => {
+    dispatch(updateLoader(''))
     try {
       const url = `incident/get/count/?action=mobile`;
       const url_individual_sub = `incident/all/specific/?action=individual`;
@@ -121,24 +124,30 @@ const Dashboard = () => {
 
 
         ]
-        console.log(array)
-        setPercentage(array)
+        // console.log(array)
+        setPercentage(array);
+        dispatch(updateLoader('none'))
+
       }
 
     } catch (err) {
+      dispatch(updateLoader('none'))
       console.log(err);
     }
   }, []);
 
   const fetchAwaitingPosts = useCallback(async page => {
+    dispatch(updateLoader(''));
     const p = page || 1;
     try {
-      const url = `sections/admin?pageId=4&page=${p}&limit=5`;
+      const url = `sections/admin?pageId=&page=${p}&limit=5`;
       const rs = await request(url, 'GET', false);
       setPosts(rs.result);
       setCount(Math.ceil(rs.paging?.total / rowsPerPage));
       setMeta(rs.paging);
+      dispatch(updateLoader('none'))
     } catch (err) {
+      dispatch(updateLoader('none'))
       console.log(err);
     }
   }, [rowsPerPage]);

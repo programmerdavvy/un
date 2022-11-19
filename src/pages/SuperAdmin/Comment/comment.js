@@ -3,18 +3,23 @@ import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, Uncon
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { request } from "../../../services/utilities";
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 const Comment = (props) => {
+    const dispatch = useDispatch();
 
     const approveComment = async id => {
+        dispatch(updateLoader(''));
         const url = `comments/approve/?id=${id}`;
         try {
             const rs = await request(url, 'PATCH', false);
             if (rs.success === true) {
+                dispatch(updateLoader('none'));
                 props.showToast('success', 'Comment approved successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to approve')
         }
@@ -22,13 +27,16 @@ const Comment = (props) => {
     const onClickDelete = async id => {
         const url = `comments/delete/?id=${id}`;
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''));
             try {
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchComment();
+                dispatch(updateLoader('none'));
                     props.showToast('success', 'Deleted  successfully');
                 }
             } catch (err) {
+                dispatch(updateLoader('none'));
                 console.log(err);
                 props.showToast('error', 'Failed to delete')
             }
@@ -63,14 +71,14 @@ const Comment = (props) => {
                                 <tbody>
                                     {props.comments.map((e, i) => {
                                         return (
-                                            <tr>
+                                            <tr className="text-capitalize">
                                                 <td>
                                                     <div>
-                                                        <span>James John</span>
+                                                        <span>{e.name}</span>
                                                     </div>
-                                                    <div>
+                                                    {/* <div>
                                                         <span>james@gmail.com</span>
-                                                    </div>
+                                                    </div> */}
                                                 </td>
                                                 <td>
                                                     {e.comment}
@@ -92,14 +100,14 @@ const Comment = (props) => {
                                                                         approveComment(e.id);
                                                                     }}
                                                                 >
-                                                                    <i className="uil-check font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-check font-size-18" id="edittooltip1" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip1">
                                                                         approve
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li>
 
-                                                            <li className="list-inline-item">
+                                                            {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
                                                                     className="text-dark"
@@ -108,12 +116,12 @@ const Comment = (props) => {
                                                                 //   // handleUserClick(users)
                                                                 // }}
                                                                 >
-                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip2" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip2">
                                                                         Edit
                                                                     </UncontrolledTooltip>
                                                                 </Link>
-                                                            </li>
+                                                            </li> */}
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"

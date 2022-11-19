@@ -9,9 +9,12 @@ import { request } from '../../../services/utilities';
 import moment from 'moment';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+
 
 const NewEvent = (props) => {
-
+    const dispatch = useDispatch();
     const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null)
 
@@ -22,15 +25,9 @@ const NewEvent = (props) => {
     const [endTime, setEndTime] = useState('');
     const [venue, setVenue] = useState('');
     const [title, setTitle] = useState('');
-
+    const [allFiles] = useState([]);
 
     function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        )
         setselectedFiles(files)
     }
 
@@ -68,38 +65,68 @@ const NewEvent = (props) => {
             // categories: Yup.string().required("Please Select Categories")
         }),
 
-        onSubmit: e => saveEvent()
+        onSubmit: e => uploadedFiles()
     });
+    const uploadedFiles = () => {
+        dispatch(updateLoader(''));
+        if (selectedFiles.length >= !1) {
+            return saveEvent()
+        }
 
+        let count = 0;
+        // const filteredD = selectedFiles.filter(i => !i.id)
+        // const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+        const files_ = selectedFiles;
+
+        const formData = new FormData();
+        for (let i = 0; i < files_.length; i++) {
+            let file = files_[i];
+            // console.log(file)
+            formData.append("file", file);
+            formData.append("upload_preset", "geekyimages");
+            fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+                method: "POST",
+                body: formData
+            })
+                .then((response) => {
+                    console.log(response)
+                    return response.json();
+                })
+                .then((data) => {
+                    let dataFile = {
+                        name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
+                            'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : ''
+                    };
+                    if (dataFile?.name !== null) {
+                        allFiles.push(dataFile);
+                    }
+                    count++
+                    if (count === files_.length) {
+                        dispatch(updateLoader('none'));
+                        saveEvent();
+
+                    }
+                });
+
+        }
+    }
     const saveEvent = async () => {
-
+        dispatch(updateLoader(''));
         const data = {
             pageId: 2, title: title, content: description, startDate, endDate, date: startDate,
-            media: [{
-                name: 'media one',
-                link: 'https://res.cloudinary.com/doxlmaiuh/image/upload/v1667309064/geekyimages/zrf8efc9086ivqfjtb4t.png',
-                type: 'image',
-                extension: 'png'
-            },
-            {
-                link: 'https://res.cloudinary.com/doxlmaiuh/video/upload/v1667435484/videos/video_qqe7ie.mp4',
-                name: 'media two',
-                type: 'video',
-                extension: 'mp4'
-            }
-            ],
+            media: allFiles,
             location: venue,
             categoryId: parseInt(selectedCategory)
         };
-        console.log(data);
         try {
             let url = `sections`;
             const rs = await request(url, 'POST', false, data);
-            console.log(rs);
-            if (rs.result === 'success') {
+            if (rs.success === true) {
+                dispatch(updateLoader('none'));
                 showToast('success', 'Successfully Saved');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to save');
 
@@ -394,7 +421,7 @@ const NewEvent = (props) => {
                                                                             height="80"
                                                                             className="avatar-sm rounded bg-light"
                                                                             alt={f.name}
-                                                                            src={f.preview}
+                                                                            src={URL.createObjectURL(f)}
                                                                         />
                                                                     </Col>
                                                                     <Col>

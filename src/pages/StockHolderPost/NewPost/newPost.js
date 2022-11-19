@@ -10,17 +10,24 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import { request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
+import { useDispatch } from 'react-redux';
+import { updateLoader } from '../../../store/actions';
 const storage = new SSRStorage();
+
+
 
 const NewIncident = (props) => {
     const {
         match: { params },
     } = props;
+    const dispatch = useDispatch();
 
     const [selectedFiles, setselectedFiles] = useState(null);
     const [selectedDocuments, setselectedDocuments] = useState([]);
     const [isChecked, setIsChecked] = useState(false)
     const [selectedMulti, setselectedMulti] = useState(null)
+    const [selectedTags, setSelectedTags] = useState([])
+
     const [tags, setTags] = useState('');
     const [description, setDescription] = useState('');
     const [post, setPost] = useState(null);
@@ -33,9 +40,17 @@ const NewIncident = (props) => {
     }
 
     const uploadedFiles = () => {
+        if (selectedFiles.length >= !1) {
+            props.showToast('error', 'Kindly attach a media file or document')
+
+        }
+        dispatch(updateLoader(''));
+
         let count = 0;
-        const filteredD = selectedFiles.filter(i => !i.id)
-        const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+        // const filteredD = selectedFiles.filter(i => !i.id)
+        // const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
+        const files_ = selectedFiles;
+
         const formData = new FormData();
         for (let i = 0; i < files_.length; i++) {
             let file = files_[i];
@@ -60,8 +75,9 @@ const NewIncident = (props) => {
                     }
                     count++
                     if (count === files_.length) {
-                        // props.showToast('success', 'Successfully uploaded');
                         savePost();
+                        dispatch(updateLoader('none'));
+
                     }
                 });
 
@@ -81,9 +97,21 @@ const NewIncident = (props) => {
     }
     function handleMulti(selectedMulti) {
         setselectedMulti(selectedMulti);
-        setTags(selectedMulti)
+
+        selectedMulti.forEach(e => {
+            console.log(e.value);
+            let item = selectedMulti.find(x => x === e.value);
+            if (!item) {
+                selectedTags.push(e.value);
+                let strignifyTags = selectedTags.toString();
+                setTags(strignifyTags);
+            }
+        })
+
+        console.log(selectedMulti, tags)
     }
     const fetchPostById = useCallback(async () => {
+        dispatch(updateLoader(''));
         try {
             let url = `sections/admin?pageId=&id=${params?.id}`;
             const rs = await request(url, 'GET', false);
@@ -93,13 +121,12 @@ const NewIncident = (props) => {
                 setselectedCategory(rs.result?.categoryId);
                 setTitle(rs.result?.title);
                 setAllFiles(rs.result?.media)
-                // let tag = rs.result.tags.split(',');
-                // let tags = 
-                // console.log(tag)
-                // setselectedMulti(rs.result.tags)
+                dispatch(updateLoader('none'));
+
             }
-            console.log(rs);
+            // console.log(rs);
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
         }
     }, [params?.id]);
@@ -109,15 +136,15 @@ const NewIncident = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            title
-            // description: ''
+            title,
+            description
             // city: '',
             // state: '',
             // zip: '',
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Title")
-            // description: Yup.string().required("Please Enter Paragraph"),
+            title: Yup.string().required("Please Enter Title"),
+            description: Yup.string().required("Please Enter Paragraph")
             // city: Yup.string().required("Please Enter Your City"),
             // state: Yup.string().required("Please Enter Your State"),
             // zip: Yup.string().required("Please Enter Your Zip"),
@@ -125,43 +152,46 @@ const NewIncident = (props) => {
         onSubmit: e => uploadedFiles(e)
     });
     const savePost = async e => {
+        dispatch(updateLoader(''));
+
         const user = await storage.getItem(USER_COOKIE);
+        // console.log(user)
         let data = {
-            pageId: 4, title, content: description, tags: selectedMulti[0].value,
-            media: allFiles, language: 'english', date: new Date(),
-            categoryId: selectedCategory
+            pageId: selectedCategory, title, content: description, tags,
+            media: allFiles, language: 'english', date: new Date()
+            // categoryId: selectedCategory
             // stakeholderId: user.payload.id
         }
+        console.log(data);
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
             const rs = await request(url, 'POST', false, data);
             console.log(rs)
 
             if (rs.success === true) {
-                props.showToast('success', params?.id === undefined || params?.id === null ? 'Updated Successfully' : 'Saved Successfully')
+                dispatch(updateLoader('none'));
+                props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
             }
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
     }
     const optionGroup = [
         {
-            label: "Picnic",
+            label: "TAGS",
             options: [
-                { label: "Mustard", value: "Mustard" },
-                { label: "Ketchup", value: "Ketchup" },
-                { label: "Relish", value: "Relish" },
+                { label: "UN", value: "UN" },
+                { label: "NEWS", value: "NEWS" },
+                { label: "NIGERIA", value: "NIGERIA" },
+
+                { label: "PEACE", value: "PEACE" },
+                { label: "SECURITY", value: "SECURITY" },
+                { label: "HUMANITARIAN ADIF", value: "HUMANITARIAN AID" },
+                { label: "SDGs", value: "SDGs" },
             ],
-        },
-        {
-            label: "Camping",
-            options: [
-                { label: "Tent", value: "Tent" },
-                { label: "Flashlight", value: "Flashlight" },
-                { label: "Toilet Paper", value: "Toilet Paper" },
-            ],
-        },
+        }
     ]
 
     const onChangeDocument = e => {
@@ -172,7 +202,6 @@ const NewIncident = (props) => {
         setselectedFiles(x);
     }
     useEffect(() => {
-
         if (params?.id !== null && params?.id !== undefined) {
             fetchPostById();
         }
@@ -239,7 +268,7 @@ const NewIncident = (props) => {
                                 </Row>
                                 <Row>
 
-                                    <Col xl={2} className='d-flex'>
+                                    <Col xl={12} className='d-flex'>
                                         <div>Categories:</div>
                                         {props.categories?.map(e => {
                                             return (
@@ -264,7 +293,7 @@ const NewIncident = (props) => {
                                                             }}
                                                         />
                                                         <Label
-                                                            className="form-check-label text-capitalize"
+                                                            className="form-check-label text-lowercase"
                                                             htmlFor={`invalidCheck${e.id}`}
                                                         >
                                                             {" "}
@@ -318,19 +347,19 @@ const NewIncident = (props) => {
                                         <FormGroup className="mb-3">
                                             <Label htmlFor="validationCustom02">Paragraph</Label>
                                             {/* <Input
-                                                        name="description"
-                                                        placeholder="Paragraph"
-                                                        type="textarea"
-                                                        className="form-control"
-                                                        id="validationCustom02"
-                                                        rows="10"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.description || ""}
-                                                        invalid={
-                                                            validation.touched.description && validation.errors.description ? true : false
-                                                        }
-                                                    /> */}
+                                                name="description"
+                                                placeholder="Paragraph"
+                                                type="textarea"
+                                                className="form-control"
+                                                id="validationCustom02"
+                                                rows="10"
+                                                onChange={e => setDescription(e.target.value)}
+                                                onBlur={validation.handleBlur}
+                                                value={validation.values.description || ""}
+                                                invalid={
+                                                    validation.touched.description && validation.errors.description ? true : false
+                                                }
+                                            /> */}
                                             <Editor
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"

@@ -312,7 +312,7 @@ const userRoutes = [
     path: "/",
     exact: true,
     // component: () => <Redirect to="/dashboard" />
-    component: () => <Redirect to="/admin" />
+    component: () => <Redirect to="/home" />
   },
 ];
 // note the route is vice versa

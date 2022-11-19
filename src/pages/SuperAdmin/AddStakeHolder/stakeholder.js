@@ -6,10 +6,69 @@ import {
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+import toastr from "toastr"
+import "toastr/build/toastr.min.css"
+import { request } from "../../../services/utilities";
+import { useEffect, useCallback } from "react";
 
 const StakeHolder = () => {
-    const [modal, setmodal] = useState(false);
+    const dispatch = useDispatch();
+    const [organization, setOrganization] = useState(null);
+    const [organizations, setOrganizations] = useState(null);
+
+    const fetchOrganizations = useCallback(async (page) => {
+        dispatch(updateLoader(''));
+        const p = page || 1;
+        try {
+            let url_org = `stakeholders`;
+            const rs_org = await request(url_org, 'GET', false);
+            setOrganizations(rs_org.result);
+            dispatch(updateLoader('none'));
+
+        } catch (err) {
+            dispatch(updateLoader('none'));
+            console.log(err);
+        }
+    }, []);
+    const showToast = (error, message) => {
+        let positionClass = "toast-top-right"
+        let toastType
+        let showMethod = 'fadeIn'
+
+        toastr.options = {
+            positionClass: positionClass,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            closeButton: false,
+            debug: false,
+            progressBar: false,
+            preventDuplicates: true,
+            newestOnTop: true,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: showMethod,
+            hideMethod: 'fadeOut',
+            showDuration: 300,
+            hideDuration: 1000
+        }
+
+        // setTimeout(() => toastr.success(`Settings updated `), 300)
+        //Toaster Types
+        // if (toastType === "info") toastr.info(message, title)
+        // else if (toastType === "warning") toastr.warning(message, title)
+        if (error === "error") toastr.error(message)
+        else toastr.success(message)
+    }
+    const clearForm = () => {
+        validation.values.firstname = '';
+        validation.values.lastname = ''
+        validation.values.email = ''
+        validation.values.phone = ''
+        validation.values.position = ''
+        setOrganization(null);
+    }
 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
@@ -21,7 +80,7 @@ const StakeHolder = () => {
             email: '',
             phone: '',
             position: '',
-            organization: '',
+            organization
         },
         validationSchema: Yup.object({
             firstname: Yup.string().required("Please Enter Your First Name"),
@@ -30,18 +89,39 @@ const StakeHolder = () => {
                 .email("Must be a valid Email")
                 .max(255)
                 .required("Email is required"),
-            phone: Yup.number().required(
-                "Please Enter Phone Number"
-            ).max(12),
-            organization: Yup.string().required("Please Select Organization"),
-            position: Yup.string().required("Please Enter Position"),
+            phone: Yup.number()
+                // .max(12)
+                .required("Please Enter Phone Number"),
+            // organization: Yup.string().required("Please Select Organization"),
+            position: Yup.string().required("Please Enter Position")
 
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (e) => {
+            if (organization === null) {
+                return showToast('error', 'Kindly select an organization');
+            }
+            dispatch(updateLoader(''))
+
+            const data = { firstName: e.firstname, lastname: e.lastname, email: e.email, phone: e.phone, position: e.position, stakeholderId: parseInt(organization) };
+            try {
+                let url = `users/register`;
+                const rs = await request(url, 'POST', false, data);
+                if (rs.success === true) {
+                    showToast('success', 'Registered successfully');
+                    dispatch(updateLoader('none'))
+                    clearForm();
+                }
+
+            } catch (err) {
+                dispatch(updateLoader('none'))
+                console.log(err);
+                showToast('error', 'Failed to register');
+            }
         }
     });
-
+    useEffect(() => {
+        fetchOrganizations()
+    }, [fetchOrganizations])
 
     return (
 
@@ -167,7 +247,7 @@ const StakeHolder = () => {
                         <Col md="6">
                             <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom02">Select Organization</Label>
-                                <div className="form-floating mb-3">
+                                <div className="mb-3">
                                     <select
                                         className="form-select"
                                         id="floatingSelectGrid"
@@ -175,24 +255,24 @@ const StakeHolder = () => {
                                         name="category"
                                         style={{ height: '30px' }}
                                         // id="validationCustom01"
-                                        onChange={validation.handleChange}
-                                        onBlur={validation.handleBlur}
-                                        value={validation.values.organization || ""}
-                                        invalid={
-                                            validation.touched.organization && validation.errors.organization ? true : false
-                                        }
+                                        onChange={e => setOrganization(e.target.value)}
+                                    // onBlur={validation.handleBlur}
+                                    // value={validation.values.organization || ""}
+                                    // invalid={
+                                    //     validation.touched.organization && validation.errors.organization ? true : false
+                                    // }
                                     >
                                         <option>Select Organization</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        {organizations?.map(e => {
+                                            return (
+                                                <option key={e.id} value={e.id}>{e.name}</option>
+                                            )
+                                        })}
+
                                     </select>
-                                    {validation.touched.organization && validation.errors.organization ? (
-                                        <FormFeedback type="invalid">{validation.errors.organization}</FormFeedback>
-                                    ) : null}
-                                    <label htmlFor="floatingSelectGrid">
-                                        Organization
-                                    </label>
+                                    {/* {validation.touched.organization && validation.errors.organization ? (
+                                                    <FormFeedback type="invalid">{validation.errors.organization}</FormFeedback>
+                                                ) : null} */}
                                 </div>
                             </FormGroup>
                         </Col>

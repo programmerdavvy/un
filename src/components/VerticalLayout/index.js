@@ -16,12 +16,15 @@ import Header from "./AdminHeader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Rightbar from "../CommonForBoth/Rightbar";
-
+import { Spinner } from "reactstrap";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 const Layout = (props) => {
   const dispatch = useDispatch();
+  const { loader } = useSelector((state) => ({
+    loader: state.visibility.show
+  }));
 
   const {
     isPreloader,
@@ -84,7 +87,7 @@ const Layout = (props) => {
       document.getElementById("preloader").style.display = "none";
       document.getElementById("status").style.display = "none";
     }
-  }, [isPreloader,hideRightbar]);
+  }, [isPreloader, hideRightbar]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -134,6 +137,8 @@ const Layout = (props) => {
       </div>
       <div id="layout-wrapper">
         <Header toggleMenuCallback={toggleMenuCallback} />
+        <Spinner className="fs-14 float-end mx-2" style={{ marginTop: '70px', display: loader }} color="primary" />
+
         <Sidebar
           theme={leftSideBarTheme}
           // type={leftSideBarType}

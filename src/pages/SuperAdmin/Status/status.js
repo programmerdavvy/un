@@ -6,9 +6,11 @@ import { request } from '../../../services/utilities';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import ReactPaginate from 'react-paginate';
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function Status(props) {
+    const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [modal, setmodal] = useState(false);
     const [isEdit, setIsedit] = useState(false);
@@ -44,16 +46,19 @@ function Status(props) {
     }
 
     const saveStatus = async () => {
+        dispatch(updateLoader(''));
         const data = { name };
         try {
             const url = `status`;
             const rs = await request(url, 'POST', false, data);
             props.fetchStatus();
             setName('');
+            dispatch(updateLoader('none'));
             setmodal(!modal);
             showToast('success', 'successfully saved');
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to save');
 
@@ -61,15 +66,18 @@ function Status(props) {
     }
     const onClickDelete = async (id) => {
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''));
             try {
                 const url = `status/delete/?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
+                    dispatch(updateLoader('none'));
                     showToast('success', 'Deleted  successfully');
                     props.fetchStatus()
                 }
 
             } catch (err) {
+                dispatch(updateLoader('none'));
                 console.log(err);
                 showToast('error', 'Failed to delete');
 
@@ -77,6 +85,7 @@ function Status(props) {
         }
     }
     const updateStatus = async () => {
+        dispatch(updateLoader(''));
         try {
             const url = `status?id=1`;
             const rs = await request(url, 'PATCH', false);
@@ -84,11 +93,13 @@ function Status(props) {
                 props.fetchStatus();
                 setName('');
                 setmodal(!modal);
+                dispatch(updateLoader('none'));
                 showToast('success', 'Updated  successfully');
 
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             showToast('error', 'Failed to update');
 

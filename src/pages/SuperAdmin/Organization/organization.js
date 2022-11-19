@@ -3,15 +3,20 @@ import { Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitl
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+
 
 function Organization(props) {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
     const [id, setId] = useState(null);
     const [isEdit, setIsedit] = useState(false);
 
     const updateOrganization = async () => {
+        dispatch(updateLoader(''))
+
         const data = { name };
         try {
             const url = `stakeholders?id=${id}`;
@@ -19,17 +24,20 @@ function Organization(props) {
             if (rs.success === true) {
                 props.showToast('success', 'Updated successfully');
                 props.fetchOrganization();
+                dispatch(updateLoader('none'))
                 setIsedit(false);
                 setName('');
                 setmodal(!modal);
             }
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to update');
 
         }
     }
     const saveOrganization = async () => {
+        dispatch(updateLoader(''))
         const data = { name };
         try {
             const url = `stakeholders`;
@@ -37,12 +45,14 @@ function Organization(props) {
             if (rs.success === true) {
                 props.showToast('success', 'Saved successfully');
                 props.fetchOrganization();
+                dispatch(updateLoader('none'))
                 setIsedit(false);
                 setName('');
                 setmodal(!modal);
 
             }
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to save');
 
@@ -50,6 +60,8 @@ function Organization(props) {
     }
     const onClickDelete = async (id) => {
         if (window.confirm('Are you sure')) {
+            dispatch(updateLoader(''))
+
             try {
                 const url = `stakeholders?id=${id}`;
                 const rs = await request(url, 'DELETE', false);
@@ -57,10 +69,12 @@ function Organization(props) {
                     props.showToast('success', 'Deleted successfully');
                     setIsedit(false);
                     props.fetchOrganization();
+                    dispatch(updateLoader('none'))
                     setmodal(false);
 
                 }
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err);
                 props.showToast('error', 'Failed to delete');
 

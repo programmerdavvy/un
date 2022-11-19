@@ -5,9 +5,11 @@ import { request } from '../../../services/utilities';
 import StakeHolder from './stakeholder';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function Index() {
-
+    const dispatch = useDispatch();
     const [stakeholders, setStakeholders] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
@@ -17,6 +19,7 @@ function Index() {
 
 
     const fetchStakeholders = useCallback(async (page) => {
+        dispatch(updateLoader(''));
         const p = page || 1;
         try {
             let url = `users?page=${p}&limit=10`;
@@ -27,7 +30,11 @@ function Index() {
             setStakeholders(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
             setMeta(rs.paging);
+            dispatch(updateLoader('none'));
+
         } catch (err) {
+            dispatch(updateLoader('none'));
+
             console.log(err);
         }
     }, [rowsPerPage]);

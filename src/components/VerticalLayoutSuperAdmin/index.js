@@ -16,12 +16,16 @@ import Header from "./StakeholderHeader";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Rightbar from "../CommonForBoth/Rightbar";
-
 //redux
+import { Spinner } from "reactstrap";
+
 import { useSelector, useDispatch } from "react-redux";
 
 const Layout = (props) => {
   const dispatch = useDispatch();
+  const { loader } = useSelector((state) => ({
+    loader: state.visibility.show
+  }));
 
   const {
     isPreloader,
@@ -134,6 +138,7 @@ const Layout = (props) => {
       </div>
       <div id="layout-wrapper">
         <Header toggleMenuCallback={toggleMenuCallback} />
+        <Spinner className="fs-14 float-end mx-2" style={{ marginTop: '70px', display: loader }} color="primary" />
         <Sidebar
           theme={leftSideBarTheme}
           // type={leftSideBarType}

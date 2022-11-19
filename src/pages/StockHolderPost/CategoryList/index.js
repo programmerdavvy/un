@@ -8,10 +8,17 @@ import "toastr/build/toastr.min.css"
 import { request } from '../../../services/utilities'
 import { useCallback } from 'react'
 import { useEffect } from 'react'
+import { useDispatch } from "react-redux";
+
+// import
+import {
+    updateLoader
+} from "../../../store/actions";
 
 
 function Index() {
     const [categories, setCategories] = useState([]);
+    const dispatch = useDispatch();
 
     const showToast = (error, message) => {
         let positionClass = "toast-top-right"
@@ -42,17 +49,22 @@ function Index() {
         if (error === "error") toastr.error(message)
         else toastr.success(message)
     }
+
     const fetchCategories = useCallback(async () => {
-        let url = `category?type=post&pageId=4`;
+        dispatch(updateLoader(''));
+        let url = `pages`;
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
+            dispatch(updateLoader('none'));
         } catch (err) {
             console.log(err);
+            dispatch(updateLoader('none'));
             showToast('error', 'Failed to fetch');
 
         }
     }, []);
+
 
     useEffect(() => {
         fetchCategories();
@@ -71,7 +83,7 @@ function Index() {
                     </Row>
                 </Container>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 

@@ -3,21 +3,26 @@ import { Card, CardBody, Table, CardTitle, Label, Input, Row, Col, Button, Uncon
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { request } from "../../../services/utilities";
-
+import { useDispatch } from 'react-redux';
+import { updateLoader } from "../../../store/actions";
 
 const IncidentReported = (props) => {
-
+    const dispatch = useDispatch();
+    
     const onClickDelete = async id => {
+        dispatch(updateLoader(''))
         if (window.confirm('Are you sure!')) {
             let url = ``;
             try {
                 const rs = await request(url, 'DELETE', false);
                 console.log(rs)
                 if (rs.success === true) {
+                    dispatch(updateLoader('none'))
                     props.fetchIncidents()
                     props.showToast('success', 'Deleted successfully ');
                 }
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err);
                 props.showToast('error', 'Failed to delete ');
 

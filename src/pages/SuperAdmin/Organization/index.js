@@ -4,10 +4,12 @@ import Breadcrumb from '../../../components/Common/Breadcrumb'
 import Organization from './organization'
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 import { request } from '../../../services/utilities'
 
 function Index() {
-
+    const dispatch = useDispatch();
     const [organization, setOrganization] = useState([]);
     const [currentPage, setCurrentPage] = useState(1)
     const [count, setCount] = useState(1);
@@ -45,6 +47,7 @@ function Index() {
     }
 
     const fetchOrganization = useCallback(async page => {
+        dispatch(updateLoader(''))
         let p = page || 1;
         let url = `stakeholders?page=${p}&limit=10`;
         try {
@@ -52,7 +55,10 @@ function Index() {
             setOrganization(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
             setMeta(rs.paging);
+            dispatch(updateLoader('none'))
+
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
         }
     }, [rowsPerPage]);

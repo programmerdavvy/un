@@ -5,12 +5,13 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import { request } from '../../../services/utilities';
-
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 const NewEvent = (props) => {
+    const dispatch = useDispatch();
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const id = ''
-
+    
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
@@ -26,6 +27,7 @@ const NewEvent = (props) => {
             // categories: Yup.string().required("Please Select Categories")
         }),
         onSubmit: async (values) => {
+            dispatch(updateLoader(''))
             let data = {
                 title: values.title,
                 content: values.title,
@@ -39,10 +41,12 @@ const NewEvent = (props) => {
             try {
                 const rs = await request(url, 'POST', false, data);
                 if (rs.success === true) {
+                    dispatch(updateLoader('none'))
                     props.showToast('success', 'Saved successfully ');
                 }
 
             } catch (err) {
+                dispatch(updateLoader('none'))
                 console.log(err);
                 props.showToast('error', 'Failed to save')
             }

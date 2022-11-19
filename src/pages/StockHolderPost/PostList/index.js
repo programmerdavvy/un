@@ -9,9 +9,12 @@ import PostLists from "./posts-list";
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { request } from "../../../services/utilities";
+import { updateLoader } from "../../../store/actions";
+import { useDispatch } from "react-redux";
 
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
@@ -49,19 +52,24 @@ const Dashboard = () => {
   }
 
   const fetchPosts = useCallback(async (page) => {
+    dispatch(updateLoader(''));
     let p = page || 1;
-    let url = `sections/admin?pageId=4&page=${p}&limit=10`;
+    let url = `sections/admin?page=${p}&limit=10`;
+
+
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
-        // console.log(rs.result)
         setPosts(rs.result);
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         setMeta(rs.paging);
+        dispatch(updateLoader('none'));
+
       }
     } catch (err) {
+      dispatch(updateLoader('none'));
       console.log(err);
-      showToast('error', 'Failed to fetch')
+      showToast('error', 'Failed to fetch');
     }
   }, [rowsPerPage]);
 

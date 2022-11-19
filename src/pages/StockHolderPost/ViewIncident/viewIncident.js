@@ -4,7 +4,8 @@ import { Button, Card, CardBody, Col, Container, Input, Label, Row, Table } from
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-
+import { useDispatch } from "react-redux";
+import { updateLoader } from "../../../store/actions";
 //Import Image
 import logo from "../../../assets/images/logo-dark.png";
 import { request } from "../../../services/utilities";
@@ -14,6 +15,7 @@ import "toastr/build/toastr.min.css"
 
 const ViewIncident = props => {
   const { match: params } = props
+  const dispatch = useDispatch();
   const [incident, setIncident] = useState(null);
   const [comment, setComment] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -52,6 +54,7 @@ const ViewIncident = props => {
     else toastr.success(message)
   }
   const onSave = async () => {
+    dispatch(updateLoader(''))
     const data_c = { comment, incidentId: incident?.id, statusId: selectedStatus };
     const data_s = { statusId: selectedStatus }
 
@@ -62,13 +65,15 @@ const ViewIncident = props => {
         const rs = await request(url_c, 'POST', false, data_c);
         setComment('');
       }
-      if (selectedStatus !== null) {
+      if (selectedStatus !== null && selectedStatus !== '') {
         const rs_s = await request(url_s, 'PATCH', false, data_s);
-
       }
+      dispatch(updateLoader('none'))
       showToast('success', 'Successfully Saved');
 
     } catch (err) {
+      dispatch(updateLoader('none'));
+
       if (err.message === 'all fields are Required') {
         showToast('error', 'Status and comment is required');
       } else {
@@ -79,20 +84,23 @@ const ViewIncident = props => {
     }
   }
   const fetchIncident = useCallback(async () => {
+    dispatch(updateLoader(''))
     const data = { referenceId: params.params?.id }
     let url = `incident/get-incident`;
     let url2 = `status`
 
     try {
       const rs = await request(url, 'POST', false, data);
+      console.log(rs)
       const rs2 = await request(url2, 'GET', false);
       if (rs.success === true && rs2.success === true) {
         setIncident(rs.result);
         setStatus(rs2.result);
         setEvidence(rs.result.media[0].link);
-        // setSelectedStatus(rs.result?.status);
+        dispatch(updateLoader('none'))
       }
     } catch (err) {
+      dispatch(updateLoader('none'))
       showToast('error', 'Failed to fetch, kindly try again later');
       console.log(err);
     }
@@ -154,7 +162,7 @@ const ViewIncident = props => {
                           <div>
                             {incident?.media.map(e => {
                               return (
-                                <div style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
+                                <div style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)} key={e.id}>
                                   <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
                                 </div>
                               )

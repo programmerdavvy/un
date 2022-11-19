@@ -5,9 +5,11 @@ import { request } from '../../../services/utilities';
 import Gallery from './gallery';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
 
 function Index() {
-
+    const dispatch = useDispatch();
     const [gallery, setGallery] = useState([]);
     const [rowsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -45,6 +47,7 @@ function Index() {
         else toastr.success(message)
     }
     const fetchGallery = useCallback(async page => {
+        dispatch(updateLoader(''))
         const p = page || 1;
         let url = `sections/admin?pageId=3&page${p}&limit=10`;
         try {
@@ -53,8 +56,11 @@ function Index() {
                 setGallery(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));
                 setMeta(rs.paging);
+                dispatch(updateLoader('none'))
+
             }
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             showToast('error', 'Failed to fetch');
 

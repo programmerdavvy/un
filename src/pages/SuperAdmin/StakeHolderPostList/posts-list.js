@@ -1,30 +1,48 @@
 import React from "react"
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle, UncontrolledTooltip, Table, Input,  Button } from "reactstrap"
+import { Row, Col, Card, CardBody, CardTitle, CardSubtitle, UncontrolledTooltip, Table, Input, Button } from "reactstrap"
 import { MDBDataTable } from "mdbreact"
 import { Link } from 'react-router-dom'
 // import Breadcrumbs from "../../components/Common/Breadcrumb"
 import { request } from "../../../services/utilities"
 import ReactPaginate from "react-paginate"
-
+import { updateLoader } from "../../../store/actions";
+import { useDispatch } from 'react-redux'
 function PostList(props) {
+  const dispatch = useDispatch()
 
- 
   const onClickDelete = async id => {
     if (window.confirm('Are u sure!')) {
+      dispatch(updateLoader(''))
       let url = `sections?id=${id}`
       try {
         const rs = await request(url, 'DELETE', false);
         if (rs.success === true) {
           props.fetchPosts();
+          dispatch(updateLoader('none'))
           props.showToast('success', 'Successfully Deleted');
         }
       } catch (err) {
+      dispatch(updateLoader('none'))
         console.log(err);
         props.showToast('error', 'Failed to Delete');
 
       }
     }
 
+  }
+  const onApprovePost = async id => {
+    let url = `sections/approve?sectionId=${id}`
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        props.fetchPosts();
+        props.showToast('success', 'Successfully Approved');
+      }
+    } catch (err) {
+      console.log(err);
+      props.showToast('error', 'Failed to Approve');
+
+    }
   }
   return (
     <React.Fragment>
@@ -84,10 +102,10 @@ function PostList(props) {
                             {e.title}
                           </td>
                           <td>
-                            News
+                            James John
                           </td>
                           <td>
-                            News
+                            {e.category?.name}
                           </td>
                           <td>
                             {e.tags}
@@ -99,6 +117,20 @@ function PostList(props) {
                           <td>
                             <div className="d-flex gap-3 users">
                               <ul className="list-inline font-size-20 contact-links mb-0">
+                                <li className="list-inline-item">
+                                  <Link
+                                    to={`#`}
+                                    className="text-dark"
+                                    onClick={() => {
+                                      onApprovePost(e.id);
+                                    }}
+                                  >
+                                    <i className="uil-check font-size-18" id="edittooltip1" />
+                                    <UncontrolledTooltip placement="top" target="edittooltip1">
+                                      Approve
+                                    </UncontrolledTooltip>
+                                  </Link>
+                                </li>
                                 <li className="list-inline-item">
                                   <Link
                                     to={`/view-post/${e.id}`}

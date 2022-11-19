@@ -20,3 +20,4 @@ export * from "./invoices/actions"
 
 // contacts
 export * from "./contacts/actions"
+export * from "./visibility/actions"

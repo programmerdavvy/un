@@ -3,15 +3,17 @@ import { Card, Modal, ModalHeader, ModalBody, Form, Row, Col, CardBody, CardTitl
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { request } from '../../../services/utilities';
-
+import { updateLoader } from '../../../store/actions';
+import { useDispatch } from 'react-redux'
 
 function VideoCategory(props) {
-
+    const dispatch = useDispatch();
     const [modal, setmodal] = useState(false);
     const [name, setName] = useState('');
     const [id, setId] = useState(null);
 
     const addCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, type: 'Video', pageId: 11 };
         let url = `category`;
         try {
@@ -19,16 +21,19 @@ function VideoCategory(props) {
             if (rs.success === true) {
                 setName('');
                 props.fetchCategories();
+                dispatch(updateLoader('none'));
                 setmodal(!modal);
                 props.showToast('success', 'Saved successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to save')
         }
     }
     const updateCategory = async () => {
+        dispatch(updateLoader(''));
         let data = { name, id };
         let url = `category/edit`;
         try {
@@ -37,28 +42,35 @@ function VideoCategory(props) {
                 setId(null);
                 setName('');
                 props.fetchCategories();
+                dispatch(updateLoader('none'));
                 setmodal(!modal);
                 props.showToast('success', 'Updated successfully ');
             }
 
         } catch (err) {
+            dispatch(updateLoader('none'));
             console.log(err);
             props.showToast('error', 'Failed to update')
         }
     }
     const onClickDelete = async (id) => {
-        let url = `category/delete/?id=${id}`;
-        try {
-            const rs = await request(url, 'DELETE', false);
-            console.log(rs);
-            if (rs.success === true) {
-                props.fetchCategories();
-                props.showToast('success', 'Deleted successfully ');
-            }
+        if (window.confirm('Are you sure!')) {
+            dispatch(updateLoader(''));
+            let url = `category/delete/?id=${id}`;
+            try {
+                const rs = await request(url, 'DELETE', false);
+                // console.log(rs);
+                if (rs.success === true) {
+                    props.fetchCategories();
+                    dispatch(updateLoader('none'));
+                    props.showToast('success', 'Deleted successfully ');
+                }
 
-        } catch (err) {
-            console.log(err);
-            props.showToast('error', 'Failed to delete')
+            } catch (err) {
+                dispatch(updateLoader('none'));
+                console.log(err);
+                props.showToast('error', 'Failed to delete')
+            }
         }
     }
     return (
@@ -139,7 +151,7 @@ function VideoCategory(props) {
                                     <tbody>
                                         {props.categories?.map((e, i) => {
                                             return (
-                                                <tr>
+                                                <tr key={i}>
                                                     <th>{e.id}</th>
                                                     <td>{e.name}</td>
                                                     <td>

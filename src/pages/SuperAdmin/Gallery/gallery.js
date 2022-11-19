@@ -4,21 +4,43 @@ import { Link } from "react-router-dom";
 import avatar7 from "../../../assets/images/users/avatar-3.jpg"
 import ReactPaginate from "react-paginate";
 import { request } from "../../../services/utilities";
+import { useDispatch } from 'react-redux'
+import { updateLoader } from "../../../store/actions";
+
 
 const IndividualSubmission = (props) => {
-
+    const dispatch = useDispatch();
     const onClickDelete = async id => {
+        dispatch(updateLoader(''))
         try {
             const url = `sections?id=${id}`;
             const rs = await request(url, 'DELETE', false);
+            dispatch(updateLoader('none'))
+
             if (rs.success === true) {
                 props.showToast('success', 'Deleted successfully');
                 props.fetchGallery();
 
             }
         } catch (err) {
+            dispatch(updateLoader('none'))
             console.log(err);
             props.showToast('error', 'Failed to delete');
+        }
+    }
+    const onApprovePost = async id => {
+        dispatch(updateLoader(''))
+        let url = `sections/approve?sectionId=${id}`
+        try {
+            const rs = await request(url, 'GET', false);
+            if (rs.success === true) {
+            dispatch(updateLoader('none'))
+                props.showToast('success', 'Successfully Approved');
+            }
+        } catch (err) {
+            dispatch(updateLoader('none'))
+            console.log(err);
+            props.showToast('error', 'Failed to Approve');
         }
     }
     return (
@@ -59,7 +81,20 @@ const IndividualSubmission = (props) => {
                                                 <td>
                                                     <div className="d-flex gap-3 users">
                                                         <ul className="list-inline font-size-20 contact-links mb-0">
-
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
+                                                                    className="text-dark"
+                                                                    onClick={() => {
+                                                                        onApprovePost(e.id)
+                                                                    }}
+                                                                >
+                                                                    <i className="uil-check font-size-18" id="edittooltip" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip">
+                                                                        Approve
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
                                                             {/* <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"
@@ -71,7 +106,7 @@ const IndividualSubmission = (props) => {
                                                                 >
                                                                     <i className="uil-edit-alt font-size-18" id="edittooltip" />
                                                                     <UncontrolledTooltip placement="top" target="edittooltip">
-                                                                        Edit
+                                                                        Approve
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li> */}
