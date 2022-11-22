@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content"> 
         <Container fluid>
           <Breadcrumbs title="Minible" breadcrumbItem="Home" />
           <Row>
