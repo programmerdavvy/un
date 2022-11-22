@@ -21,7 +21,6 @@ import axios from "axios"
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-
 //Import Image
 import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
 import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
@@ -136,7 +135,7 @@ const Dashboard = () => {
       }
       fetchAllCategory()
     } catch (error) {
-      console.log('Fetch All Category Error', error)
+      console.log("Fetch All Category Error", error)
     }
   }, [])
 
@@ -434,7 +433,7 @@ const Dashboard = () => {
                             onClick={handleFormSubmit}
                           >
                             {loading ? (
-                              <Spinner type="grow" size="sm" color="success" />
+                              <Spinner color="primary" style={{height:'20px', width:'20px'}}/>
                             ) : (
                               <Translate>Submit</Translate>
                             )}
@@ -461,12 +460,14 @@ const Dashboard = () => {
                       <CardBody>
                         <div className="d-flex p-2 justify-content-center">
                           <h6 className="text-dark font-weight-bold">
-                          <Translate>Thank you for reporting this incident. Your
-                            complaint ID is</Translate>
-                             {referenceId}, <Translate>
-                             We will take the
-                            necessary actions immediately
-                             </Translate>
+                            <Translate>
+                              Thank you for reporting this incident. Your
+                              complaint ID is
+                            </Translate>
+                            {referenceId},{" "}
+                            <Translate>
+                              We will take the necessary actions immediately
+                            </Translate>
                           </h6>
                         </div>
                       </CardBody>

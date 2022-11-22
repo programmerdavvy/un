@@ -81,7 +81,7 @@ const Dashboard = () => {
         payLoad
       )
       setLoading(false)
-      console.log('Length', response)
+      console.log("Length", response)
       if (response?.data?.message && phoneNumber.length == 11) {
         tog_center()
       }
@@ -98,7 +98,6 @@ const Dashboard = () => {
     setComplaintId("")
     setPhoneNumber("")
   }
-
 
   const handleConfirmOTP = async () => {
     const payLoad = {
@@ -121,7 +120,7 @@ const Dashboard = () => {
     }
   }
 
-  console.log('Doctor', trackComplain)
+  console.log("Doctor", trackComplain)
 
   return (
     <React.Fragment>
@@ -176,9 +175,8 @@ const Dashboard = () => {
                             >
                               {loading ? (
                                 <Spinner
-                                  type="grow"
-                                  size="sm"
-                                  color="success"
+                                  color="primary"
+                                  style={{ height: "20px", width: "20px" }}
                                 />
                               ) : (
                                 <Translate>Submit</Translate>
@@ -243,7 +241,14 @@ const Dashboard = () => {
                               className="btn btn-primary"
                               onClick={handleConfirmOTP}
                             >
-                              Confirm
+                              {loading ? (
+                                <Spinner
+                                  color="primary"
+                                  style={{ height: "20px", width: "20px" }}
+                                />
+                              ) : (
+                                <Translate>Confirm</Translate>
+                              )}
                             </button>
                           </div>
                         </div>
