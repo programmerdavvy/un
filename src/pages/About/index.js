@@ -26,7 +26,7 @@ import LatestTransaction from "./latest-transaction"
 
 //Import Image
 import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
-import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
+// import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Title from "../../components/Common/Title"
 import NewsCard from "../../components/Common/NewsCard"

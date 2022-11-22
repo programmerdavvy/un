@@ -25,7 +25,7 @@ const ProfileMenu = props => {
 
   const [username, setusername] = useState("Stakeholder");
 
-  const logOut = () => {
+   const logOut = () => {
     storage.removeItem(USER_COOKIE);
     window.location.href = '/stakeholder-login';
   }

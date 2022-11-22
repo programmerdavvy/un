@@ -20,8 +20,8 @@ const storage = new SSRStorage();
 const Dashboard = () => {
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(1);
   const [meta, setMeta] = useState(null);
 
@@ -53,13 +53,12 @@ const Dashboard = () => {
     // else if (toastType === "warning") toastr.warning(message, title)
     if (error === "error") toastr.error(message)
     else toastr.success(message)
-  }
+  };
 
   const fetchPosts = useCallback(async (page) => {
-    const user = await storage.getItem(USER_COOKIE);
     dispatch(updateLoader(''));
     let p = page || 1;
-    let url = `sections/admin?page=${p}&limit=10&stakeholderId=${user.payload.stakeholderId}`;
+    let url = `sections/admin?page=${p}&limit=10`;
 
     try {
       const rs = await request(url, 'GET', false);
@@ -72,9 +71,6 @@ const Dashboard = () => {
     } catch (err) {
       dispatch(updateLoader('none'));
       console.log(err);
-      if (err.message === 'no contents') {
-        return showToast('error', 'No result');
-      }
       showToast('error', 'Failed to fetch');
     }
   }, [rowsPerPage]);

@@ -44,7 +44,6 @@ function Index() {
         try {
             const rs = await request(url, 'GET', false);
             setCategories(rs.result);
-            console.log(rs)
         } catch (err) {
             console.log(err);
         }

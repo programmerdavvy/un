@@ -180,7 +180,7 @@ const NewEvent = props => {
                                                 >
                                                     <option>Select Categories</option>
                                                     {props.categories?.map(e => (
-                                                        <option value={e.id}>{e.name}</option>
+                                                        <option key={e.id} value={e.id}>{e.name}</option>
                                                     ))}
                                                 </select>
                                                 {validation.touched.categories && validation.errors.categories ? (

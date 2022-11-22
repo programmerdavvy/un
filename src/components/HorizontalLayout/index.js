@@ -130,7 +130,7 @@ const Layout = (props) => {
             openLeftMenuCallBack={openMenu}
             setSelectedLanguage={setSelectedLanguage}
           ></HeaderILO>
-          <Navbar menuOpen={isMenuOpened} />
+          {/* <Navbar menuOpen={isMenuOpened} /> */}
           <NavbarILO menuOpen={isMenuOpened} />
         </header>
        
