@@ -40,8 +40,8 @@ const NewIncident = (props) => {
     }
 
     const uploadedFiles = () => {
-        if (selectedFiles.length >= !1) {
-            props.showToast('error', 'Kindly attach a media file or document')
+        if (!selectedFiles?.length) {
+            return props.showToast('error', 'Kindly attach a media file or document');
 
         }
         dispatch(updateLoader(''));
@@ -54,7 +54,6 @@ const NewIncident = (props) => {
         const formData = new FormData();
         for (let i = 0; i < files_.length; i++) {
             let file = files_[i];
-            // console.log(file)
             formData.append("file", file);
             formData.append("upload_preset", "geekyimages");
             fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
@@ -62,7 +61,6 @@ const NewIncident = (props) => {
                 body: formData
             })
                 .then((response) => {
-                    console.log(response)
                     return response.json();
                 })
                 .then((data) => {
@@ -97,9 +95,7 @@ const NewIncident = (props) => {
     }
     function handleMulti(selectedMulti) {
         setselectedMulti(selectedMulti);
-
         selectedMulti.forEach(e => {
-            console.log(e.value);
             let item = selectedMulti.find(x => x === e.value);
             if (!item) {
                 selectedTags.push(e.value);
@@ -108,7 +104,7 @@ const NewIncident = (props) => {
             }
         })
 
-        console.log(selectedMulti, tags)
+        // console.log(selectedMulti, tags)
     }
     const fetchPostById = useCallback(async () => {
         dispatch(updateLoader(''));
@@ -155,19 +151,15 @@ const NewIncident = (props) => {
         dispatch(updateLoader(''));
 
         const user = await storage.getItem(USER_COOKIE);
-        // console.log(user)
         let data = {
             pageId: selectedCategory, title, content: description, tags,
-            media: allFiles, language: 'english', date: new Date()
+            media: allFiles, language: 'english', date: new Date(),
             // categoryId: selectedCategory
-            // stakeholderId: user.payload.id
+            userId: user.payload.id
         }
-        console.log(data);
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
             const rs = await request(url, 'POST', false, data);
-            console.log(rs)
-
             if (rs.success === true) {
                 dispatch(updateLoader('none'));
                 props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
