@@ -37,14 +37,15 @@ import ilologo from "../../assets/images/un/ilologo.png"
 
 //Import config
 import { facebook, google } from "../../config"
-import { httpRequest, request } from "../../services/utilities"
+import { httpRequest, request } from "../../services/utilities";
+import { useHistory, useLocation } from "react-router-dom"
 import SSRStorage from "../../services/storage";
 import { USER_COOKIE } from "../../services/constants"
 const storage = new SSRStorage();
 
 const Login = props => {
   const dispatch = useDispatch()
-
+  // const history = useHistory();
   const showToast = (error, message) => {
     let positionClass = "toast-top-right"
     let toastType
@@ -96,7 +97,8 @@ const Login = props => {
         if (rs.success === true) {
           storage.setItem(USER_COOKIE, rs.result);
           dispatch(updateLoader('none'))
-          showToast('success', 'Successfully login')
+          showToast('success', 'Successfully login');
+          // history.push('/stakeholder')
           window.location.href = '/stakeholder';
         }
       } catch (err) {

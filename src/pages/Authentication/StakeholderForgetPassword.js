@@ -17,15 +17,12 @@ import {  updateLoader } from "../../store/actions"
 import logo from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
 import { request } from '../../services/utilities';
-import SSRStorage from '../../services/storage';
-import { USER_COOKIE } from '../../services/constants';
-const storage = new SSRStorage();
+import { useHistory } from 'react-router-dom';
 
 
 const ForgetPasswordPage = props => {
   const [msg, setMsg] = useState(null);
   const [note, setNote] = useState('');
-
   const dispatch = useDispatch();
 
   const validation = useFormik({
