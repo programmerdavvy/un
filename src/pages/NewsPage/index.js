@@ -65,7 +65,6 @@ const InvoiceDetail = props => {
   }, [])
 
   const handleComment = async () => {
-    // console.log("malik man", comment)
     const payLoad = {
       sectionId: individualNews?.id,
       name: name,

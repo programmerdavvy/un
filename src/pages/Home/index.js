@@ -40,8 +40,6 @@ import Statistics from "../../components/Common/Statistics"
 import { Translate } from "react-auto-translate"
 
 const Dashboard = () => {
-  
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -58,28 +56,121 @@ const Dashboard = () => {
           </Row>
 
           <Row>
-            <Col xl={8}>
+            <Col xl={8} className="mt-3">
               <Col className="me-3">
                 <Title title="DANGERS" />
-                <Card>
-                  <CardImg
-                    top
-                    className="img-fluid h-100"
-                    src={newImage1}
-                    alt="children labour"
-                  />
-                  <CardBody>
-                    <CardText className="text-justify card-img-overlay h-100 d-flex align-items-end">
-                      <h4 className="text-white font-weight-bold">
-                        <Translate>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aliquam est mi, auctor eget
-                        </Translate>
-                        
-                      </h4>
-                    </CardText>
-                  </CardBody>
-                </Card>
+                <Row className="mt-3 mb-3">
+                  <Col xl={6}>
+                    <Card className="h-100">
+                      <CardImg
+                        top
+                        className="img-fluid h-100"
+                        src={newImage1}
+                        alt="children labour"
+                      />
+                      <CardBody>
+                        <CardText>
+                          <h6 className="text-dark font-weight-bold">
+                            <Translate>Lorem ipsum dolor</Translate>
+                          </h6>
+                          <Translate>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Aliquam est mi, auctor eget
+                          </Translate>
+                        </CardText>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                  <Col xl={6}>
+                    <Row className="g-0 align-items-center ">
+                      <Col md={4}>
+                        <CardImg
+                          top
+                          className="img-fluid h-100"
+                          src={newImage1}
+                          alt="children labour"
+                        />
+                      </Col>
+                      <Col md={8}>
+                        <CardBody>
+                          <CardTitle className="h5">
+                            <Link
+                              to=""
+                              className="waves-effect waves-light w-100 text-dark font-weight-bold"
+                            >
+                              Lorem ipsum dolor
+                            </Link>
+                          </CardTitle>
+                          <span className="blockquote-footer mt-3 font-size-12">
+                            <cite title="Source Title">11/12/2002</cite>
+                          </span>
+                          <CardText className="">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Aliquam est mi, auctor eget...
+                          </CardText>
+                        </CardBody>
+                      </Col>
+                    </Row>
+                    <Row className="g-0 align-items-center ">
+                      <Col md={4}>
+                        <CardImg
+                          top
+                          className="img-fluid h-100"
+                          src={newImage1}
+                          alt="children labour"
+                        />
+                      </Col>
+                      <Col md={8}>
+                        <CardBody>
+                          <CardTitle className="h5">
+                            <Link
+                              to=""
+                              className="waves-effect waves-light w-100 text-dark font-weight-bold"
+                            >
+                              Lorem ipsum dolor
+                            </Link>
+                          </CardTitle>
+                          <span className="blockquote-footer font-size-12">
+                            <cite title="Source Title">11/12/2002</cite>
+                          </span>
+                          <CardText className="">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Aliquam est mi, auctor eget...
+                          </CardText>
+                        </CardBody>
+                      </Col>
+                    </Row>
+                    <Row className="g-0 align-items-center ">
+                      <Col md={4}>
+                        <CardImg
+                          top
+                          className="img-fluid h-100"
+                          src={newImage1}
+                          alt="children labour"
+                        />
+                      </Col>
+                      <Col md={8}>
+                        <CardBody>
+                          <CardTitle className="h5">
+                            <Link
+                              to=""
+                              className="waves-effect waves-light w-100 text-dark font-weight-bold"
+                            >
+                              Lorem ipsum dolor
+                            </Link>
+                          </CardTitle>
+                          <span className="blockquote-footer mt-3 font-size-12">
+                            <cite title="Source Title">11/12/2002</cite>
+                          </span>
+                          <CardText className="">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Aliquam est mi, auctor eget...
+                          </CardText>
+                        </CardBody>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
 
                 <Title title="FOOTPRINTS" />
                 <FootPrints />

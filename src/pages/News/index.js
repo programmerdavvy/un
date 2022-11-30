@@ -70,14 +70,9 @@ const Dashboard = () => {
             </Col>
           </Row>
           <Row>
-            <Title title="LATEST" />
-            <NewsCard news={news}/>
-          </Row>
-
-          <Row>
             <Col xl={8}>
               <Col className="me-3">
-                <Title title="SEE ALSO" />
+                <Title title="ALL NEWS" />
                 <SeeAlso news={news}/>
               </Col>
             </Col>
