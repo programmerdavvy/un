@@ -55,23 +55,13 @@ const HeaderILO = props => {
   }
   useEffect(() => {
     localStorage.setItem("theme", theme)
-    // document.body.className = theme
-  console.log('heyyyy', theme)
   if (theme === "light") {
     document.body.style.backgroundColor = '#fff' 
-    // document.body.style.color= 'red' 
   } else {
-    document.body.style.backgroundColor = '#333' 
+    document.body.style.backgroundColor = '#2b2e3b' 
   }
 
-  // .dark {
-  //   background-color: #333;
-  //   color: #fff;
-  //   }
-  //   .light {
-  //   background-color: #fff;
-  //   color: #333;
-  //   }
+ 
 
   }, [theme])
 
