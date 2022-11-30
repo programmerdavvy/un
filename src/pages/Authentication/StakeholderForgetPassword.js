@@ -40,7 +40,7 @@ const ForgetPasswordPage = props => {
     }),
     onSubmit: async e => {
       const user = await storage.getItem(USER_COOKIE);
-      const data = { userId: user.payload.id, email: e.email };
+      const data = {  email: e.email };
       try {
         const url = `users/password/reset`;
         const rs = await request(url, 'PATCH', false, data);

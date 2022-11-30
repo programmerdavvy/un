@@ -364,6 +364,7 @@ const NewIncident = (props) => {
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"
                                                 editorClassName="editorClassName"
+                                                // contentState={}
                                                 name='description'
                                                 onChange={e => setDescription(e.blocks[0].text)}
 

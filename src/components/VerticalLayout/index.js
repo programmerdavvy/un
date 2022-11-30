@@ -137,7 +137,11 @@ const Layout = (props) => {
       </div>
       <div id="layout-wrapper">
         <Header toggleMenuCallback={toggleMenuCallback} />
-        <Spinner className="fs-14 float-end mx-2" style={{ marginTop: '70px', display: loader }} color="primary" />
+        <Spinner className="fs-14 float-end mx-2" style={{ 
+          // marginTop: '70px',
+           top:'7%', right:'2%',
+            display:loader,
+            position:'absolute' }} color="primary" />
 
         <Sidebar
           theme={leftSideBarTheme}

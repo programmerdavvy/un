@@ -84,8 +84,7 @@ const Comment = (props) => {
                                                     {e.comment}
                                                 </td>
                                                 <td>
-                                                    Incident Reported
-                                                </td>
+                                                {e.section?.title}                                                </td>
                                                 <td>
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>

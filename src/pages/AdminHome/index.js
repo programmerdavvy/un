@@ -66,7 +66,7 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [meta, setMeta] = useState(null);
   const [percentage, setPercentage] = useState([]);
-
+ const [mobileP,setMobileP] = useState(null)
 
   const fetchMobileCount = useCallback(async () => {
     dispatch(updateLoader(''))
@@ -92,13 +92,12 @@ const Dashboard = () => {
         setTotalSubmission(total);
         setMobileCount(rs.result.totalCount);
 
-        let mobilePercent = mobileCount * 30 / 100;
-        let openIncidentCountPercent = openincidentotal * 30 / 100;
-        let closeincidentPercent = closeincidentotal * 30 / 100;
-        let organizationPercent = organizationCount * 30 / 100;
-        let individualPercent = individualCount * 30 / 100;
-        let totalSubmissionPercent = totalSubmission * 30 / 100;
-
+        let mobilePercent = rs.result.totalCount * 30 / 100;
+        let openIncidentCountPercent = rs_open.result?.totalCount * 30 / 100;
+        let closeincidentPercent = rs_close.result?.totalCount * 30 / 100;
+        let organizationPercent = rs_organization.paging.total * 30 / 100;
+        let individualPercent = rs_individual.paging.total * 30 / 100;
+        let totalSubmissionPercent = total * 30 / 100;
         let array = [{
           name: 'mobile count',
           value: mobilePercent
@@ -137,7 +136,7 @@ const Dashboard = () => {
   }, []);
 
   const fetchAwaitingPosts = useCallback(async page => {
-    dispatch(updateLoader(''));
+    // dispatch(updateLoader(''));
     const p = page || 1;
     try {
       const url = `sections/admin?pageId=&page=${p}&limit=5`;
@@ -145,9 +144,9 @@ const Dashboard = () => {
       setPosts(rs.result);
       setCount(Math.ceil(rs.paging?.total / rowsPerPage));
       setMeta(rs.paging);
-      dispatch(updateLoader('none'))
+      // dispatch(updateLoader('none'))
     } catch (err) {
-      dispatch(updateLoader('none'))
+      // dispatch(updateLoader('none'))
       console.log(err);
     }
   }, [rowsPerPage]);
@@ -162,7 +161,12 @@ const Dashboard = () => {
   }, [fetchAwaitingPosts, fetchMobileCount]);
 
 
-  const series2 = [47];
+  const series2 = [percentage[5]?.value];
+  const seriesInd = [percentage[4]?.value];
+  const seriesOrg = [percentage[3]?.value];
+  const seriesMob = [percentage[0]?.value];
+  const seriesOp = [percentage[1]?.value];
+  const seriesC = [percentage[2]?.value];
 
   const reports = [
     {
@@ -177,7 +181,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: `${percentage[5]?.value}%`,
+      badgeValue: `${percentage[5]?.value}%`, 
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -198,7 +202,7 @@ const Dashboard = () => {
       badgeValue: `${percentage[4]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesInd,
       options: options2,
     }, {
       id: 3,
@@ -215,12 +219,12 @@ const Dashboard = () => {
       badgeValue: `${percentage[3]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesOrg,
       options: options2,
     },
     {
       id: 3,
-      icon: "uil-phone",
+      icon: "uil-coins",
       title: "Mobile submissions",
       rate: mobileCount,
       value: mobileCount,
@@ -230,10 +234,10 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: `${percentage[0]?.value}%`,
+      badgeValue: `${percentage[0]?.value}%`, 
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesMob,
       options: options2,
     }
   ];
@@ -282,7 +286,7 @@ const Dashboard = () => {
       badgeValue: `${percentage[1]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesOp,
       options: options2,
     }, {
       id: 4,
@@ -299,11 +303,10 @@ const Dashboard = () => {
       badgeValue: `${percentage[2]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesC,
       options: options2,
     }
   ]
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -313,11 +316,10 @@ const Dashboard = () => {
               <Row>
                 <Col xl={12}>
                   <Row>
-                    {/* <Statistics reports={reports} /> */}
                     <MiniWidget reports={reports} />
                     {openClose.map(e => {
                       return (
-                        <Col md={6} xl={2} key={e.id} >
+                        <Col md={6} xl={4} key={e.id} >
                           <Card>
                             <CardBody>
                               <div className="float-end mt-2">

@@ -9,7 +9,7 @@ const MiniWidget = props => {
     <React.Fragment>
       {props.reports.map((report, key) => (
 
-        < Col md={6} xl={2} key={key} >
+        < Col md={6} xl={4} key={key} >
           <Card>
             <CardBody>
               <div className="float-end mt-2">

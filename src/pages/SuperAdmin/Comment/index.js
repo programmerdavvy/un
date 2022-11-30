@@ -52,6 +52,7 @@ function Index() {
         let url = `comments/all/?page=&${p}limit=10`;
         try {
             const rs = await request(url, 'GET', false);
+            console.log(rs)
             setComment(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));
             setMeta(rs.paging);
