@@ -11,16 +11,13 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // action
-import { userForgetPassword } from "../../store/actions"
+import { updateLoader} from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
 import { request } from '../../services/utilities';
 import SSRStorage from '../../services/storage';
-import { USER_COOKIE } from '../../services/constants';
-const storage = new SSRStorage();
-
 
 const ForgetPasswordPage = props => {
   const [msg, setMsg] = useState(null);
@@ -39,17 +36,19 @@ const ForgetPasswordPage = props => {
       email: Yup.string().required("Please Enter Your Email"),
     }),
     onSubmit: async e => {
-      const user = await storage.getItem(USER_COOKIE);
-      const data = { userId: user.payload.id, email: e.email };
+      dispatch(updateLoader('block'))
+      const data = {  email: e.email };
       try {
         const url = `users/password/reset`;
         const rs = await request(url, 'PATCH', false, data);
-        console.log(rs)
+        // console.log(rs)
         if (rs.success == true) {
+          dispatch(updateLoader('none'))
           setNote('A new password has been sent kindly check your mail');
           setMsg(true);
         }
       } catch (err) {
+        dispatch(updateLoader('none'))
         if (err.message === 'user not found') {
           setNote('Email not found');
           setMsg(false);

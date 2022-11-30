@@ -25,15 +25,19 @@ const ProfileMenu = props => {
 
   const [username, setusername] = useState("Stakeholder");
 
-   const logOut = () => {
+  const logOut = () => {
     storage.removeItem(USER_COOKIE);
     window.location.href = '/stakeholder-login';
   }
   const loggedUser = async () => {
     let user = await storage.getItem(USER_COOKIE);
-    console.log(user)
-    let value = user.payload.stakeholder
-    setusername(value)
+    if (!user) {
+      window.location.href = '/home'
+    } else {
+      let value = user.payload.stakeholder
+      setusername(value);
+    }
+    // console.log(user)
   }
   useEffect(() => {
     loggedUser();

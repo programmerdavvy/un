@@ -29,8 +29,7 @@ import { GoogleLogin } from "react-google-login"
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 
 // actions
-import { loginUser, socialLogin } from "../../store/actions"
-
+import { loginUser, socialLogin, updateLoader } from "../../store/actions"
 // import images
 import logo from "../../assets/images/logo-dark.png"
 import logolight from "../../assets/images/logo-light.png"
@@ -38,14 +37,15 @@ import ilologo from "../../assets/images/un/ilologo.png"
 
 //Import config
 import { facebook, google } from "../../config"
-import { httpRequest, request } from "../../services/utilities"
+import { httpRequest, request } from "../../services/utilities";
+import { useHistory, useLocation } from "react-router-dom"
 import SSRStorage from "../../services/storage";
 import { USER_COOKIE } from "../../services/constants"
 const storage = new SSRStorage();
 
 const Login = props => {
   const dispatch = useDispatch()
-
+  // const history = useHistory();
   const showToast = (error, message) => {
     let positionClass = "toast-top-right"
     let toastType
@@ -88,18 +88,21 @@ const Login = props => {
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: async e => {
-
+      dispatch(updateLoader('block'))
       let url = `users/login`;
       let data = { email: e.email, password: e.password };
       try {
         const rs = await httpRequest(url, 'POST', data);
-        console.log(rs);
+        // console.log(rs);
         if (rs.success === true) {
           storage.setItem(USER_COOKIE, rs.result);
-          showToast('success', 'Successfully login')
+          dispatch(updateLoader('none'))
+          showToast('success', 'Successfully login');
+          // history.push('/stakeholder')
           window.location.href = '/stakeholder';
         }
       } catch (err) {
+        dispatch(updateLoader('none'))
         console.log(err);
         if (err.message === 'invalid credentials') {
           showToast('error', 'Invalid Email or Password')

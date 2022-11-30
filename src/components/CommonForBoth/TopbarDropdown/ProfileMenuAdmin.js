@@ -29,24 +29,20 @@ const ProfileMenu = props => {
     storage.removeItem(USER_COOKIE);
     window.location.href = '/admin-login';
   }
-  useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
-        setusername(obj.displayName)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
-        if (obj.username) {
-          setusername(obj.username)
-        } else {
-          setusername(obj.name)
-        }
-      }
+
+  const loggedUser = async () => {
+    let user = await storage.getItem(USER_COOKIE);
+    if (!user) {
+      window.location.href = '/home'
+    } else {
+      let value = user.payload.stakeholder
+      setusername(value);
     }
-  }, [props.success])
+    // console.log(user)
+  }
+  useEffect(() => {
+    loggedUser();
+  }, []);
 
   return (
     <React.Fragment>

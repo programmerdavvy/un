@@ -29,7 +29,7 @@ import { GoogleLogin } from "react-google-login"
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 
 // actions
-import { loginUser, socialLogin } from "../../store/actions"
+import { loginUser, socialLogin ,updateLoader} from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-dark.png"
@@ -88,19 +88,20 @@ const Login = props => {
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: async e => {
-
+      dispatch(updateLoader(''));
       let url = `users/login`;
       let data = { email: e.email, password: e.password };
       try {
         const rs = await httpRequest(url, 'POST', data);
-        console.log(rs);
+        // console.log(rs);
         if (rs.success === true) {
           storage.setItem(USER_COOKIE, rs.result);
-          showToast('success', 'Successfully login')
-
+          dispatch(updateLoader('none'));
+          showToast('success', 'Successfully login');
           window.location.href = '/admin';
         }
       } catch (err) {
+        dispatch(updateLoader('none'));
         console.log(err);
         if (err.message === 'invalid credentials') {
           showToast('error', 'Invalid Email or Password')
