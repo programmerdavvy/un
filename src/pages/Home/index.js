@@ -64,7 +64,7 @@ const Dashboard = () => {
                     <Card className="h-100">
                       <CardImg
                         top
-                        className="img-fluid h-100"
+                        className="img-fluid h-100 mh-50"
                         src={newImage1}
                         alt="children labour"
                       />

@@ -130,6 +130,12 @@ const InvoiceDetail = props => {
                 {individualNews?.tags.split(",").map((tag, i) => (
                   <span> {tag}</span>
                 ))}
+                <div className="d-flex justify-content-center">
+                  <h5>Leave a Comment</h5>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <p>Your email address will not be published.Required fields are marked *</p>
+                </div>
                 <div className="row">
                   <div className="col-6 mt-2">
                     <Label
@@ -142,7 +148,7 @@ const InvoiceDetail = props => {
                       type="text"
                       className="form-control"
                       id="specificSizeInputName"
-                      placeholder="Enter Name"
+                      placeholder="Enter Name*"
                       onChange={e => setName(e.target.value)}
                     />
                   </div>
@@ -157,7 +163,7 @@ const InvoiceDetail = props => {
                       type="text"
                       className="form-control"
                       id="specificSizeInputName"
-                      placeholder="Enter E-mail"
+                      placeholder="Enter E-mail*"
                       onChange={e => setEmail(e.target.value)}
                     />
                   </div>
