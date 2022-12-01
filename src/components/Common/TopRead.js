@@ -15,102 +15,160 @@ import {
 
 const TopRead = props => {
   return (
-    <Row>
-      <Col xl={12} className="m-3">
-        <Card>
-          <CardBody>
-            <Row>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+    <>
+      <Row>
+        <Col lg={6}>
+          <Card>
+            <Row className="g-0 align-items-center">
+              <Col md={4}>
+                <CardImg
+                  className="img-fluid"
+                  src=''
+                  alt="Card image cap"
+                />
               </Col>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
-              </Col>
-            </Row>
-
-            <Col xl={12}>
-              <hr className="pt-1 " />
-            </Col>
-
-            <Row>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
-              </Col>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+              <Col md={8}>
+                <CardBody>
+                  <CardTitle className="h5">Card title</CardTitle>
+                  <CardText>
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content.ssssss
+                  </CardText>
+                  <CardText>
+                    <small className="text-muted">
+                      Last updated 3 mins ago
+                    </small>
+                  </CardText>
+                </CardBody>
               </Col>
             </Row>
-
-            <Col xl={12}>
-              <hr className="pt-1 " />
-            </Col>
-
-            <Row>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+          </Card>
+        </Col>
+        <Col lg={6}>
+          <Card>
+            <Row className="g-0 align-items-center">
+              <Col md={8}>
+                <CardBody>
+                  <CardTitle className="h5">Card title</CardTitle>
+                  <CardText>
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content.bbbbb
+                  </CardText>
+                  <CardText>
+                    <small className="text-muted">
+                      Last updated 3 mins ago
+                    </small>
+                  </CardText>
+                </CardBody>
               </Col>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
-              </Col>
-            </Row>
-            <Col xl={12}>
-              <hr className="pt-1 " />
-            </Col>
-
-            <Row>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
-              </Col>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+              <Col md={4}>
+                <CardImg
+                  className="img-fluid"
+                  src=''
+                  alt="Card image cap"
+                />
               </Col>
             </Row>
-            <Col xl={12}>
-              <hr className="pt-1 " />
-            </Col>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col xl={12} className="m-3">
+          <Card>
+            <CardBody>
+              <Row>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+              </Row>
 
-            <Row>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+              <Col xl={12}>
+                <hr className="pt-1 " />
               </Col>
-              <Col xl={6}>
-                <CardText>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer posuere erat a ante.
-                </CardText>
+
+              <Row>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+              </Row>
+
+              <Col xl={12}>
+                <hr className="pt-1 " />
               </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+
+              <Row>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+              </Row>
+              <Col xl={12}>
+                <hr className="pt-1 " />
+              </Col>
+
+              <Row>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+              </Row>
+              <Col xl={12}>
+                <hr className="pt-1 " />
+              </Col>
+
+              <Row>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+                <Col xl={6}>
+                  <CardText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Integer posuere erat a ante.
+                  </CardText>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </>
   )
 }
 

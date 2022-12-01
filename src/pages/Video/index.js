@@ -43,24 +43,34 @@ import YoutubeEmbed from "../../components/Common/YoutubeEmbed"
 import { useEffect } from "react"
 import { useState } from "react"
 import axios from "axios"
+import ReactPaginate from "react-paginate"
 
 const Dashboard = () => {
   const [videos, setVideos] = useState()
+  const [meta, setMeta] = useState(null)
+
+  const fetchAllVideos = async page => {
+    const p = page || 1
+    const response = await axios.get(
+      `https://unirp.herokuapp.com/sections/?pageId=11&id=&language=&events=&commentPage=&commentLimit=&limit=9&page=${p}`
+    )
+    setVideos(response?.data?.result)
+    setMeta(response?.data?.paging)
+  }
+
   useEffect(() => {
     try {
-      const fetchAllVideos = async () => {
-        const response = await axios.get(
-          "https://unirp.herokuapp.com/sections/?pageId=11&id=&language=&events=&commentPage=1&commentLimit=20"
-        )
-        setVideos(response?.data?.result)
-      }
       fetchAllVideos()
     } catch (error) {
       console.log("Fetch All Video Error", error)
     }
   }, [])
 
-  console.log("Malik=======", videos)
+  console.log("Malik=======", meta)
+
+  const handlePagination = page => {
+    fetchAllVideos(page.selected + 1)
+  }
 
   return (
     <React.Fragment>
@@ -77,7 +87,7 @@ const Dashboard = () => {
             <Title title="VIDEO GALLERY" />
             {videos?.map((video, i) => (
               <Col xl={4} key={i}>
-                <Card>
+                <Card className="h-100 d-inline-block w-100">
                   <CardBody>
                     {/* <YoutubeEmbed embedId="HJEue9-lTgg" /> */}
                     <YoutubeEmbed
@@ -86,16 +96,44 @@ const Dashboard = () => {
                   </CardBody>
                   <CardBody>
                     <CardText className="text-justify">
-                      <h4 className="text-dark font-weight-bold">
+                      <h6 className="text-dark font-weight-bold">
                         {video.content}
-                      </h4>
+                      </h6>
                     </CardText>
                   </CardBody>
                 </Card>
               </Col>
             ))}
 
-            <Col xl={12}>
+            <div className="mt-3 d-flex align-items-center justify-content-between">
+              <div>Showing 1 to 10 of {meta?.total} entries</div>
+
+              <div>
+                <ReactPaginate
+                  nextLabel="Next"
+                  breakLabel="..."
+                  previousLabel="Prev"
+                  pageCount={meta?.pages}
+                  // pageCount={props.count}
+                  activeClassName="active"
+                  breakClassName="page-item"
+                  pageClassName={"page-item"}
+                  breakLinkClassName="page-link"
+                  nextLinkClassName={"page-link"}
+                  pageLinkClassName={"page-link"}
+                  nextClassName={"page-item next"}
+                  previousLinkClassName={"page-link"}
+                  previousClassName={"page-item prev"}
+                  onPageChange={page => handlePagination(page)}
+                  // forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                  containerClassName={
+                    "pagination react-paginate justify-content-end p-1"
+                  }
+                />
+              </div>
+            </div>
+
+            {/* <Col xl={12}>
               <div className="d-flex p-2 justify-content-center">
                 <Link
                   to="#"
@@ -104,65 +142,10 @@ const Dashboard = () => {
                   Load More
                 </Link>
               </div>
-            </Col>
+            </Col> */}
             <TagsNoComment />
-            <Title title="TOP READ" />
-            <TopRead />
+            
           </Row>
-
-          {/* <Row>
-            <MiniWidget reports={reports} />
-          </Row> */}
-
-          {/* <Row>
-            <Col xl={8}>
-              <SalesAnalyticsChart />
-            </Col>
-            <Col xl={4}>
-              <Card className="bg-primary">
-                <CardBody>
-                  <Row className="align-items-center">
-                    <Col sm={8}>
-                      <p className="text-white font-size-18">
-                        Enhance your <b>Campaign</b> for better outreach{" "}
-                        <i className="mdi mdi-arrow-right"></i>
-                      </p>
-                      <div className="mt-4">
-                        <Link
-                          to="#"
-                          className="btn btn-success waves-effect waves-light"
-                        >
-                          Upgrade Account!
-                        </Link>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="mt-4 mt-sm-0">
-                        <img
-                          src={setupanalytics}
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              <TopProduct />
-            </Col>
-          </Row> */}
-          {/* <Row>
-            <Col xl={4}>
-              <TopUser />
-            </Col>
-            <Col xl={4}>
-              <RecentActivity />
-            </Col>
-            <Col xl={4}>
-              <SocialSource />
-            </Col>
-          </Row> */}
-          {/* <LatestTransaction /> */}
         </Container>
       </div>
     </React.Fragment>
