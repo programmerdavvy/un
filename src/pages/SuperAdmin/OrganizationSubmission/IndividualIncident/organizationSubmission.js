@@ -30,65 +30,64 @@ const OrganizationSubmission = (props) => {
                                 </thead>
                                 <tbody>
                                     {props.submission?.map((e, i) => {
-                                        if (e.userId === null) {
-                                            return (
-                                                <tr key={i} className='text-capitalize'>
-                                                    <td><Link to="#" className="text-body fw-bold">#{e.referenceId}</Link> </td>
-                                                    <td>
-                                                        {e.childname}
-                                                    </td>
-                                                    <td>{e.isMobile === true ? <><i className="uil-mobile-android-alt"></i> Mobile</> : <><i className="uil-desktop"></i> Desktop</>} </td>
-                                                    <td>
-                                                        {e.category}
-                                                    </td>
-                                                    <td>
-                                                        {e.reporter_name}
-                                                    </td>
-                                                    <td>
-                                                        {e.city}
-                                                    </td>
-                                                    <td>
-                                                        {e.state}
-                                                    </td>
-                                                    <td>
-                                                        {new Date(e.createdAt).toDateString()}
-                                                    </td>
-                                                    <td>
-                                                        <td style={{ width: '140px' }}>
-                                                            {e.media[0]?.type !== 'image' ?
-                                                                <iframe
-                                                                    width='50%'
-                                                                    // height='400px'
-                                                                    title={e?.media[0]?.name}
-                                                                    className="embed-responsive-item"
-                                                                    src={e?.media[0]?.link}
-                                                                /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
-                                                            }
+                                        return (
+                                            <tr key={i} className='text-capitalize'>
+                                                <td><Link to="#" className="text-body fw-bold">#{e.referenceId}</Link> </td>
+                                                <td>
+                                                    {e.childname}
+                                                </td>
+                                                <td>{e.isMobile === true ? <><i className="uil-mobile-android-alt"></i> Mobile</> : <><i className="uil-desktop"></i> Desktop</>} </td>
+                                                <td>
+                                                    {e.category}
+                                                </td>
+                                                <td>
+                                                    {e.reporter_name}
+                                                </td>
+                                                <td>
+                                                    {e.city}
+                                                </td>
+                                                <td>
+                                                    {e.state}
+                                                </td>
+                                                <td>
+                                                    {new Date(e.createdAt).toDateString()}
+                                                </td>
+                                                <td>
+                                                    <td style={{ width: '140px' }}>
+                                                        {e.media[0]?.type !== 'image' ?
+                                                            <iframe
+                                                                width='50%'
+                                                                // height='400px'
+                                                                title={e?.media[0]?.name}
+                                                                className="embed-responsive-item"
+                                                                src={e?.media[0]?.link}
+                                                            /> : <div> <img src={e.media[0]?.link} alt={e.media[0]?.name} className='img-thumbnail' width='100' /></div>
+                                                        }
 
-                                                        </td>
                                                     </td>
-                                                    <td>
-                                                        {e.status}
-                                                    </td>
-                                                    <td>
-                                                        <div className="d-flex gap-3 users">
-                                                            <ul className="list-inline font-size-20 contact-links mb-0">
-                                                                <li className="list-inline-item">
-                                                                    <Link
-                                                                        to={`/admin-view-incident/${e.referenceId}`}
-                                                                        className="text-dark"
-                                                                    // onClick={() => {
-                                                                    //   const users = cellProps.row.original
-                                                                    //   // handleUserClick(users)
-                                                                    // }}
-                                                                    >
-                                                                        <i className="uil-expand-arrows-alt font-size-18" id="edittooltip1" />
-                                                                        <UncontrolledTooltip placement="top" target="edittooltip1">
-                                                                            View Details
-                                                                        </UncontrolledTooltip>
-                                                                    </Link>
-                                                                </li>
-                                                                {/* <li className="list-inline-item">
+                                                </td>
+                                                <td>
+                                                    {e.status}
+                                                </td>
+                                                <td>
+                                                    <div className="d-flex gap-3 users">
+                                                        <ul className="list-inline font-size-20 contact-links mb-0">
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to={`/admin-view-incident/${e.referenceId}`}
+                                                                    className="text-dark"
+                                                                // onClick={() => {
+                                                                //   const users = cellProps.row.original
+                                                                //   // handleUserClick(users)
+                                                                // }}
+                                                                >
+                                                                    <i className="uil-expand-arrows-alt font-size-18" id="edittooltip1" />
+                                                                    <UncontrolledTooltip placement="top" target="edittooltip1">
+                                                                        View Details
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                            {/* <li className="list-inline-item">
                                                                     <Link
                                                                         to="#"
                                                                         className="text-dark"
@@ -103,31 +102,30 @@ const OrganizationSubmission = (props) => {
                                                                         </UncontrolledTooltip>
                                                                     </Link>
                                                                 </li> */}
-                                                                <li className="list-inline-item">
-                                                                    <Link
-                                                                        to="#"
-                                                                        // onClick={() => {
-                                                                        //   const users = cellProps.row.original
-                                                                        //   onClickDelete(users)
-                                                                        // }}
-                                                                        className="text-dark"
+                                                            <li className="list-inline-item">
+                                                                <Link
+                                                                    to="#"
+                                                                    // onClick={() => {
+                                                                    //   const users = cellProps.row.original
+                                                                    //   onClickDelete(users)
+                                                                    // }}
+                                                                    className="text-dark"
 
-                                                                    >
-                                                                        <i
-                                                                            className="uil uil-trash-alt font-size-18"
-                                                                            id="deletetooltip3"
-                                                                        />
-                                                                        <UncontrolledTooltip placement="top" target="deletetooltip3">
-                                                                            Delete
-                                                                        </UncontrolledTooltip>
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
+                                                                >
+                                                                    <i
+                                                                        className="uil uil-trash-alt font-size-18"
+                                                                        id="deletetooltip3"
+                                                                    />
+                                                                    <UncontrolledTooltip placement="top" target="deletetooltip3">
+                                                                        Delete
+                                                                    </UncontrolledTooltip>
+                                                                </Link>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )
                                     })}
 
                                 </tbody>

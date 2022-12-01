@@ -22,6 +22,7 @@ function Index() {
         try {
             let url = `incident/all/specific/?action=stakeholder`;
             const rs = await request(url, 'GET', false);
+            // console.log(rs)
             setMeta(rs.paging);
             setOrganizationSubmission(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));

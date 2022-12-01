@@ -18,9 +18,9 @@ import {
 } from "../../store/actions";
 
 import { useDispatch } from "react-redux";
-
-
-
+import { USER_COOKIE } from "../../services/constants";
+import SSRStorage from "../../services/storage";
+const storage = new SSRStorage();
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Dashboard = () => {
 
   const [meta, setMeta] = useState(null);
 
-  const [rowsPerPageP, setRowsPerPageP] = useState(10)
+  const [rowsPerPageP, setRowsPerPageP] = useState(5)
   const [currentPageP, setCurrentPageP] = useState(1)
   const [countP, setCountP] = useState(1);
   const [metaP, setMetaP] = useState(null);
@@ -47,16 +47,14 @@ const Dashboard = () => {
 
   const fetchIncident = useCallback(async page => {
     dispatch(updateLoader(''));
-
     const p = page || 1;
-
     try {
       let url = `incident/getall?page=${p}&limit=5`;
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
         setIncidents(rs.result);
         setTotalreportedincident(rs.paging?.total);
-        let x = rs.paging.total / 30;
+        let x = rs.paging.total / 800;
         let z = x * 100;
         setTotalreportedincidentbypercent(z.toFixed(2))
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
@@ -72,6 +70,28 @@ const Dashboard = () => {
   }, [rowsPerPage]);
 
   const fetchPosts = useCallback(async (page) => {
+    const user = await storage.getItem(USER_COOKIE);
+    dispatch(updateLoader(''));
+    let p = page || 1;
+    let url = `sections/admin?page=${p}&limit=5&stakeholderId=${user.payload.stakeholderId}`;
+
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        setPosts(rs.result);
+        setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
+        setMetaP(rs.paging);
+        dispatch(updateLoader('none'));
+      }
+    } catch (err) {
+      dispatch(updateLoader('none'));
+
+      console.log(err);
+      // showToast('error', 'Failed to fetch')
+    }
+  }, [rowsPerPageP]);
+
+  const fetchPostsMoApprove = useCallback(async (page) => {
     dispatch(updateLoader(''));
     let p = page || 1;
     let url = `sections/admin?page=${p}&limit=5&type=approved`;
@@ -79,13 +99,13 @@ const Dashboard = () => {
     try {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
-        setPosts(rs.result);
+        // setPosts(rs.result);
         setTotalreportedpost(rs.paging?.total);
-        let x = rs.paging.total / 30;
+        let x = rs.paging.total / 400;
         let z = x * 100;
         setTotalreportedpostbypercent(z.toFixed(2))
-        setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
-        setMetaP(rs.paging);
+        // setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
+        // setMetaP(rs.paging);
         dispatch(updateLoader('none'));
 
       }
@@ -95,7 +115,7 @@ const Dashboard = () => {
       console.log(err);
       // showToast('error', 'Failed to fetch')
     }
-  }, [rowsPerPageP]);
+  }, []);
 
   const fetchDocuments = useCallback(async (page) => {
     dispatch(updateLoader(''));
@@ -106,7 +126,7 @@ const Dashboard = () => {
       const rs = await request(url, 'GET', false);
       if (rs.success === true) {
         setTotaldocument(rs.paging?.total);
-        let x = rs.paging?.total / 30;
+        let x = rs.paging?.total / 800;
         let z = x * 100;
         setTotaldocumentbypercent(z.toFixed(2))
         dispatch(updateLoader('none'));
@@ -128,11 +148,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchIncident();
+    fetchPostsMoApprove();
     fetchPosts();
     fetchDocuments();
-  }, [fetchIncident, fetchPosts, fetchDocuments])
+  }, [fetchIncident, fetchPostsMoApprove, fetchPosts, fetchDocuments])
 
-  const series2 = [40];
+  const series2 = [`${totaldocumentbypercent}`];
+  const seriesApp = [`${totalreportedpostbypercent}`];
+  const seriesInci = [`${totalreportedincidentbypercent}`];
+
 
   const options2 = {
     fill: {
@@ -195,7 +219,7 @@ const Dashboard = () => {
       badgeValue: `${totalreportedpostbypercent}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesApp,
       options: options2,
     }, {
       id: 3,
@@ -212,7 +236,7 @@ const Dashboard = () => {
       badgeValue: `${totalreportedincidentbypercent}%`,
       color: "danger",
       desc: "Last 30 days",
-      series: series2,
+      series: seriesInci,
       options: options2,
     }
   ];

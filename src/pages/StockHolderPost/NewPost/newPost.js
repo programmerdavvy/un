@@ -7,11 +7,15 @@ import { Link, withRouter } from 'react-router-dom'
 import { Editor } from "react-draft-wysiwyg"
 import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import { request } from '../../../services/utilities';
+import { EditorState } from "draft-js";
+
+import { httpRequest, request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
 import { useDispatch } from 'react-redux';
 import { updateLoader } from '../../../store/actions';
+import axios from 'axios'
+
 const storage = new SSRStorage();
 
 
@@ -34,13 +38,22 @@ const NewIncident = (props) => {
     const [selectedCategory, setselectedCategory] = useState(null);
     const [title, setTitle] = useState('');
     const [allFiles, setAllFiles] = useState([])
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty(),)
+
+
+
+    const onEditorStateChange = (editorState) => {
+        console.log(editorState)
+        setEditorState(editorState)
+    }
+
 
     function handleAcceptedFiles(files) {
         // setselectedFiles(files)
     }
 
     const uploadedFiles = () => {
-        if (!selectedFiles?.length) {
+        if (!(selectedFiles?.length >= 1)) {
             return props.showToast('error', 'Kindly attach a media file or document');
 
         }
@@ -80,6 +93,63 @@ const NewIncident = (props) => {
                 });
 
         }
+    }
+    const uploadImageCallBacks = async () => {
+        let file = selectedFiles[0]
+        console.log(file);
+        const formData = new FormData();
+
+        formData.append("file", file);
+        formData.append("upload_preset", "geekyimages");
+        // try {
+            // let rs = await httpRequest(url, 'POST', false, formData);
+            const rs = await ((axios.post("https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload", formData))).data;
+            let x = rs.secure_url
+            console.log(x);
+            return x
+        // } catch (err) {
+        //     console.log(err)
+        // }
+
+
+        // fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+        //     method: "POST",
+        //     body: formData
+        // })
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        //         // secure_url
+        //         try {
+        //             console.log(data);
+        //         } catch (err) {
+        //             console.log(err)
+        //         }
+        //     });
+    }
+    function uploadImageCallBack() {
+        let file = selectedFiles[0]
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload");
+            // xhr.setRequestHeader("Authorization", "Client-ID ##clientid###");
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "geekyimages");
+            xhr.send(formData)
+            xhr.addEventListener("load", async () => {
+                const response = JSON.parse(xhr.responseText);
+                
+                console.log(response.secure_url);
+                await resolve(response.secure_url);
+            });
+            xhr.addEventListener("error", () => {
+                const error = JSON.parse(xhr.responseText);
+                console.log(error);
+                reject(error);
+            });
+        });
     }
     /**
      * Formats the size
@@ -207,7 +277,10 @@ const NewIncident = (props) => {
                         <Col>
                             {/* <Card>
                                 <CardBody> */}
-                            <h4 className="card-title">{params.id ? 'Edit' : 'Create a New'} Post</h4>
+                            <h4 className="card-title" onClick={() => {
+                                let x = uploadImageCallBacks()
+                                console.log(x)
+                            }}>{params.id ? 'Edit' : 'Create a New'} Post</h4>
 
                             <Form className="needs-validation"
                                 onSubmit={(e) => {
@@ -338,31 +411,31 @@ const NewIncident = (props) => {
                                     <Col>
                                         <FormGroup className="mb-3">
                                             <Label htmlFor="validationCustom02">Paragraph</Label>
-                                            {/* <Input
-                                                name="description"
-                                                placeholder="Paragraph"
-                                                type="textarea"
-                                                className="form-control"
-                                                id="validationCustom02"
-                                                rows="10"
-                                                onChange={e => setDescription(e.target.value)}
-                                                onBlur={validation.handleBlur}
-                                                value={validation.values.description || ""}
-                                                invalid={
-                                                    validation.touched.description && validation.errors.description ? true : false
-                                                }
-                                            /> */}
                                             <Editor
+                                                editorState={editorState}
+                                                onEditorStateChange={onEditorStateChange}
+                                                toolbar={{
+                                                    inline: { inDropdown: true },
+                                                    list: { inDropdown: true },
+                                                    textAlign: { inDropdown: true },
+                                                    link: { inDropdown: true },
+                                                    history: { inDropdown: true },
+                                                    image: {
+                                                        uploadCallback: uploadImageCallBack,
+                                                        alt: { present: false, mandatory: false },
+                                                    },
+                                                }}
+                                            />
+                                            {/* <Editor
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"
                                                 editorClassName="editorClassName"
+                                                // contentState={}
                                                 name='description'
                                                 onChange={e => setDescription(e.blocks[0].text)}
 
-                                            />
-                                            {/* {validation.touched.description && validation.errors.description ? (
-                                                <FormFeedback type="invalid">{validation.errors.description}</FormFeedback>
-                                            ) : null} */}
+                                            /> */}
+
                                         </FormGroup>
                                     </Col>
                                 </Row>

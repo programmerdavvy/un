@@ -26,6 +26,7 @@ function Index() {
             let url_org = `stakeholders`;
             const rs = await request(url, 'GET', false);
             const rs_org = await request(url_org, 'GET', false);
+            console.log(rs)
             setOrganizations(rs_org.result);
             setStakeholders(rs.result);
             setCount(Math.ceil(rs.paging?.total / rowsPerPage));

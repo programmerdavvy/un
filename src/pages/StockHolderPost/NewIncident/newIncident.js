@@ -7,12 +7,17 @@ import { Link, } from 'react-router-dom'
 import { request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
-import { useDispatch } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { updateLoader } from '../../../store/actions';
+import { Spinner } from "reactstrap";
 const storage = new SSRStorage();
 
+
 const NewPost = (props) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { loader } = useSelector((state) => ({
+        loader: state.visibility.show
+    }));
     const [selectedFiles, setselectedFiles] = useState([])
     const [allFiles] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -84,8 +89,8 @@ const NewPost = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     const uploadedFiles = () => {
-        if (selectedFiles.length >= !1) {
-            props.showToast('error', 'kindly attach a media File');
+        if (!(selectedFiles.length >= 1)) {
+            return props.showToast('error', 'kindly attach a media File');
         }
         dispatch(updateLoader(''));
         let count = 0;
@@ -101,7 +106,6 @@ const NewPost = (props) => {
                 body: formData
             })
                 .then((response) => {
-                    console.log(response)
                     return response.json();
                 })
                 .then((data) => {
@@ -123,7 +127,18 @@ const NewPost = (props) => {
         }
     }
 
+    const clearForm = () => {
+        validation.values.title = '';
+        validation.values.description = '';
+        validation.values.city = '';
+        validation.values.state = '';
+        validation.values.lga = '';
+        validation.values.housenumber = '';
+        validation.values.landmark = '';
+        setSelectedCategory(null);
+        setselectedFiles([]);
 
+    }
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
@@ -135,51 +150,38 @@ const NewPost = (props) => {
             state,
             housenumber,
             landmark,
-            lga,
-            rname,
-            email,
-            phone,
+            lga
             // categories: ''
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Child Name"),
             description: Yup.string().required("Please Enter Description"),
             city: Yup.string().required("Please Enter Your City"),
-            rname: Yup.string().required("Please Enter Name"),
             state: Yup.string().required("Please Enter Your State"),
             housenumber: Yup.string().required("Please Enter Your House Number"),
             landmark: Yup.string().required("Please Enter Your Landmark"),
             lga: Yup.string().required("Please Enter Your LGA"),
             // categories: Yup.string().required("Please Select Categories"),
-            email: Yup.string()
-                .email("Must be a valid Email")
-                .max(255)
-                .required("Email is required"),
-            phone: Yup.string()
-                .max(10)
-                .min(10)
-                .required("Phone number is required"),
         }),
         onSubmit: e => uploadedFiles()
 
     });
+   
     const saveIncident = async e => {
         dispatch(updateLoader(''))
 
         const user = await storage.getItem(USER_COOKIE);
-        // console.log(user);
         let data = {
             childname: title, categoryId: parseInt(selectedCategory), sex: "M", age: 20, description, child_address: "mm", landmark, city, state, lga,
-            isMobile: false, reporter_phone: phone.toString(), reporter_name: rname, media_file: "media_file", reporter_mail: email, media: allFiles, userId: user.payload.id
+            isMobile: false, reporter_phone: user.payload.phone, reporter_name: user.payload.name, media_file: "media_file", reporter_mail: user.payload.email, media: allFiles, userId: user.payload.id
 
         };
         let url = `incident/create`;
         try {
             const rs = await request(url, 'POST', false, data);
-            console.log(rs);
             if (rs.success === true) {
                 dispatch(updateLoader('none'))
-
+                clearForm();
                 props.showToast('success', 'Successfully saved');
             }
         } catch (err) {
@@ -320,7 +322,7 @@ const NewPost = (props) => {
                                                             <div className="mb-3">
                                                                 <i className="display-4 text-muted uil uil-cloud-upload" />
                                                             </div>
-                                                            <h4>Attache Media File.</h4>
+                                                            <h4>Attach Media File.</h4>
                                                         </div>
                                                     </div>
                                                 )}
@@ -484,80 +486,11 @@ const NewPost = (props) => {
                                         </FormGroup>
                                     </Col>
                                 </Row>
-                                <h5>Report Details</h5>
 
-                                <Row>
-                                    <Col>
-                                        <FormGroup className="mb-3">
-                                            <Label htmlFor="validationCustom01">Name</Label>
-                                            <Input
-                                                name="rname"
-                                                placeholder="Name of Child"
-                                                type="text"
-                                                className="form-control"
-                                                id="validationCustom01"
-                                                onChange={e => setRname(e.target.value)}
-                                                onBlur={validation.handleBlur}
-                                                value={validation.values.rname || ""}
-                                                invalid={
-                                                    validation.touched.rname && validation.errors.rname ? true : false
-                                                }
-                                            />
-                                            {validation.touched.rname && validation.errors.rname ? (
-                                                <FormFeedback type="invalid">{validation.errors.rname}</FormFeedback>
-                                            ) : null}
-                                        </FormGroup>
-                                    </Col>
-
-                                </Row>
-
-                                <Row>
-                                    <Col>
-                                        <FormGroup className="mb-3">
-                                            <Label htmlFor="validationCustom01">Email</Label>
-                                            <Input
-                                                name="email"
-                                                placeholder="Email Address"
-                                                type="email"
-                                                className="form-control"
-                                                id="validationCustom01"
-                                                onChange={e => setEmail(e.target.value)}
-                                                onBlur={validation.handleBlur}
-                                                value={validation.values.email || ""}
-                                                invalid={
-                                                    validation.touched.email && validation.errors.email ? true : false
-                                                }
-                                            />
-                                            {validation.touched.email && validation.errors.email ? (
-                                                <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
-                                            ) : null}
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup className="mb-3">
-                                            <Label htmlFor="validationCustom01">Phone Number</Label>
-                                            <Input
-                                                name="phone"
-                                                placeholder="Phone Number"
-                                                type="number"
-                                                className="form-control"
-                                                id="validationCustom01"
-                                                onChange={e => setPhone(e.target.value)}
-                                                onBlur={validation.handleBlur}
-                                                value={validation.values.phone || ""}
-                                                invalid={
-                                                    validation.touched.phone && validation.errors.phone ? true : false
-                                                }
-                                            />
-                                            {validation.touched.phone && validation.errors.phone ? (
-                                                <FormFeedback type="invalid">{validation.errors.phone}</FormFeedback>
-                                            ) : null}
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
                                 <Button className='float-end' color="success" type="submit">
                                     Submit
                                 </Button>
+                                <Spinner className="fs-5 float-end mx-2" style={{ display: loader }} color="primary" />
 
                             </Form>
                         </CardBody>

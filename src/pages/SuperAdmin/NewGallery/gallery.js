@@ -217,7 +217,7 @@ const NewEvent = props => {
                                                             <div className="mb-3">
                                                                 <i className="display-4 text-muted uil uil-cloud-upload" />
                                                             </div>
-                                                            <h4>Attache Featured Image.</h4>
+                                                            <h4>Attach Featured Image.</h4>
                                                         </div>
                                                     </div>
                                                 )}

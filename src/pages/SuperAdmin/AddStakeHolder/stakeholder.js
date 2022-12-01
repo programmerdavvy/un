@@ -79,9 +79,8 @@ const StakeHolder = () => {
             lastname: '',
             email: '',
             phone: '',
-            position: '',
-            organization
-        },
+            position: ''
+                },
         validationSchema: Yup.object({
             firstname: Yup.string().required("Please Enter Your First Name"),
             lastname: Yup.string().required("Please Enter Your Last Name"),
@@ -250,17 +249,11 @@ const StakeHolder = () => {
                                 <div className="mb-3">
                                     <select
                                         className="form-select"
-                                        id="floatingSelectGrid"
+                                        id="floatingSelectGrids"
                                         // aria-label="Select Categories"
                                         name="category"
-                                        style={{ height: '30px' }}
-                                        // id="validationCustom01"
+                                        // style={{ height: '33px' }}
                                         onChange={e => setOrganization(e.target.value)}
-                                    // onBlur={validation.handleBlur}
-                                    // value={validation.values.organization || ""}
-                                    // invalid={
-                                    //     validation.touched.organization && validation.errors.organization ? true : false
-                                    // }
                                     >
                                         <option>Select Organization</option>
                                         {organizations?.map(e => {
@@ -270,9 +263,6 @@ const StakeHolder = () => {
                                         })}
 
                                     </select>
-                                    {/* {validation.touched.organization && validation.errors.organization ? (
-                                                    <FormFeedback type="invalid">{validation.errors.organization}</FormFeedback>
-                                                ) : null} */}
                                 </div>
                             </FormGroup>
                         </Col>
