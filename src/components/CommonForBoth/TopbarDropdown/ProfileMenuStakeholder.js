@@ -33,11 +33,15 @@ const ProfileMenu = props => {
     let user = await storage.getItem(USER_COOKIE);
     if (!user) {
       window.location.href = '/home'
-    } else {
+    } else if (user.payload.userType !== 'stakeholder') {
+      window.location.href = '/home'
+      
+    }
+    else {
       let value = user.payload.stakeholder
       setusername(value);
     }
-    // console.log(user)
+    console.log(user)
   }
   useEffect(() => {
     loggedUser();

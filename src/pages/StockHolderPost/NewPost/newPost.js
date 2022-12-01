@@ -26,11 +26,12 @@ const NewIncident = (props) => {
     } = props;
     const dispatch = useDispatch();
 
-    const [selectedFiles, setselectedFiles] = useState(null);
+    const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedDocuments, setselectedDocuments] = useState([]);
     const [isChecked, setIsChecked] = useState(false)
     const [selectedMulti, setselectedMulti] = useState(null)
     const [selectedTags, setSelectedTags] = useState([])
+    const [selectedImages, setSelectedImages] = useState([])
 
     const [tags, setTags] = useState('');
     const [description, setDescription] = useState('');
@@ -43,8 +44,8 @@ const NewIncident = (props) => {
 
 
     const onEditorStateChange = (editorState) => {
-        console.log(editorState)
-        setEditorState(editorState)
+        console.log(editorState);
+        setEditorState(editorState);
     }
 
 
@@ -94,61 +95,17 @@ const NewIncident = (props) => {
 
         }
     }
-    const uploadImageCallBacks = async () => {
-        let file = selectedFiles[0]
-        console.log(file);
-        const formData = new FormData();
-
-        formData.append("file", file);
-        formData.append("upload_preset", "geekyimages");
-        // try {
-            // let rs = await httpRequest(url, 'POST', false, formData);
-            const rs = await ((axios.post("https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload", formData))).data;
-            let x = rs.secure_url
-            console.log(x);
-            return x
-        // } catch (err) {
-        //     console.log(err)
-        // }
 
 
-        // fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
-        //     method: "POST",
-        //     body: formData
-        // })
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        //         // secure_url
-        //         try {
-        //             console.log(data);
-        //         } catch (err) {
-        //             console.log(err)
-        //         }
-        //     });
-    }
-    function uploadImageCallBack() {
-        let file = selectedFiles[0]
+    const uploadCallback = (file) => {
         return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload");
-            // xhr.setRequestHeader("Authorization", "Client-ID ##clientid###");
             const formData = new FormData();
             formData.append("file", file);
             formData.append("upload_preset", "geekyimages");
-            xhr.send(formData)
-            xhr.addEventListener("load", async () => {
-                const response = JSON.parse(xhr.responseText);
-                
-                console.log(response.secure_url);
-                await resolve(response.secure_url);
-            });
-            xhr.addEventListener("error", () => {
-                const error = JSON.parse(xhr.responseText);
-                console.log(error);
-                reject(error);
-            });
+            axios.post(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, formData).then(responseImage => {
+                console.log(responseImage)
+                resolve({ data: { link: responseImage.data.secure_url } });
+            })
         });
     }
     /**
@@ -188,9 +145,7 @@ const NewIncident = (props) => {
                 setTitle(rs.result?.title);
                 setAllFiles(rs.result?.media)
                 dispatch(updateLoader('none'));
-
             }
-            // console.log(rs);
         } catch (err) {
             dispatch(updateLoader('none'));
             console.log(err);
@@ -257,10 +212,15 @@ const NewIncident = (props) => {
     ]
 
     const onChangeDocument = e => {
+        let x = [...selectedFiles, ...e]
+        let z = [...selectedDocuments, ...e]
+        setselectedDocuments(z);
         setselectedFiles(e)
     }
     const onChangeImage = e => {
         let x = [...selectedFiles, ...e]
+        let z = [...selectedImages, ...e]
+        setSelectedImages(z);
         setselectedFiles(x);
     }
     useEffect(() => {
@@ -278,8 +238,8 @@ const NewIncident = (props) => {
                             {/* <Card>
                                 <CardBody> */}
                             <h4 className="card-title" onClick={() => {
-                                let x = uploadImageCallBacks()
-                                console.log(x)
+                                // let x = uploadImageCallBacks()
+                                // console.log(x)
                             }}>{params.id ? 'Edit' : 'Create a New'} Post</h4>
 
                             <Form className="needs-validation"
@@ -421,10 +381,28 @@ const NewIncident = (props) => {
                                                     link: { inDropdown: true },
                                                     history: { inDropdown: true },
                                                     image: {
-                                                        uploadCallback: uploadImageCallBack,
+                                                        uploadEnabled: true,
+                                                        uploadCallback: uploadCallback,
+                                                        previewImage: true,
+                                                        inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
                                                         alt: { present: false, mandatory: false },
+                                                        defaultSize: {
+                                                            height: 'auto',
+                                                            width: 'auto',
+                                                        },
                                                     },
                                                 }}
+                                            // toolbar={{
+                                            //     inline: { inDropdown: true },
+                                            //     list: { inDropdown: true },
+                                            //     textAlign: { inDropdown: true },
+                                            //     link: { inDropdown: true },
+                                            //     history: { inDropdown: true },
+                                            //     image: {
+                                            //         uploadCallback: uploadImageCallBack,
+                                            //         alt: { present: false, mandatory: false },
+                                            //     },
+                                            // }}
                                             />
                                             {/* <Editor
                                                 toolbarClassName="toolbarClassName"
@@ -462,61 +440,33 @@ const NewIncident = (props) => {
                                                     </div>
                                                 )}
                                             </Dropzone>
-                                            {/* <div className="dropzone-previews mt-3" id="file-previews">
-                                                {selectedFiles.map((f, i) => {
-                                                    return (
-                                                        <Card
-                                                            className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                            key={i + "-file"}
-                                                        >
-                                                            <div className="p-2">
-                                                                <Row className="align-items-center">
-                                                                    <Col className="col-auto">
-                                                                        <img
-                                                                            data-dz-thumbnail=""
-                                                                            height="80"
-                                                                            className="avatar-sm rounded bg-light"
-                                                                            alt={f.name}
-                                                                            src={f.preview}
-                                                                        />
-                                                                    </Col>
-                                                                    <Col>
-                                                                        <Link
-                                                                            to="#"
-                                                                            className="text-muted font-weight-bold"
-                                                                        >
-                                                                            {f.name}
-                                                                        </Link>
-                                                                        <p className="mb-0">
-                                                                            <strong>{f.formattedSize}</strong>
-                                                                        </p>
-                                                                    </Col>
-                                                                </Row>
-                                                            </div>
-                                                        </Card>
-                                                    )
-                                                })}
-                                            </div> */}
                                         </Form>
-                                        {/* <div className="text-center mt-4">
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-primary waves-effect waves-light"
-                                                            >
-                                                                Upload Document
-                                                            </button>
-                                                        </div> */}
-                                        {/* </CardBody>
-                                                </Card> */}
                                     </Col>
                                     <Col>
                                         <Label>Add Documents</Label>
                                         <Input type='file' onChange={e => onChangeDocument(e.target.files)} multiple />
+                                        <div>
+                                            {selectedDocuments?.map(e => {
+                                                return (
+                                                    <span height="80"
+                                                        className="avatar-sm rounded bg-light mt-2 mx-2" alt='document' >
+                                                        <i className='uil-file-alt' /> {e.name}
+                                                    </span>
+                                                )
+                                            })}
+                                        </div>
                                     </Col>
                                     <Col>
                                         <Label>Add Feature Image</Label>
                                         <Input type='file' onChange={e => onChangeImage(e.target.files)} accept="image/*" multiple />
-
+                                        <div>
+                                            {selectedImages?.map(e => {
+                                                return (
+                                                    <img src={URL.createObjectURL(e)} height="80" key={e.name}
+                                                        className="avatar-sm rounded bg-light mt-2 mx-2" alt='feature' />
+                                                )
+                                            })}
+                                        </div>
                                     </Col>
                                 </Row>
 

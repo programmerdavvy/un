@@ -66,7 +66,7 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [meta, setMeta] = useState(null);
   const [percentage, setPercentage] = useState([]);
- const [mobileP,setMobileP] = useState(null)
+  const [mobileP, setMobileP] = useState(null)
 
   const fetchMobileCount = useCallback(async () => {
     dispatch(updateLoader(''))
@@ -140,7 +140,7 @@ const Dashboard = () => {
     const p = page || 1;
     try {
       const url = `sections/admin?pageId=&page=${p}&limit=5`;
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'GET', true);
       setPosts(rs.result);
       setCount(Math.ceil(rs.paging?.total / rowsPerPage));
       setMeta(rs.paging);
@@ -181,7 +181,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: `${percentage[5]?.value}%`, 
+      badgeValue: `${percentage[5]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: series2,
@@ -234,7 +234,7 @@ const Dashboard = () => {
       chartwidth: 75,
       prefix: "",
       suffix: "",
-      badgeValue: `${percentage[0]?.value}%`, 
+      badgeValue: `${percentage[0]?.value}%`,
       color: "danger",
       desc: "Last 30 days",
       series: seriesMob,

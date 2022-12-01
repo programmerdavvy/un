@@ -1,9 +1,8 @@
 // import should be made
 // import SSRStorage from './storage';
-import { API_URI, HTTP_URI } from './constants';
+import { API_URI, HTTP_URI, USER_COOKIE } from './constants';
 // import axios from 'axios';
 import SSRStorage from './storage';
-import { TOKEN_COOKIE } from './constants';
 const parseJSON = response => response.json();
 export const isUnset = o => typeof o === 'undefined' || o === null;
 export function decodeValue(val) {
@@ -55,8 +54,8 @@ const checkStatus = async response => {
 
 export const request = async (url, method, authed = false, data) => {
     // prettier-ignore
-    const user = await (new SSRStorage()).getItem(TOKEN_COOKIE);
-    // console.log(user)
+    const user = await (new SSRStorage()).getItem(USER_COOKIE);
+    console.log(user)
     const response = await fetch(`${API_URI}/${url}`, {
         method: method,
         headers: authed ? headers(user) : { ...defaultHeaders },

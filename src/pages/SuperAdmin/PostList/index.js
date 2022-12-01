@@ -61,10 +61,8 @@ const Dashboard = () => {
     let url = `sections/admin?page=${p}&limit=10`;
 
     try {
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'GET', true);
       if (rs.success === true) {
-    console.log(rs)
-
         setPosts(rs.result);
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));
         setMeta(rs.paging);

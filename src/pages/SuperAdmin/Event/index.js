@@ -51,7 +51,7 @@ function Index() {
         let url = `sections/admin?pageId=2`;
         // &page=${p}&limit=10
         try {
-            const rs = await request(url, 'GET', false);
+            const rs = await request(url, 'GET', true);
             if (rs.success === true) {
                 setEvents(rs.result);
                 setCount(Math.ceil(rs.paging?.total / rowsPerPage));

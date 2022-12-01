@@ -185,7 +185,7 @@ const Login = props => {
               <Card>
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
-                    <h5 className="text-primary">Welcome Back !</h5>
+                    <h5 className="text-primary">Welcome Back Admin !</h5>
                     <p className="text-muted">Sign in to continue to FGN ILO</p>
                   </div>
                   <div className="p-2 mt-4">

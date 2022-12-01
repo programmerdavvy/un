@@ -6,15 +6,19 @@ import Dropzone from "react-dropzone"
 import { Link, } from 'react-router-dom'
 import Flatpickr from "react-flatpickr"
 import { request } from '../../../services/utilities';
-import moment from 'moment';
+import { Spinner } from "reactstrap";
+
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateLoader } from "../../../store/actions";
 
 
 const NewEvent = (props) => {
     const dispatch = useDispatch();
+    const { loader } = useSelector((state) => ({
+        loader: state.visibility.show
+    }));
     const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null)
 
@@ -55,7 +59,7 @@ const NewEvent = (props) => {
             // categories: ''
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Child Name"),
+            title: Yup.string().required("Please Enter Event Title"),
             description: Yup.string().required("Please Enter Description"),
             // startate: Yup.date().required("Please Enter Date"),
             // enddate: Yup.date().required("Please Enter Date"),
@@ -68,11 +72,10 @@ const NewEvent = (props) => {
         onSubmit: e => uploadedFiles()
     });
     const uploadedFiles = () => {
-        dispatch(updateLoader(''));
-        if (selectedFiles.length >= !1) {
+        if (!(selectedFiles.length >= 1)) {
             return saveEvent()
         }
-
+        dispatch(updateLoader(''));
         let count = 0;
         // const filteredD = selectedFiles.filter(i => !i.id)
         // const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
@@ -89,7 +92,6 @@ const NewEvent = (props) => {
                 body: formData
             })
                 .then((response) => {
-                    console.log(response)
                     return response.json();
                 })
                 .then((data) => {
@@ -120,7 +122,7 @@ const NewEvent = (props) => {
         };
         try {
             let url = `sections`;
-            const rs = await request(url, 'POST', false, data);
+            const rs = await request(url, 'POST', true, data);
             if (rs.success === true) {
                 dispatch(updateLoader('none'));
                 showToast('success', 'Successfully Saved');
@@ -243,31 +245,11 @@ const NewEvent = (props) => {
                                             Date & Time
                                         </Label>
                                         <InputGroup>
-                                            <Flatpickr
-                                                name='startdate'
-                                                className="form-control d-block bg-white"
-                                                placeholder="dd M,yyyy hh:M:ss"
-                                                options={{
-                                                    enableTime: true,
-                                                    dateFormat: "Y-m-d H:i",
-                                                    minDate: "today"
-                                                }}
-                                                onChange={e => {
-                                                    const datetime = moment(new Date(e)).format(
-                                                        'YYYY-MM-DD HH:mm:ss'
-                                                    );
-                                                    setStartDate(datetime)
-                                                }}
-                                            // onChange={validation.handleChange}
-                                            // onBlur={validation.handleBlur}
-                                            // value={validation.values.startdate || ""}
-                                            // invalid={
-                                            //     validation.touched.startdate && validation.errors.startdate ? true : false
-                                            // }
+
+                                            <Input type='datetime-local' name='startdate'
+                                                onChange={e => setStartDate(e.target.value)}
                                             />
-                                            {/* {validation.touched.startdate && validation.errors.startdate ? (
-                                                        <FormFeedback type="invalid">{validation.errors.startdate}</FormFeedback>
-                                                    ) : null} */}
+
                                         </InputGroup>
                                     </Col>
 
@@ -291,31 +273,8 @@ const NewEvent = (props) => {
                                             Date
                                         </Label>
                                         <InputGroup>
-                                            <Flatpickr
-                                                name='enddate'
-                                                className="form-control d-block bg-white"
-                                                placeholder="dd M,yyyy hh:M:ss"
-                                                options={{
-                                                    enableTime: true,
-                                                    dateFormat: "Y-m-d H:i",
-                                                    minDate: "today"
-                                                }}
-                                                onChange={e => {
-                                                    const datetime = moment(new Date(e)).format(
-                                                        'YYYY-MM-DD HH:mm:ss'
-                                                    );
-                                                    setEndDate(datetime)
-                                                }}
-                                            // onChange={validation.handleChange}
-                                            // onBlur={validation.handleBlur}
-                                            // value={validation.values.enddate || ""}
-                                            // invalid={
-                                            //     validation.touched.enddate && validation.errors.enddate ? true : false
-                                            // }
+                                            <Input type='datetime-local' name='enddate' onChange={e => setEndDate(e.target.value)}
                                             />
-                                            {/* {validation.touched.enddate && validation.errors.enddate ? (
-                                                        <FormFeedback type="invalid">{validation.errors.enddate}</FormFeedback>
-                                                    ) : null} */}
                                         </InputGroup>
                                     </Col>
                                 </Row>
@@ -461,6 +420,7 @@ const NewEvent = (props) => {
                                 <Button className='float-end' color="success" type="submit">
                                     Publish
                                 </Button>
+                                <Spinner className="fs-5 float-end mx-2" style={{ display: loader }} color="primary" />
 
                             </Form>
                         </CardBody>

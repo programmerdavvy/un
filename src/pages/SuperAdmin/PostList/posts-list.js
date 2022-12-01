@@ -10,110 +10,6 @@ import ReactPaginate from "react-paginate"
 function PostList(props) {
 
 
-  const actionIcon = <div className="d-flex gap-3 users">
-    <ul className="list-inline font-size-20 contact-links mb-0">
-      <li className="list-inline-item">
-        <Link
-          to="/view-post/1"
-          className="text-primary"
-        // onClick={() => {
-        //   const users = cellProps.row.original
-        //   // handleUserClick(users)
-        // }}
-        >
-          <i className="uil-eye font-size-18" id="edittooltip" />
-          <UncontrolledTooltip placement="top" target="edittooltip">
-            View Details
-          </UncontrolledTooltip>
-        </Link>
-      </li>
-      <li className="list-inline-item">
-        <Link
-          to="/edit-post/1"
-          className="text-primary"
-        // onClick={() => {
-        //   const users = cellProps.row.original
-        //   // handleUserClick(users)
-        // }}
-        >
-          <i className="uil uil-pen font-size-18" id="edittooltip" />
-          <UncontrolledTooltip placement="top" target="edittooltip">
-            Edit
-          </UncontrolledTooltip>
-        </Link>
-      </li>
-      <li className="list-inline-item">
-        <Link
-          to="#"
-          className="text-danger"
-        // onClick={() => {
-        //   const users = cellProps.row.original
-        //   onClickDelete(users)
-        // }}
-        >
-          <i
-            className="uil uil-trash-alt font-size-18"
-            id="deletetooltip"
-          />
-          <UncontrolledTooltip placement="top" target="deletetooltip">
-            Delete
-          </UncontrolledTooltip>
-        </Link>
-      </li>
-    </ul>
-  </div>
-  const data = {
-    columns: [
-      {
-        label: "Title",
-        field: "title",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Author",
-        field: "author",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Categories",
-        field: "categories",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Tag",
-        field: "tag",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "Date",
-        field: "date",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Action",
-        field: "action",
-        sort: "asc",
-        width: 100,
-      },
-    ],
-    rows: [
-      {
-        title: "Tiger Nixon",
-        author: "System Architect",
-        categories: "Edinburgh",
-        tags: "61",
-        date: "2011/04/25",
-        action: actionIcon,
-      },
-
-
-    ],
-  }
   const onClickDelete = async id => {
     if (window.confirm('Are u sure!')) {
       let url = `sections?id=${id}`
@@ -132,45 +28,36 @@ function PostList(props) {
 
   }
   const onApprovePost = async id => {
-      let url = `sections/approve?sectionId=${id}`
-      try {
-        const rs = await request(url, 'GET', false);
-        if (rs.success === true) {
-          props.fetchPosts();
-          props.showToast('success', 'Successfully Approved');
-        }
-      } catch (err) {
-        console.log(err);
-        props.showToast('error', 'Failed to Approve');
-
+    let url = `sections/approve?sectionId=${id}`
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        props.fetchPosts();
+        props.showToast('success', 'Successfully Approved');
       }
+    } catch (err) {
+      console.log(err);
+      props.showToast('error', 'Failed to Approve');
+
     }
+  }
+  const onDisApprovePost = async id => {
+    let url = `sections/disapprove?sectionId=${id}`
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        props.fetchPosts();
+        props.showToast('success', 'Successfully Approved');
+      }
+    } catch (err) {
+      console.log(err);
+      props.showToast('error', 'Failed to Approve');
+
+    }
+  }
 
   return (
     <React.Fragment>
-
-      <Row className="d-none">
-        <Col className="col-12">
-          <Card>
-            <CardBody>
-              {/* <CardTitle>Stripped example </CardTitle>
-              <CardSubtitle className="mb-3">
-                mdbreact DataTables has most features enabled by default, so
-                all you need to do to use it with your own tables is to call
-                the construction function:{" "}
-                <code>&lt;MDBDataTable striped /&gt;</code>.
-              </CardSubtitle> */}
-              <div>
-                <Link to='/admin-new-post' className="btn btn-primary float-end">
-                  Add New
-                </Link>
-              </div>
-              <MDBDataTable responsive striped bordered data={data} />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-
       <Row>
         <Col className="col-12">
           <Card>
@@ -226,10 +113,10 @@ function PostList(props) {
                             {e.title}
                           </td>
                           <td>
-                            News
+                            {e.stakeholder?.name}
                           </td>
                           <td>
-                            {e.category?.name}
+                            {e.page?.name}
                           </td>
                           <td>
                             {e.tags}
@@ -241,20 +128,38 @@ function PostList(props) {
                           <td>
                             <div className="d-flex gap-3 users">
                               <ul className="list-inline font-size-20 contact-links mb-0">
-                              <li className="list-inline-item">
+
+
+                                {e.isApproved !== true ?
+                                  <li className="list-inline-item">
+                                    <Link
+                                      to={`#`}
+                                      className="text-dark"
+                                      onClick={() => {
+                                        onApprovePost(e.id);
+                                      }}
+                                    >
+                                      <i className="uil-check font-size-18" id="edittooltip1" />
+                                      <UncontrolledTooltip placement="top" target="edittooltip1">
+                                        Approve
+                                      </UncontrolledTooltip>
+                                    </Link>
+                                  </li> : ''}
+                                <li className="list-inline-item">
                                   <Link
                                     to={`#`}
                                     className="text-dark"
-                                  onClick={() => {
-                                    onApprovePost(e.id);
-                                  }}
+                                    onClick={() => {
+                                      onDisApprovePost(e.id);
+                                    }}
                                   >
-                                    <i className="uil-check font-size-18" id="edittooltip1" />
-                                    <UncontrolledTooltip placement="top" target="edittooltip1">
-                                      Approve
+                                    <i className=" uil-cancel font-size-18" id="edittooltipfg1" />
+                                    <UncontrolledTooltip placement="top" target="edittooltipfg1">
+                                      Disapprove
                                     </UncontrolledTooltip>
                                   </Link>
                                 </li>
+
                                 <li className="list-inline-item">
                                   <Link
                                     to={`/admin-view-post/${e.id}`}

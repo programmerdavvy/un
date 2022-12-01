@@ -11526,7 +11526,7 @@ react-date-picker@^8.3.5:
     react-fit "^1.4.0"
     update-input-width "^1.2.2"
 
-react-datepicker@^4.3.0:
+react-datepicker@^4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.8.0.tgz#11b8918d085a1ce4781eee4c8e4641b3cd592010"
   integrity sha512-u69zXGHMpxAa4LeYR83vucQoUCJQ6m/WBsSxmUMu/M8ahTSVMMyiyQzauHgZA2NUr9y0FUgOAix71hGYUb6tvg==
@@ -11653,10 +11653,10 @@ react-fit@^1.4.0:
     prop-types "^15.6.0"
     tiny-warning "^1.0.0"
 
-react-flatpickr@^3.10.12:
-  version "3.10.12"
-  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.10.12.tgz#c07f39f553865bc7063b69586ffc9d36759e6915"
-  integrity sha512-NYhUg3QE9K1QpHXLxR7HuWldnNbVWa6lgiZBlWu0HDsX3IWs/hVJ5q1JzM0/CNLJmm2blUEdudHwbyBNezynBg==
+react-flatpickr@^3.10.13:
+  version "3.10.13"
+  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.10.13.tgz#5b9d8f35f84e43f342fb0f0334b78a8dcd7d67c4"
+  integrity sha512-4m+K1K8jhvRFI8J/AHmQfA5hLALzhebEtEK8mLevXjX24MV3u502crzBn+EGFIBOfNUtrL5PId9FsGwgtuz/og==
   dependencies:
     flatpickr "^4.6.2"
     prop-types "^15.5.10"
