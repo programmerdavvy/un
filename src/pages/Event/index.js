@@ -41,7 +41,6 @@ import SeeAlso from "../../components/Common/SeeAlso"
 import TopRead from "../../components/Common/TopRead"
 import axios from "axios"
 
-
 const Dashboard = () => {
   const [news, setNews] = useState()
   useEffect(() => {
@@ -51,11 +50,10 @@ const Dashboard = () => {
           "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
         )
         setNews(response?.data?.result)
-        
       }
       fetchAllNews()
     } catch (error) {
-      console.log('Fetch All News Error', error)
+      console.log("Fetch All News Error", error)
     }
   }, [])
 
@@ -70,11 +68,6 @@ const Dashboard = () => {
             </Col>
           </Row>
           <Row>
-            <Title title="LATEST" />
-            <NewsCard news={news}/>
-          </Row>
-
-          <Row>
             <Col xl={8}>
               <Col className="me-3">
                 <Title title="ALL EVENTS" />
@@ -88,8 +81,8 @@ const Dashboard = () => {
               <EventsCard />
             </Col>
             <Col xl={12}>
-            <Title title="TOP READ" />
-            <TopRead/>
+              <Title title="TOP READ" />
+              <TopRead />
             </Col>
           </Row>
         </Container>
