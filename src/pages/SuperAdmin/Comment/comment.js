@@ -32,7 +32,7 @@ const Comment = (props) => {
                 const rs = await request(url, 'DELETE', false);
                 if (rs.success === true) {
                     props.fetchComment();
-                dispatch(updateLoader('none'));
+                    dispatch(updateLoader('none'));
                     props.showToast('success', 'Deleted  successfully');
                 }
             } catch (err) {
@@ -84,7 +84,8 @@ const Comment = (props) => {
                                                     {e.comment}
                                                 </td>
                                                 <td>
-                                                {e.section?.title}                                                </td>
+                                                    {e.section?.title}
+                                                </td>
                                                 <td>
                                                     {new Date(e.createdAt).toDateString()}
                                                 </td>

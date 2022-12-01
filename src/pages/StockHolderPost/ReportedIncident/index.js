@@ -20,7 +20,7 @@ function Index() {
         dispatch(updateLoader(''))
         const p = page || 1;
         try {
-            let url = `incident/all/specific/?action=individual&page=${p}&limit=10`;
+            let url = `incident/all/specific/?action=stakeholder&page=${p}&limit=10`;
             const rs = await request(url, 'GET', false);
             // console.log(rs)
             setIncidents(rs.result);
