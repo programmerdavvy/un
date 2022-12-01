@@ -35,6 +35,7 @@ import VideoCard from "../../components/Common/VideoCard"
 import EventsCard from "../../components/Common/EventsCard"
 import TopRead from "../../components/Common/TopRead"
 import { Translate } from "react-auto-translate"
+import moment from "moment"
 
 const InvoiceDetail = props => {
   const {
@@ -46,6 +47,7 @@ const InvoiceDetail = props => {
   const [individualNews, setIndividualNews] = useState(null)
   const [comment, setComment] = useState("")
   const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -69,6 +71,7 @@ const InvoiceDetail = props => {
       sectionId: individualNews?.id,
       name: name,
       comment: comment,
+      email: email,
     }
     try {
       setLoading(true)
@@ -76,7 +79,7 @@ const InvoiceDetail = props => {
         "https://unirp.herokuapp.com/sections/comment",
         payLoad
       )
-      console.log("heyyyy", response)
+
       setLoading(false)
     } catch (error) {
       console.log("Submit comment error", error)
@@ -104,42 +107,60 @@ const InvoiceDetail = props => {
                 <CardImg
                   top
                   className="img-fluid"
-                  src={individualNews?.media[0].link}
+                  src={individualNews?.media.reverse()[0].link}
                   alt="Card image cap"
                 />
                 <CardBody>
-                  <CardTitle className="h4 mt-0">
-                    <Translate>{individualNews?.title}</Translate>
+                  <CardTitle className="h4 mt-0 d-flex justify-content-between">
+                    <Translate className="me-2">
+                      {individualNews?.title}
+                    </Translate>
+                    <span className="me-2">News</span>
+                    <span className="me-2">
+                      {moment(individualNews?.createdAt).format("DD-MM-YYYY")}
+                    </span>
                   </CardTitle>
                   <CardText>
                     <Translate>{individualNews?.content}</Translate>
                   </CardText>
                 </CardBody>
               </Card>
-              <div>
+              <div style={{ marginTop: "80px" }}>
                 <Label>Tags: </Label>
                 {individualNews?.tags.split(",").map((tag, i) => (
-                  <Button
-                    color="secondary"
-                    className="btn-soft-secondary waves-effect waves-light me-3"
-                  >
-                    {tag}
-                  </Button>
+                  <span> {tag}</span>
                 ))}
-                <div className="col-4 mt-2">
-                  <Label
-                    className="visually-hidden"
-                    htmlFor="specificSizeInputName"
-                  >
-                    Name
-                  </Label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    id="specificSizeInputName"
-                    placeholder="Enter Name"
-                  onChange={e => setName(e.target.value)}
-                  />
+                <div className="row">
+                  <div className="col-6 mt-2">
+                    <Label
+                      className="visually-hidden"
+                      htmlFor="specificSizeInputName"
+                    >
+                      Name
+                    </Label>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="specificSizeInputName"
+                      placeholder="Enter Name"
+                      onChange={e => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-6 mt-2">
+                    <Label
+                      className="visually-hidden"
+                      htmlFor="specificSizeInputName"
+                    >
+                      E-mail
+                    </Label>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="specificSizeInputName"
+                      placeholder="Enter E-mail"
+                      onChange={e => setEmail(e.target.value)}
+                    />
+                  </div>
                 </div>
                 <div className="mt-3">
                   <Input
@@ -157,17 +178,17 @@ const InvoiceDetail = props => {
                     onClick={handleComment}
                   >
                     {loading ? (
-                              <Spinner color="primary" style={{height:'20px', width:'20px'}}/>
-                            ) : (
-                              <Translate>Post Comment</Translate>
-                            )}
-
-                            
-                    
+                      <Spinner
+                        color="primary"
+                        style={{ height: "20px", width: "20px" }}
+                      />
+                    ) : (
+                      <Translate>Post Comment</Translate>
+                    )}
                   </Button>
                 </div>
               </div>
-              <Col lg={12}>
+              <Col lg={12} style={{ marginTop: "80px" }}>
                 <Card>
                   <CardHeader>Comments</CardHeader>
                   <CardBody>

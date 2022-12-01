@@ -277,11 +277,6 @@ const Dashboard = () => {
             </Col>
           </Row>
           <Row>
-            <Title title="LATEST" />
-            <NewsCard />
-          </Row>
-
-          <Row>
             <Col xl={8}>
               <Col className="me-3">
                 <Title title="SEE ALSO" />

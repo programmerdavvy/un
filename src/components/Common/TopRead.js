@@ -12,6 +12,7 @@ import {
   CardSubtitle,
   CardHeader,
 } from "reactstrap"
+import newImage1 from "../../assets/images/un/children.png"
 
 const TopRead = props => {
   return (
@@ -20,11 +21,14 @@ const TopRead = props => {
         <Col lg={6}>
           <Card>
             <Row className="g-0 align-items-center">
-              <Col md={4}>
-                <CardImg
-                  className="img-fluid"
-                  src=''
-                  alt="Card image cap"
+              <Col md={4} className="d-flex justify-content-center">
+                <img
+                  src={newImage1}
+                  style={{
+                    borderRadius: "50%",
+                    width: "100px",
+                    height: "100px",
+                  }}
                 />
               </Col>
               <Col md={8}>
@@ -47,12 +51,22 @@ const TopRead = props => {
         <Col lg={6}>
           <Card>
             <Row className="g-0 align-items-center">
+              <Col md={4} className="d-flex justify-content-center">
+                <img
+                  src={newImage1}
+                  style={{
+                    borderRadius: "50%",
+                    width: "100px",
+                    height: "100px",
+                  }}
+                />
+              </Col>
               <Col md={8}>
                 <CardBody>
                   <CardTitle className="h5">Card title</CardTitle>
                   <CardText>
                     This is a wider card with supporting text below as a natural
-                    lead-in to additional content.bbbbb
+                    lead-in to additional content.ssssss
                   </CardText>
                   <CardText>
                     <small className="text-muted">
@@ -61,110 +75,67 @@ const TopRead = props => {
                   </CardText>
                 </CardBody>
               </Col>
-              <Col md={4}>
-                <CardImg
-                  className="img-fluid"
-                  src=''
-                  alt="Card image cap"
+            </Row>
+          </Card>
+        </Col>
+        <Col lg={6}>
+          <Card>
+            <Row className="g-0 align-items-center">
+              <Col md={4} className="d-flex justify-content-center">
+                <img
+                  src={newImage1}
+                  style={{
+                    borderRadius: "50%",
+                    width: "100px",
+                    height: "100px",
+                  }}
                 />
+              </Col>
+              <Col md={8}>
+                <CardBody>
+                  <CardTitle className="h5">Card title</CardTitle>
+                  <CardText>
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content.ssssss
+                  </CardText>
+                  <CardText>
+                    <small className="text-muted">
+                      Last updated 3 mins ago
+                    </small>
+                  </CardText>
+                </CardBody>
               </Col>
             </Row>
           </Card>
         </Col>
-      </Row>
-      <Row>
-        <Col xl={12} className="m-3">
+        <Col lg={6}>
           <Card>
-            <CardBody>
-              <Row>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-              </Row>
-
-              <Col xl={12}>
-                <hr className="pt-1 " />
+            <Row className="g-0 align-items-center">
+              <Col md={4} className="d-flex justify-content-center">
+                <img
+                  src={newImage1}
+                  style={{
+                    borderRadius: "50%",
+                    width: "100px",
+                    height: "100px",
+                  }}
+                />
               </Col>
-
-              <Row>
-                <Col xl={6}>
+              <Col md={8}>
+                <CardBody>
+                  <CardTitle className="h5">Card title</CardTitle>
                   <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content.ssssss
                   </CardText>
-                </Col>
-                <Col xl={6}>
                   <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
+                    <small className="text-muted">
+                      Last updated 3 mins ago
+                    </small>
                   </CardText>
-                </Col>
-              </Row>
-
-              <Col xl={12}>
-                <hr className="pt-1 " />
+                </CardBody>
               </Col>
-
-              <Row>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-              </Row>
-              <Col xl={12}>
-                <hr className="pt-1 " />
-              </Col>
-
-              <Row>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-              </Row>
-              <Col xl={12}>
-                <hr className="pt-1 " />
-              </Col>
-
-              <Row>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-                <Col xl={6}>
-                  <CardText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Integer posuere erat a ante.
-                  </CardText>
-                </Col>
-              </Row>
-            </CardBody>
+            </Row>
           </Card>
         </Col>
       </Row>
