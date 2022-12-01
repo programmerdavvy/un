@@ -44,7 +44,6 @@ const SeeAlso = props => {
                 </CardTitle>
                 <span className="blockquote-footer mt-3 font-size-12">
                   {moment(news.createdAt).format("DD-MM-YYYY")}{" "}
-                  <cite title="Source Title">{news?.tags}</cite>
                 </span>
                 <CardText className="">
                   {news.content.slice(0, 300)}...

@@ -274,10 +274,7 @@ const Dashboard = () => {
               <Slidewithcontrol />
             </Col>
           </Row>
-          <Row>
-            <Title title="NEWS" />
-            <NewsCard />
-          </Row>
+         
 
           <Row>
             <Col xl={8}>

@@ -21,20 +21,9 @@ const TagsNoComment = props => {
     <div>
       <Label>Tags:</Label>
       <div className="d-flex p-2 justify-content-start">
-        <Button
-          color="secondary"
-          className="btn-soft-secondary waves-effect waves-light me-3"
-        >
-          Tags
-        </Button>
-        <Button
-          color="secondary"
-          className="btn-soft-secondary waves-effect waves-light"
-        >
-          Keywords
-        </Button>
+        <span className="me-1">Tags</span>
+        <span className="me-1">Keywords</span>
       </div>
-      
     </div>
   )
 }
