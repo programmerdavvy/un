@@ -20,7 +20,7 @@ const storage = new SSRStorage();
 
 
 
-const NewIncident = (props) => {
+const NewPost = (props) => {
     const {
         match: { params },
     } = props;
@@ -137,7 +137,7 @@ const NewIncident = (props) => {
         dispatch(updateLoader(''));
         try {
             let url = `sections/admin?pageId=&id=${params?.id}`;
-            const rs = await request(url, 'GET', false);
+            const rs = await request(url, 'GET', true);
             if (rs.success === true) {
                 setPost(rs.result);
                 setDescription(rs.result?.content);
@@ -677,4 +677,4 @@ const NewIncident = (props) => {
     )
 }
 
-export default withRouter(NewIncident) 
+export default withRouter(NewPost) 

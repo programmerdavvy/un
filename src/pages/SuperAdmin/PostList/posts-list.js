@@ -42,9 +42,10 @@ function PostList(props) {
     }
   }
   const onDisApprovePost = async id => {
-    let url = `sections/disapprove?sectionId=${id}`
+    let url = `sections/admin/disapprove?sectionId=${id}`;
+    const data = { isApproved: false }
     try {
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'PATCH', true, data);
       if (rs.success === true) {
         props.fetchPosts();
         props.showToast('success', 'Successfully Approved');
@@ -144,7 +145,15 @@ function PostList(props) {
                                         Approve
                                       </UncontrolledTooltip>
                                     </Link>
-                                  </li> : ''}
+                                  </li> :
+                                  <li className="list-inline-item" style={{ visibility: 'hidden' }}>
+                                    <Link
+                                      to={`#`}
+                                      className="text-dark"
+                                    >
+                                      <i className="uil-check font-size-18" id="edittooltip1" />
+                                    </Link>
+                                  </li>}
                                 <li className="list-inline-item">
                                   <Link
                                     to={`#`}
