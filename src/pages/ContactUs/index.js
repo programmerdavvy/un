@@ -19,8 +19,7 @@ import {
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 
 //Import Image
-import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
-import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
+
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Title from "../../components/Common/Title"
 import { Translate } from "react-auto-translate"
