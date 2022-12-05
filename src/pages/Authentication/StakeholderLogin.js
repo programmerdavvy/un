@@ -93,13 +93,13 @@ const Login = props => {
       let data = { email: e.email, password: e.password };
       try {
         const rs = await httpRequest(url, 'POST', data);
-        // console.log(rs);
-        if (rs.success === true && rs.payload.userType === 'stakeholder') {
+        console.log(rs);
+        if (rs.success === true && rs.result?.payload?.userType === 'stakeholder') {
           storage.setItem(USER_COOKIE, rs.result);
           dispatch(updateLoader('none'))
           showToast('success', 'Successfully login');
           window.location.href = '/stakeholder';
-        } else if (rs.success === true && rs.payload.userType === 'admin') {
+        } else if (rs.success === true && rs.result?.payload?.userType === 'admin') {
           dispatch(updateLoader('none'))
           window.location.href = '/admin-login';
         }

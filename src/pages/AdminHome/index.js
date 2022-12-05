@@ -223,7 +223,7 @@ const Dashboard = () => {
       options: options2,
     },
     {
-      id: 3,
+      id: 4,
       icon: "uil-coins",
       title: "Mobile submissions",
       rate: mobileCount,
@@ -272,7 +272,7 @@ const Dashboard = () => {
 
   const openClose = [
     {
-      id: 4,
+      id: 1,
       icon: "uil-coins",
       title: "Opened  Incidents",
       rate: mobileCount,
@@ -289,7 +289,7 @@ const Dashboard = () => {
       series: seriesOp,
       options: options2,
     }, {
-      id: 4,
+      id: 2,
       icon: "uil-coins",
       title: "Closed  Incidents",
       rate: mobileCount,

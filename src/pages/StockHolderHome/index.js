@@ -71,7 +71,7 @@ const Dashboard = () => {
 
   const fetchPosts = useCallback(async (page) => {
     const user = await storage.getItem(USER_COOKIE);
-    // console.log(user)
+    console.log(user)
     dispatch(updateLoader(''));
     let p = page || 1;
     let url = `sections/?page=${p}&limit=5&userId=${user.payload.stakeholderId}`;

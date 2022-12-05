@@ -118,7 +118,7 @@ function PostList(props) {
     if (window.confirm('Are u sure!')) {
       let url = `sections?id=${id}`
       try {
-        const rs = await request(url, 'DELETE', false);
+        const rs = await request(url, 'DELETE', true);
         if (rs.success === true) {
           props.fetchPosts();
           props.showToast('success', 'Successfully Deleted');
@@ -132,19 +132,19 @@ function PostList(props) {
 
   }
   const onApprovePost = async id => {
-      let url = `sections/approve?sectionId=${id}`
-      try {
-        const rs = await request(url, 'GET', false);
-        if (rs.success === true) {
-          props.fetchPosts();
-          props.showToast('success', 'Successfully Approved');
-        }
-      } catch (err) {
-        console.log(err);
-        props.showToast('error', 'Failed to Approve');
-
+    let url = `sections/approve?sectionId=${id}`
+    try {
+      const rs = await request(url, 'GET', false);
+      if (rs.success === true) {
+        props.fetchPosts();
+        props.showToast('success', 'Successfully Approved');
       }
+    } catch (err) {
+      console.log(err);
+      props.showToast('error', 'Failed to Approve');
+
     }
+  }
 
   return (
     <React.Fragment>
@@ -226,10 +226,10 @@ function PostList(props) {
                             {e.title}
                           </td>
                           <td>
-                            News
+                            {e.stakeholder?.name}
                           </td>
                           <td>
-                            {e.category?.name}
+                            {e.page?.name}
                           </td>
                           <td>
                             {e.tags}
@@ -241,13 +241,13 @@ function PostList(props) {
                           <td>
                             <div className="d-flex gap-3 users">
                               <ul className="list-inline font-size-20 contact-links mb-0">
-                              <li className="list-inline-item">
+                                <li className="list-inline-item">
                                   <Link
                                     to={`#`}
                                     className="text-dark"
-                                  onClick={() => {
-                                    onApprovePost(e.id);
-                                  }}
+                                    onClick={() => {
+                                      onApprovePost(e.id);
+                                    }}
                                   >
                                     <i className="uil-check font-size-18" id="edittooltip1" />
                                     <UncontrolledTooltip placement="top" target="edittooltip1">
