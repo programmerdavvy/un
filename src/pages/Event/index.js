@@ -11,6 +11,7 @@ import {
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import newImage1 from "../../assets/images/un/children.png"
+import ReactPaginate from "react-paginate"
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
@@ -40,22 +41,33 @@ import Statistics from "../../components/Common/Statistics"
 import SeeAlso from "../../components/Common/SeeAlso"
 import TopRead from "../../components/Common/TopRead"
 import axios from "axios"
+import moment from "moment"
 
 const Dashboard = () => {
-  const [news, setNews] = useState()
+  const [event, setEvent] = useState()
+  const [meta, setMeta] = useState(null)
+
+  const fetchAllEvent = async page => {
+    const p = page || 1
+    const response = await axios.get(
+      `https://unirp.herokuapp.com/sections/?pageId=2&language=&events=&commentPage=&commentLimit=20&limit=10&page=${p}`
+    )
+    setEvent(response?.data?.result)
+    setMeta(response?.data?.paging)
+  }
+
   useEffect(() => {
     try {
-      const fetchAllNews = async () => {
-        const response = await axios.get(
-          "https://unirp.herokuapp.com/sections/?pageId=1&language=&events=&commentPage=1&commentLimit=20"
-        )
-        setNews(response?.data?.result)
-      }
-      fetchAllNews()
+      fetchAllEvent()
     } catch (error) {
-      console.log("Fetch All News Error", error)
+      console.log("Fetch All Event Error", error)
     }
   }, [])
+
+  const handlePagination = page => {
+    fetchAllEvent(page.selected + 1)
+  }
+  console.log("Malik", event)
 
   return (
     <React.Fragment>
@@ -67,18 +79,56 @@ const Dashboard = () => {
               <Slidewithcontrol />
             </Col>
           </Row>
+
           <Row>
             <Col xl={8}>
               <Col className="me-3">
                 <Title title="ALL EVENTS" />
-                {/* <SeeAlso news={news}/> */}
+                {event?.map((event, id) => (
+                  <Row className="mb-5">
+                    <Col xl={2} className="">
+                      {moment(event.startDate).format("DD-MM-YYYY")}
+                    </Col>
+                    <Col xl={10} className="">
+                      <p>{event.title}</p>
+                      <h3>{event.title}</h3>
+                      <span className="mb-5">Venue: {event.location}</span>
+                      <p>{event.content.slice(0, 200)}</p>
+                    </Col>
+                  </Row>
+                ))}
               </Col>
+              <div className="mt-3 d-flex align-items-center justify-content-between">
+                <div>Showing 1 to 10 of {meta?.total} Events</div>
+
+                <div>
+                  <ReactPaginate
+                    nextLabel="Next"
+                    breakLabel="..."
+                    previousLabel="Prev"
+                    pageCount={meta?.pages}
+                    // pageCount={props.count}
+                    activeClassName="active"
+                    breakClassName="page-item"
+                    pageClassName={"page-item"}
+                    breakLinkClassName="page-link"
+                    nextLinkClassName={"page-link"}
+                    pageLinkClassName={"page-link"}
+                    nextClassName={"page-item next"}
+                    previousLinkClassName={"page-link"}
+                    previousClassName={"page-item prev"}
+                    onPageChange={page => handlePagination(page)}
+                    // forcePage={props.currentPage !== 0 ? props.currentPage - 1 : 0}
+                    containerClassName={
+                      "pagination react-paginate justify-content-end p-1"
+                    }
+                  />
+                </div>
+              </div>
             </Col>
             <Col xl={4}>
               <Title title="VIDEO GALLERY" />
               <VideoCard />
-              <Title title="EVENTS" />
-              <EventsCard />
             </Col>
             <Col xl={12}>
               <Title title="TOP READ" />
