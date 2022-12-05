@@ -5,7 +5,9 @@ import ReportedIncident from './reportedIncident';
 import { request } from '../../../services/utilities'
 import { useDispatch } from 'react-redux';
 import { updateLoader } from "../../../store/actions";
-
+import { USER_COOKIE } from '../../../services/constants';
+import SSRStorage from '../../../services/storage';
+const storage = new SSRStorage();
 
 
 function Index() {
@@ -17,10 +19,11 @@ function Index() {
     const [meta, setMeta] = useState(null);
 
     const fetchIncidents = useCallback(async (page) => {
+        const user = await storage.getItem(USER_COOKIE);
         dispatch(updateLoader(''))
         const p = page || 1;
         try {
-            let url = `incident/all/specific/?action=stakeholder&page=${p}&limit=10`;
+            let url = `incident/getall?stakeholderId=${user.payload.stakeholderId}&page=${p}&limit=10`;
             const rs = await request(url, 'GET', false);
             // console.log(rs)
             setIncidents(rs.result);

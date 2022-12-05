@@ -5,25 +5,42 @@ import { useFormik } from "formik";
 import Dropzone from "react-dropzone"
 import { Link, withRouter } from 'react-router-dom'
 import { Editor } from "react-draft-wysiwyg"
-import Select from "react-select"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import { EditorState } from "draft-js";
+import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
+// import { selectThemeColors } from '@utils'
+import makeAnimated from 'react-select/animated'
 
 import { httpRequest, request } from '../../../services/utilities';
 import { USER_COOKIE } from '../../../services/constants';
 import SSRStorage from '../../../services/storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateLoader } from '../../../store/actions';
 import axios from 'axios'
+import CreatableSelect from 'react-select/creatable'
+import { Spinner } from "reactstrap";
 
 const storage = new SSRStorage();
+const animatedComponents = makeAnimated()
 
 
+export const selectThemeColors = theme => ({
+    ...theme,
+    colors: {
+        primary25: '#7367f01a', // for option hover bg-color
+        primary: '#7367f0', // for selected option bg-color
+        neutral10: '#7367f0', // for tags bg-color
+        neutral20: '#ededed', // for input border-color
+        neutral30: '#ededed' // for input hover border-color
+    }
+})
 
 const NewPost = (props) => {
     const {
         match: { params },
     } = props;
+    const { loader } = useSelector((state) => ({
+        loader: state.visibility.show
+    }));
     const dispatch = useDispatch();
 
     const [selectedFiles, setselectedFiles] = useState([]);
@@ -40,21 +57,14 @@ const NewPost = (props) => {
     const [title, setTitle] = useState('');
     const [allFiles, setAllFiles] = useState([])
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty(),)
-
-
+    const [convertedContent, setConvertedContent] = useState(null);
 
     const onEditorStateChange = (editorState) => {
-        console.log(editorState);
         setEditorState(editorState);
     }
 
-
-    function handleAcceptedFiles(files) {
-        // setselectedFiles(files)
-    }
-
     const uploadedFiles = () => {
-        if (!(selectedFiles?.length >= 1)) {
+        if (!(selectedFiles?.length >= 1) && !(allFiles?.length >= 1)) {
             return props.showToast('error', 'Kindly attach a media file or document');
 
         }
@@ -64,36 +74,42 @@ const NewPost = (props) => {
         // const filteredD = selectedFiles.filter(i => !i.id)
         // const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
         const files_ = selectedFiles;
-
-        const formData = new FormData();
-        for (let i = 0; i < files_.length; i++) {
-            let file = files_[i];
-            formData.append("file", file);
-            formData.append("upload_preset", "geekyimages");
-            fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
-                method: "POST",
-                body: formData
-            })
-                .then((response) => {
-                    return response.json();
+        console.log(files_, selectedFiles)
+        if (selectedFiles?.length >= 1) {
+            const formData = new FormData();
+            for (let i = 0; i < files_.length; i++) {
+                let file = files_[i];
+                formData.append("file", file);
+                formData.append("upload_preset", "geekyimages");
+                fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
+                    method: "POST",
+                    body: formData
                 })
-                .then((data) => {
-                    let dataFile = {
-                        name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
-                            'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : ''
-                    };
-                    if (dataFile?.name !== null) {
-                        allFiles.push(dataFile);
-                    }
-                    count++
-                    if (count === files_.length) {
-                        savePost();
-                        dispatch(updateLoader('none'));
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log(data);
+                        let dataFile = {
+                            name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
+                                'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : data.format === 'pdf' ? 'pdf' : ''
+                        };
+                        if (dataFile?.name !== null) {
+                            allFiles.push(dataFile);
+                        }
+                        count++
+                        if (count === files_.length) {
+                            savePost();
+                            dispatch(updateLoader('none'));
 
-                    }
-                });
+                        }
+                    });
 
+            }
+        } else {
+            savePost();
         }
+
     }
 
 
@@ -108,9 +124,7 @@ const NewPost = (props) => {
             })
         });
     }
-    /**
-     * Formats the size
-     */
+
     function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return "0 Bytes"
         const k = 1024
@@ -121,29 +135,41 @@ const NewPost = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     function handleMulti(selectedMulti) {
+        console.log(selectedMulti)
         setselectedMulti(selectedMulti);
         selectedMulti.forEach(e => {
-            let item = selectedMulti.find(x => x === e.value);
-            if (!item) {
+            let item = selectedTags.find(x => x === e.value);
+            if (item !== e.value) {
                 selectedTags.push(e.value);
                 let strignifyTags = selectedTags.toString();
                 setTags(strignifyTags);
             }
         })
 
-        // console.log(selectedMulti, tags)
     }
     const fetchPostById = useCallback(async () => {
         dispatch(updateLoader(''));
         try {
             let url = `sections/admin?pageId=&id=${params?.id}`;
             const rs = await request(url, 'GET', true);
+            // console.log(rs);
             if (rs.success === true) {
                 setPost(rs.result);
                 setDescription(rs.result?.content);
-                setselectedCategory(rs.result?.categoryId);
+                setTags(rs.result.tags);
+                let comingTags = rs.result.tags.split(',');
+                 comingTags.forEach(e => {
+                    let x = { label: e, value: e }
+                    selectedTags.push(x)
+                })
+                setselectedCategory(rs.result?.pageId);
                 setTitle(rs.result?.title);
-                setAllFiles(rs.result?.media)
+                setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
+                setAllFiles(rs.result?.media);
+                let images = rs.result?.media.filter(e => e.type === 'image');
+                let documents = rs.result?.media.filter(e => e.type === 'pdf');
+                setSelectedImages(images);
+                setselectedDocuments(documents);
                 dispatch(updateLoader('none'));
             }
         } catch (err) {
@@ -157,18 +183,10 @@ const NewPost = (props) => {
         enableReinitialize: true,
 
         initialValues: {
-            title,
-            description
-            // city: '',
-            // state: '',
-            // zip: '',
+            title
         },
         validationSchema: Yup.object({
-            title: Yup.string().required("Please Enter Title"),
-            description: Yup.string().required("Please Enter Paragraph")
-            // city: Yup.string().required("Please Enter Your City"),
-            // state: Yup.string().required("Please Enter Your State"),
-            // zip: Yup.string().required("Please Enter Your Zip"),
+            title: Yup.string().required("Please Enter Title")
         }),
         onSubmit: e => uploadedFiles(e)
     });
@@ -176,15 +194,23 @@ const NewPost = (props) => {
         dispatch(updateLoader(''));
 
         const user = await storage.getItem(USER_COOKIE);
+        const contentState = editorState.getCurrentContent();
         let data = {
-            pageId: selectedCategory, title, content: description, tags,
+            pageId: selectedCategory, title, content: JSON.stringify(convertToRaw(contentState)), tags,
             media: allFiles, language: 'english', date: new Date(),
             // categoryId: selectedCategory
             userId: user.payload.id
         }
+        console.log(data)
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
-            const rs = await request(url, 'POST', false, data);
+            const rs = await request(url, params?.id === undefined && params?.id === null ? 'POST' : 'PATCH', true, data);
+            // if (params?.id !== null && params?.id !== undefined) {
+            //     const rs_up = await request(`media?type=section&id=${params?.id}`, 'POST', true, allFiles);
+            //     console.log(rs_up)
+            // }
+
+            console.log(rs)
             if (rs.success === true) {
                 dispatch(updateLoader('none'));
                 props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
@@ -195,27 +221,22 @@ const NewPost = (props) => {
             props.showToast('error', 'Failed to save')
         }
     }
-    const optionGroup = [
-        {
-            label: "TAGS",
-            options: [
-                { label: "UN", value: "UN" },
-                { label: "NEWS", value: "NEWS" },
-                { label: "NIGERIA", value: "NIGERIA" },
-
-                { label: "PEACE", value: "PEACE" },
-                { label: "SECURITY", value: "SECURITY" },
-                { label: "HUMANITARIAN ADIF", value: "HUMANITARIAN AID" },
-                { label: "SDGs", value: "SDGs" },
-            ],
-        }
+    const tagOption = [
+        { label: "UN", value: "UN" },
+        { label: "NEWS", value: "NEWS" },
+        { label: "NIGERIA", value: "NIGERIA" },
+        { label: "PEACE", value: "PEACE" },
+        { label: "SECURITY", value: "SECURITY" },
+        { label: "HUMANITARIAN ADIF", value: "HUMANITARIAN AID" },
+        { label: "SDGs", value: "SDGs" }
     ]
 
     const onChangeDocument = e => {
         let x = [...selectedFiles, ...e]
         let z = [...selectedDocuments, ...e]
         setselectedDocuments(z);
-        setselectedFiles(e)
+        setselectedFiles(e);
+        console.log(selectedFiles)
     }
     const onChangeImage = e => {
         let x = [...selectedFiles, ...e]
@@ -228,6 +249,7 @@ const NewPost = (props) => {
             fetchPostById();
         }
     }, [fetchPostById]);
+
 
     return (
         <React.Fragment>
@@ -248,6 +270,14 @@ const NewPost = (props) => {
                                     validation.handleSubmit();
                                     return false;
                                 }}>
+                                <Row>
+                                    <Col>
+                                        <div>
+                                            {/* {editorState} */}
+                                        </div>
+                                    </Col>
+                                </Row>
+
                                 <Row>
                                     <Col>
                                         <FormGroup className="mb-3">
@@ -273,23 +303,28 @@ const NewPost = (props) => {
                                 </Row>
                                 <Row>
                                     <Col>
-
-                                        <div className="mb-3" style={{ outline: 'none' }}>
-                                            <label htmlFor="floatingSelectGrid" className='control-label'>
-                                                Tag
-                                            </label>
-                                            <Select
-                                                style={{ outline: 'none' }}
-                                                value={selectedMulti}
-                                                isMulti={true}
-                                                onChange={(e) => {
-                                                    handleMulti(e)
-                                                }}
-                                                options={optionGroup}
-                                                classNamePrefix="select2-selection"
-                                            />
-
-                                        </div></Col>
+                                        <FormGroup>
+                                            <div className="mb-3" style={{ outline: 'none' }}>
+                                                <label htmlFor="floatingSelectGrid" className='form-label'>
+                                                    Tags
+                                                </label>
+                                                <CreatableSelect
+                                                    isClearable={false}
+                                                    theme={'#eee'}
+                                                    closeMenuOnSelect={false}
+                                                    components={animatedComponents}
+                                                    defaultValue={selectedTags ? selectedTags : [tagOption[0]]}
+                                                    isMulti
+                                                    options={tagOption}
+                                                    className='react-select'
+                                                    classNamePrefix='tags'
+                                                    onChange={(e) => {
+                                                        handleMulti(e)
+                                                    }}
+                                                />
+                                            </div>
+                                        </FormGroup>
+                                    </Col>
                                 </Row>
                                 <Row>
 
@@ -303,6 +338,7 @@ const NewPost = (props) => {
                                                             type="checkbox"
                                                             className="form-check-input"
                                                             id={`invalidCheck${e.id}`}
+                                                            // checked={selectedCategory === e.id ? true : false}
                                                             // checked={selectedCategory === e.id ? true : isChecked}
                                                             onClick={() => {
                                                                 // setIsChecked(!isChecked)
@@ -330,42 +366,7 @@ const NewPost = (props) => {
                                         })}
 
                                     </Col>
-                                    {/* <Col xl={1}>
-                                        <FormGroup className="mb-3">
-                                            <div className="form-check">
-                                                <Input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    id="invalidCheck"
-                                                />
-                                                <Label
-                                                    className="form-check-label"
-                                                    htmlFor="invalidCheck"
-                                                >
-                                                    {" "}
-                                                    Articles
-                                                </Label>
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col xl={2}>
-                                        <FormGroup className="mb-3">
-                                            <div className="form-check">
-                                                <Input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    id="invalidCheck"
-                                                />
-                                                <Label
-                                                    className="form-check-label"
-                                                    htmlFor="invalidCheck"
-                                                >
-                                                    {" "}
-                                                    News
-                                                </Label>
-                                            </div>
-                                        </FormGroup>
-                                    </Col> */}
+
                                 </Row>
                                 <Row>
                                     <Col>
@@ -374,12 +375,16 @@ const NewPost = (props) => {
                                             <Editor
                                                 editorState={editorState}
                                                 onEditorStateChange={onEditorStateChange}
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                // readOnly
                                                 toolbar={{
-                                                    inline: { inDropdown: true },
-                                                    list: { inDropdown: true },
-                                                    textAlign: { inDropdown: true },
-                                                    link: { inDropdown: true },
-                                                    history: { inDropdown: true },
+                                                    // inline: { inDropdown: true },
+                                                    // list: { inDropdown: true },
+                                                    // textAlign: { inDropdown: true },
+                                                    // link: { inDropdown: true },
+                                                    // history: { inDropdown: true },
                                                     image: {
                                                         uploadEnabled: true,
                                                         uploadCallback: uploadCallback,
@@ -418,37 +423,14 @@ const NewPost = (props) => {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col className='d-none'>
-                                        <Form>
-                                            <Dropzone
-                                                onDrop={acceptedFiles => {
-                                                    handleAcceptedFiles(acceptedFiles)
-                                                }}
-                                            >
-                                                {({ getRootProps, getInputProps }) => (
-                                                    <div className="dropzone">
-                                                        <div
-                                                            className="dz-message needsclick"
-                                                            {...getRootProps()}
-                                                        >
-                                                            <input {...getInputProps()} />
-                                                            <div className="mb-3">
-                                                                <i className="display-4 text-muted uil uil-cloud-upload" />
-                                                            </div>
-                                                            <h4>Add Documents.</h4>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </Dropzone>
-                                        </Form>
-                                    </Col>
+
                                     <Col>
                                         <Label>Add Documents</Label>
-                                        <Input type='file' onChange={e => onChangeDocument(e.target.files)} multiple />
+                                        <Input type='file' accept="pdf/*" onChange={e => onChangeDocument(e.target.files)} multiple />
                                         <div>
                                             {selectedDocuments?.map(e => {
                                                 return (
-                                                    <span height="80"
+                                                    <span height="80" key={e.id}
                                                         className="avatar-sm rounded bg-light mt-2 mx-2" alt='document' >
                                                         <i className='uil-file-alt' /> {e.name}
                                                     </span>
@@ -462,8 +444,9 @@ const NewPost = (props) => {
                                         <div>
                                             {selectedImages?.map(e => {
                                                 return (
-                                                    <img src={URL.createObjectURL(e)} height="80" key={e.name}
+                                                    <img src={e.size === undefined ? e.link : URL.createObjectURL(e)} height="80" key={e.name}
                                                         className="avatar-sm rounded bg-light mt-2 mx-2" alt='feature' />
+
                                                 )
                                             })}
                                         </div>
@@ -473,7 +456,7 @@ const NewPost = (props) => {
                                 <div className='d-flex justify-content-between mt-3'>
                                     <Row>
                                         <Col lg="12">
-                                            <FormGroup className="mb-3">
+                                            {/* <FormGroup className="mb-3">
                                                 <div className="form-check">
                                                     <Input
                                                         type="checkbox"
@@ -488,187 +471,20 @@ const NewPost = (props) => {
                                                         Allow Comments
                                                     </Label>
                                                 </div>
-                                            </FormGroup>
+                                            </FormGroup> */}
                                         </Col>
                                     </Row>
                                     <div>
                                         <Button color="primary" type="submit">
                                             {params?.id === null || params?.id === undefined ? 'Publish' : 'Update'}
                                         </Button>
+                                        <Spinner className="fs-5 float-end mx-2" style={{ display: loader }} color="primary" />
+
                                     </div>
                                 </div>
                             </Form>
-                            {/* </CardBody>
-                            </Card> */}
+
                         </Col>
-                        <Col xl={3} className='d-none'>
-                            <Card className='mb-2'>
-                                <CardBody>
-                                    <h4 className="card-title">Categories</h4>
-                                    <Row>
-                                        <Col lg="12">
-                                            <FormGroup className="mb-3">
-                                                <div className="form-check">
-                                                    <Input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        id="invalidCheck"
-                                                    />
-                                                    <Label
-                                                        className="form-check-label"
-                                                        htmlFor="invalidCheck"
-                                                    >
-                                                        {" "}
-                                                        Resources
-                                                    </Label>
-                                                </div>
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col lg="12">
-                                            <FormGroup className="mb-3">
-                                                <div className="form-check">
-                                                    <Input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        id="invalidCheck"
-                                                    />
-                                                    <Label
-                                                        className="form-check-label"
-                                                        htmlFor="invalidCheck"
-                                                    >
-                                                        {" "}
-                                                        Article
-                                                    </Label>
-                                                </div>
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col lg="12">
-                                            <FormGroup className="mb-3">
-                                                <div className="form-check">
-                                                    <Input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        id="invalidCheck"
-                                                    />
-                                                    <Label
-                                                        className="form-check-label"
-                                                        htmlFor="invalidCheck"
-                                                    >
-                                                        {" "}
-                                                        News
-                                                    </Label>
-                                                </div>
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
-
-                            <Card>
-                                <CardBody>
-                                    <Form>
-                                        <Dropzone
-                                            onDrop={acceptedFiles => {
-                                                handleAcceptedFiles(acceptedFiles)
-                                            }}
-                                        >
-                                            {({ getRootProps, getInputProps }) => (
-                                                <div className="dropzone">
-                                                    <div
-                                                        className="dz-message needsclick"
-                                                        {...getRootProps()}
-                                                    >
-                                                        <input {...getInputProps()} />
-                                                        <div className="mb-3">
-                                                            <i className="display-4 text-muted uil uil-cloud-upload" />
-                                                        </div>
-                                                        <h4>Add Feature Image.</h4>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </Dropzone>
-                                        {/* <div className="dropzone-previews mt-3" id="file-previews">
-                                            {selectedFiles.map((f, i) => {
-                                                return (
-                                                    <Card
-                                                        className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                        key={i + "-file"}
-                                                    >
-                                                        <div className="p-2">
-                                                            <Row className="align-items-center">
-                                                                <Col className="col-auto">
-                                                                    <img
-                                                                        data-dz-thumbnail=""
-                                                                        height="80"
-                                                                        className="avatar-sm rounded bg-light"
-                                                                        alt={f.name}
-                                                                        src={f.preview}
-                                                                    />
-                                                                </Col>
-                                                                <Col>
-                                                                    <Link
-                                                                        to="#"
-                                                                        className="text-muted font-weight-bold"
-                                                                    >
-                                                                        {f.name}
-                                                                    </Link>
-                                                                    <p className="mb-0">
-                                                                        <strong>{f.formattedSize}</strong>
-                                                                    </p>
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                    </Card>
-                                                )
-                                            })}
-                                        </div> */}
-                                    </Form>
-
-                                    <div className="text-center mt-4">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary waves-effect waves-light"
-                                        >
-                                            Upload Image
-                                        </button>
-                                    </div>
-                                </CardBody>
-                            </Card>
-
-                            <Card>
-                                <CardBody>
-                                    <div>
-                                        <FormGroup className="mb-3">
-                                            <Label htmlFor="validationCustom01">Tags</Label>
-                                            <Input
-                                                name="tag"
-                                                placeholder="Tags"
-                                                type="text"
-                                                className="form-control"
-                                                id="validationCustom01"
-                                                onChange={validation.handleChange}
-                                                onBlur={validation.handleBlur}
-                                                value={validation.values.tag || ""}
-                                                invalid={
-                                                    validation.touched.tag && validation.errors.tag ? true : false
-                                                }
-                                            />
-                                            {validation.touched.tag && validation.errors.tag ? (
-                                                <FormFeedback type="invalid">{validation.errors.tag}</FormFeedback>
-                                            ) : null}
-                                        </FormGroup>
-                                    </div>
-                                    <button className='btn btn-primary float-end'>
-                                        Save
-                                    </button>
-                                </CardBody>
-                            </Card>
-                        </Col>
-
                     </Row>
                 </CardBody>
             </Card>

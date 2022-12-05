@@ -157,6 +157,8 @@ const StakeHolderRoutes = [
   { path: "/admin-view-incident/:id", component: AdminViewIncident },
 
   { path: "/admin-new-post", component: StockHolderAddPost },
+  { path: "/admin-edit-post/:id", component: StockHolderAddPost },
+
   { path: "/admin-new-incident", component: StockHolderAddIncident },
   { path: "/admin-categories", component: StockHolderCategoryList },
   { path: "/admin-incident-categories", component: StockHolderIncidentCategoryList },

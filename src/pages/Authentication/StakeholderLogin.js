@@ -94,12 +94,14 @@ const Login = props => {
       try {
         const rs = await httpRequest(url, 'POST', data);
         // console.log(rs);
-        if (rs.success === true) {
+        if (rs.success === true && rs.payload.userType === 'stakeholder') {
           storage.setItem(USER_COOKIE, rs.result);
           dispatch(updateLoader('none'))
           showToast('success', 'Successfully login');
-          // history.push('/stakeholder')
           window.location.href = '/stakeholder';
+        } else if (rs.success === true && rs.payload.userType === 'admin') {
+          dispatch(updateLoader('none'))
+          window.location.href = '/admin-login';
         }
       } catch (err) {
         dispatch(updateLoader('none'))

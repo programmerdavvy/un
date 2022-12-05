@@ -11,6 +11,9 @@ import { request } from "../../../services/utilities";
 import { useEffect } from "react";
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
+import { Editor } from "react-draft-wysiwyg"
+
+import { EditorState, convertFromRaw } from "draft-js";
 
 const ViewPost = props => {
   const { match: params } = props
@@ -20,7 +23,7 @@ const ViewPost = props => {
   const [openorclose, setOpenorclose] = useState(null);
   const [canComment, setCanComment] = useState(false);
   const [isApprove, setIsApprove] = useState(false);
-
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty(),);
   const [evidence, setEvidence] = useState('');
   const [status, setStatus] = useState([]);
 
@@ -96,12 +99,14 @@ const ViewPost = props => {
   const fetchIncident = useCallback(async () => {
     let url = `sections/admin?pageId=4&id=${params.params?.id}`;
     try {
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'GET', true);
+      console.log(rs);
       if (rs.success === true) {
         setIsApprove(rs.result.isApproved);
         setCanComment(rs.result.canComment);
         setIncident(rs.result);
-        setEvidence(rs.result.media[0].link)
+        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
+        setEvidence(rs.result.media[0].link);
       }
     } catch (err) {
       showToast('error', 'Failed to fetch, kindly try again later');
@@ -135,13 +140,21 @@ const ViewPost = props => {
                   </div>
                   <hr className="my-4" />
                   <Row>
-                    <Col sm="6">
+                    <Col sm="6" xl='12'>
                       <div className="text-muted">
                         <h5 className="font-size-16 mb-3 ">Post Content:</h5>
                         <p className="mb-2" style={{ fontWeight: '700' }}>Title: {incident?.title || '--'}</p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Description: <span style={{ fontWeight: '400' }}>{incident?.content || '--'}</span></p>
+                        <p className="mb-1" style={{ fontWeight: '700' }}>Description: <span style={{ fontWeight: '400' }}>
+                          {/* {incident?.content || '--'} */}
+                          <Editor
+                            style={{ border: 'none' }}
+                            editorState={editorState}
+                            toolbarHidden
+                            readOnly
+                          />
+                        </span></p>
                         <p className="mb-1" style={{ fontWeight: '700' }}>Tags: <span style={{ fontWeight: '400' }}>{incident?.tags || '--'}</span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Category: <span style={{ fontWeight: '400' }}>{incident?.category?.name || '--'}</span></p>
+                        <p className="mb-1" style={{ fontWeight: '700' }}>Category: <span style={{ fontWeight: '400' }}>{incident?.page?.name || '--'}</span></p>
                         <p className="mb-1" style={{ fontWeight: '700' }}>IsApproved: <span style={{ fontWeight: '400' }}>{incident?.isApproved === true ? 'True' : 'False'}</span></p>
                         <p className="mb-1" style={{ fontWeight: '700' }}>CanComment: <span style={{ fontWeight: '400' }}>{incident?.canComment === true ? 'True' : 'False'}</span></p>
                         <p className="mb-1" style={{ fontWeight: '700' }}>Date Posted: <span style={{ fontWeight: '400' }}>{new Date(incident?.createdAt).toDateString() || '--'}</span></p>
@@ -159,7 +172,7 @@ const ViewPost = props => {
                           <div>
                             {incident?.media.map(e => {
                               return (
-                                <div style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
+                                <div key={e.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
                                   <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
                                 </div>
                               )
@@ -263,7 +276,7 @@ const ViewPost = props => {
 
                     <div className="d-print-none mt-4">
                       <div className="float-end">
-                        {/* <Link to="#" className="btn btn-success waves-effect waves-light me-1"><i className="fa fa-print"></i></Link>{" "} */}
+                        <Link to={`admin-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
                         <Button className="btn btn-success w-md waves-effect waves-light" onClick={onSave}>Save</Button>
                       </div>
                     </div>

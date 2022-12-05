@@ -73,7 +73,7 @@ const SidebarContent = props => {
       activateParentDropdown(matchingMenuItem);
     }
 
-  }, [props.location.pathname, activateParentDropdown])
+  }, [])
 
   useEffect(() => {
     ref.current.recalculate()

@@ -93,7 +93,7 @@ const Login = props => {
       let data = { email: e.email, password: e.password };
       try {
         const rs = await httpRequest(url, 'POST', data);
-        // console.log(rs);
+        console.log(rs);
         if (rs.success === true) {
           storage.setItem(USER_COOKIE, rs.result);
           dispatch(updateLoader('none'));
