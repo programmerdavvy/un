@@ -15,37 +15,21 @@ import newImage1 from "../../assets/images/un/children.png"
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-//Import Components
-import MiniWidget from "./mini-widget"
-import SalesAnalyticsChart from "./salesanalytics-chart"
-import TopProduct from "./topselling-product"
-import TopUser from "./topuser"
-import RecentActivity from "./recent-activity"
-import SocialSource from "./socialsource"
-import LatestTransaction from "./latest-transaction"
-
 //Import Image
-import setupanalytics from "../../assets/images/setup-analytics-amico.svg"
 // import ILOSlideWithControl from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Slidewithcontrol from "../Ui/CarouselTypes/iloslidewithcontrol"
 import Title from "../../components/Common/Title"
-import NewsCard from "../../components/Common/NewsCard"
 import VideoCard from "../../components/Common/VideoCard"
-import EventsCard from "../../components/Common/EventsCard"
-import FootPrints from "../../components/Common/FootPrints"
-import Resources from "../../components/Common/Resources"
-import GoodPractices from "../../components/Common/GoodPractices"
+
 import Podcast from "../../components/Common/Podcast"
 import Statistics from "../../components/Common/Statistics"
 import YoutubeEmbed from "../../components/Common/YoutubeEmbed"
 import { Translate } from "react-auto-translate"
 
 const Dashboard = () => {
- 
-
   return (
     <React.Fragment>
-      <div className="page-content"> 
+      <div className="page-content">
         <Container fluid>
           <Breadcrumbs title="Minible" breadcrumbItem="Home" />
           <Row>
@@ -58,27 +42,24 @@ const Dashboard = () => {
             <Col xl={8}>
               <Col className="me-3">
                 <Title title="About FGN UN ILO" />
-                
-                  <CardBody>
-                    <CardText className=" h-100 d-flex align-items-end">
-                      <h4 className="text-dark text-justify">
-                        <Translate>
 
+                <CardBody>
+                  <CardText className=" h-100 d-flex align-items-end">
+                    <h4 className="text-dark text-justify">
+                      <Translate>
                         The only tripartite U.N. agency, since 1919 the ILO
                         brings together governments, employers and workers of
                         187 member States , to set labour standards, develop
                         policies and devise programmes promoting decent work for
                         all women and men. Origins and history
-                        </Translate>
-                      </h4>
-                    </CardText>
-                  </CardBody>
-              
-                
-                  <CardBody>
-                 <YoutubeEmbed embedId="HJEue9-lTgg"/>
-                  </CardBody>
-              
+                      </Translate>
+                    </h4>
+                  </CardText>
+                </CardBody>
+
+                <CardBody>
+                  <YoutubeEmbed embedId="HJEue9-lTgg" />
+                </CardBody>
 
                 <Title title="PODCAST" />
                 <Podcast />

@@ -274,7 +274,6 @@ const Dashboard = () => {
               <Slidewithcontrol />
             </Col>
           </Row>
-         
 
           <Row>
             <Col xl={8}>
@@ -313,65 +312,7 @@ const Dashboard = () => {
               <Title title="EVENTS" />
               <EventsCard />
             </Col>
-            <Col xl={12}>
-              <Title title="STATISTICS" />
-              <Statistics />
-            </Col>
           </Row>
-
-          {/* <Row>
-            <MiniWidget reports={reports} />
-          </Row> */}
-
-          {/* <Row>
-            <Col xl={8}>
-              <SalesAnalyticsChart />
-            </Col>
-            <Col xl={4}>
-              <Card className="bg-primary">
-                <CardBody>
-                  <Row className="align-items-center">
-                    <Col sm={8}>
-                      <p className="text-white font-size-18">
-                        Enhance your <b>Campaign</b> for better outreach{" "}
-                        <i className="mdi mdi-arrow-right"></i>
-                      </p>
-                      <div className="mt-4">
-                        <Link
-                          to="#"
-                          className="btn btn-success waves-effect waves-light"
-                        >
-                          Upgrade Account!
-                        </Link>
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="mt-4 mt-sm-0">
-                        <img
-                          src={setupanalytics}
-                          className="img-fluid"
-                          alt=""
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              <TopProduct />
-            </Col>
-          </Row> */}
-          {/* <Row>
-            <Col xl={4}>
-              <TopUser />
-            </Col>
-            <Col xl={4}>
-              <RecentActivity />
-            </Col>
-            <Col xl={4}>
-              <SocialSource />
-            </Col>
-          </Row> */}
-          {/* <LatestTransaction /> */}
         </Container>
       </div>
     </React.Fragment>
