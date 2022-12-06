@@ -141,22 +141,22 @@ const NavbarILO = props => {
                     {" "}{props.t("Index")}
                   </Link>
                 </li>
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <Link
                     className="nav-link text-dark fw-bolder"
                     to="/report-incident"
                   >
                     {" "}{props.t("Report Incident")}
                   </Link>
-                </li> */}
-                {/* <li className="nav-item">
+                </li>
+                <li className="nav-item">
                   <Link
                     className="nav-link text-dark fw-bolder"
                     to="/track"
                   >
                     {" "}{props.t("Track Incident")}
                   </Link>
-                </li> */}
+                </li>
                 <li className="nav-item">
                   <Link
                     className="nav-link text-dark fw-bolder"
