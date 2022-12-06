@@ -204,7 +204,7 @@ const NewPost = (props) => {
         console.log(data)
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
-            const rs = await request(url, params?.id === undefined && params?.id === null ? 'POST' : 'PATCH', true, data);
+            const rs = await request(url, params?.id === undefined || params?.id === null ? 'POST' : 'PATCH', true, data);
             // if (params?.id !== null && params?.id !== undefined) {
             //     const rs_up = await request(`media?type=section&id=${params?.id}`, 'POST', true, allFiles);
             //     console.log(rs_up)

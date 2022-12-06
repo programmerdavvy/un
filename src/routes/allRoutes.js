@@ -196,7 +196,7 @@ const superAdminRoutes = [
   { path: "/stakeholder", component: StockHolderAdminHome },
   { path: "/stakeholder-documents", component: StackHolderDocument },
   { path: "/posts", component: StockHolderPost },
-  { path: "/edit-post/:id", component: StockHolderAddPost },
+  { path: "/stakeholder-edit-post/:id", component: StockHolderAddPost },
   { path: "/new-post", component: StockHolderAddPost },
   { path: "/new-incident", component: StockHolderAddIncident },
   { path: "/reported-incident", component: StakeHolderReportedIncident },

@@ -257,7 +257,7 @@ function PostList(props) {
                                 </li>
                                 <li className="list-inline-item">
                                   <Link
-                                    to={`/admin-view-post/${e.id}`}
+                                    to={`/stakeholder-view-post/${e.id}`}
                                     className="text-dark"
                                   // onClick={() => {
                                   //   const users = cellProps.row.original
@@ -272,7 +272,7 @@ function PostList(props) {
                                 </li>
                                 <li className="list-inline-item">
                                   <Link
-                                    to={`/admin-edit-post/${e.id}`}
+                                    to={`/stakeholder-edit-post/${e.id}`}
                                     className="text-dark"
                                   // onClick={() => {
                                   //   const users = cellProps.row.original

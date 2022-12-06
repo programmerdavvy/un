@@ -112,7 +112,7 @@ const NewPost = (props) => {
 
     }
 
-
+console.log(params?.id)
     const uploadCallback = (file) => {
         return new Promise((resolve, reject) => {
             const formData = new FormData();
@@ -158,7 +158,7 @@ const NewPost = (props) => {
                 setDescription(rs.result?.content);
                 setTags(rs.result.tags);
                 let comingTags = rs.result.tags.split(',');
-                 comingTags.forEach(e => {
+                comingTags.forEach(e => {
                     let x = { label: e, value: e }
                     selectedTags.push(x)
                 })
@@ -201,10 +201,11 @@ const NewPost = (props) => {
             // categoryId: selectedCategory
             userId: user.payload.id
         }
-        console.log(data)
-        let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
+        let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`;
+        console.log(data, url)
+
         try {
-            const rs = await request(url, params?.id === undefined && params?.id === null ? 'POST' : 'PATCH', true, data);
+            const rs = await request(url, params?.id === undefined || params?.id === null ? 'POST' : 'PATCH', true, data);
             // if (params?.id !== null && params?.id !== undefined) {
             //     const rs_up = await request(`media?type=section&id=${params?.id}`, 'POST', true, allFiles);
             //     console.log(rs_up)
