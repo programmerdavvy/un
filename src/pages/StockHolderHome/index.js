@@ -50,7 +50,7 @@ const Dashboard = () => {
     const p = page || 1;
     try {
       let url = `incident/getall?page=${p}&limit=5`;
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'GET', true);
       if (rs.success === true) {
         setIncidents(rs.result);
         setTotalreportedincident(rs.paging?.total);
@@ -71,12 +71,14 @@ const Dashboard = () => {
 
   const fetchPosts = useCallback(async (page) => {
     const user = await storage.getItem(USER_COOKIE);
+    console.log(user)
     dispatch(updateLoader(''));
     let p = page || 1;
-    let url = `sections/?page=${p}&limit=5&stakeholderId=${user.payload.stakeholderId}`;
+    let url = `sections/?page=${p}&limit=5&userId=${user.payload.stakeholderId}`;
 
     try {
       const rs = await request(url, 'GET', true);
+      console.log(rs);
       if (rs.success === true) {
         setPosts(rs.result);
         setCountP(Math.ceil(rs.paging?.total / rowsPerPageP));
@@ -92,12 +94,13 @@ const Dashboard = () => {
   }, [rowsPerPageP]);
 
   const fetchPostsMoApprove = useCallback(async (page) => {
+    const user = await storage.getItem(USER_COOKIE);
     dispatch(updateLoader(''));
     let p = page || 1;
-    let url = `sections/admin?page=${p}&limit=5&type=approved`;
+    let url = `sections/?page=${p}&limit=5&type=approved&stakeholderId=${user.payload.stakeholderId}`;
 
     try {
-      const rs = await request(url, 'GET', false);
+      const rs = await request(url, 'GET', true);
       if (rs.success === true) {
         // setPosts(rs.result);
         setTotalreportedpost(rs.paging?.total);

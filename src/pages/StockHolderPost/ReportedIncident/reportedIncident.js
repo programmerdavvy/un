@@ -107,21 +107,7 @@ const IncidentReported = (props) => {
                                                                     </UncontrolledTooltip>
                                                                 </Link>
                                                             </li>
-                                                            {/* <li className="list-inline-item">
-                                                                <Link
-                                                                    to="/edit-post/1"
-                                                                    className="text-dark"
-                                                                // onClick={() => {
-                                                                //   const users = cellProps.row.original
-                                                                //   // handleUserClick(users)
-                                                                // }}
-                                                                >
-                                                                    <i className="uil-edit-alt font-size-18" id="edittooltip2" />
-                                                                    <UncontrolledTooltip placement="top" target="edittooltip2">
-                                                                        Edit
-                                                                    </UncontrolledTooltip>
-                                                                </Link>
-                                                            </li> */}
+                                                          
                                                             <li className="list-inline-item">
                                                                 <Link
                                                                     to="#"

@@ -112,7 +112,7 @@ const NewPost = (props) => {
 
     }
 
-console.log(params?.id)
+
     const uploadCallback = (file) => {
         return new Promise((resolve, reject) => {
             const formData = new FormData();
@@ -158,7 +158,7 @@ console.log(params?.id)
                 setDescription(rs.result?.content);
                 setTags(rs.result.tags);
                 let comingTags = rs.result.tags.split(',');
-                comingTags.forEach(e => {
+                 comingTags.forEach(e => {
                     let x = { label: e, value: e }
                     selectedTags.push(x)
                 })
@@ -201,9 +201,8 @@ console.log(params?.id)
             // categoryId: selectedCategory
             userId: user.payload.id
         }
-        let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`;
-        console.log(data, url)
-
+        console.log(data)
+        let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`
         try {
             const rs = await request(url, params?.id === undefined || params?.id === null ? 'POST' : 'PATCH', true, data);
             // if (params?.id !== null && params?.id !== undefined) {

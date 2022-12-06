@@ -1,29 +1,25 @@
 import React, { useCallback, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Button, Card, CardBody, Col, Container, Input, Label, Row, Table, FormGroup } from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Input, Label, Row, Table } from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-
+import { useDispatch } from "react-redux";
+import { updateLoader } from "../../../store/actions";
 //Import Image
 import logo from "../../../assets/images/logo-dark.png";
 import { request } from "../../../services/utilities";
 import { useEffect } from "react";
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
-import { Editor } from "react-draft-wysiwyg"
 
-import { EditorState, convertFromRaw } from "draft-js";
-
-const ViewPost = props => {
+const ViewIncident = props => {
   const { match: params } = props
+  const dispatch = useDispatch();
   const [incident, setIncident] = useState(null);
   const [comment, setComment] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [openorclose, setOpenorclose] = useState(null);
-  const [canComment, setCanComment] = useState(false);
-  const [isApprove, setIsApprove] = useState(false);
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty(),);
   const [evidence, setEvidence] = useState('');
   const [status, setStatus] = useState([]);
 
@@ -58,57 +54,53 @@ const ViewPost = props => {
     else toastr.success(message)
   }
   const onSave = async () => {
-    const data_c = { comment, sectionId: params.params?.id };
-
-    let url_addc = `sections/comment`;
-    let url_ap = `sections/approve?sectionId=${params.params?.id}`;
-    let url_can = `sections/comment/status?sectionId=${params.params?.id}&canComment=${canComment === true ? 1 : 0}`;
-    console.log(canComment)
+    dispatch(updateLoader(''))
+    const data_c = { comment, incidentId: incident?.id, statusId: selectedStatus };
+    const data_s = { statusId: selectedStatus }
 
     try {
+      let url_c = `incident/comment/add`;
+      let url_s = `incident/change/status?id=${incident?.id}`
       if (comment !== null && comment !== '') {
-        const rs = await request(url_addc, 'POST', false, data_c);
+        const rs = await request(url_c, 'POST', false, data_c);
         setComment('');
-        console.log(rs, 'add comment')
-
       }
-      if (isApprove === true) {
-        const rs = await request(url_ap, 'GET', false);
-        console.log(rs, 'approve')
-
+      if (selectedStatus !== null && selectedStatus !== '') {
+        const rs_s = await request(url_s, 'PATCH', false, data_s);
       }
-      if (canComment === true) {
-        const rs = await request(url_can, 'GET', false);
-        console.log(rs, 'cmment')
-
-      }
-
+      dispatch(updateLoader('none'))
       showToast('success', 'Successfully Saved');
-    } catch (err) {
-      if (err.message === 'comment blocked by admin') {
-        showToast('error', err.message);
 
+    } catch (err) {
+      dispatch(updateLoader('none'));
+
+      if (err.message === 'all fields are Required') {
+        showToast('error', 'Status and comment is required');
       } else {
-        showToast('error', 'Failed to fetch, kindly try again later');
+        showToast('error', 'Failed to save');
 
       }
       console.log(err);
     }
   }
-
   const fetchIncident = useCallback(async () => {
-    let url = `sections/admin?pageId=4&id=${params.params?.id}`;
+    dispatch(updateLoader(''))
+    const data = { referenceId: params.params?.id }
+    let url = `incident/get-incident`;
+    let url2 = `status`
+
     try {
-      const rs = await request(url, 'GET', true);
-      console.log(rs);
-      if (rs.success === true) {
-        setIsApprove(rs.result.isApproved);
-        setCanComment(rs.result.canComment);
+      const rs = await request(url, 'POST', false, data);
+      console.log(rs)
+      const rs2 = await request(url2, 'GET', false);
+      if (rs.success === true && rs2.success === true) {
         setIncident(rs.result);
-        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
+        setStatus(rs2.result);
         setEvidence(rs.result.media[0].link);
+        dispatch(updateLoader('none'))
       }
     } catch (err) {
+      dispatch(updateLoader('none'))
       showToast('error', 'Failed to fetch, kindly try again later');
       console.log(err);
     }
@@ -121,7 +113,7 @@ const ViewPost = props => {
   return (
     <React.Fragment>
       <div className="page-content">
-        <Breadcrumbs title="Post" breadcrumbItem="View Post" />
+        <Breadcrumbs title="Incidents" breadcrumbItem="View Incidents" />
 
         <Container>
           <Row>
@@ -130,8 +122,8 @@ const ViewPost = props => {
                 <CardBody>
                   <div className="invoice-title">
                     <h4 className="float-end font-size-16">
-                      Post #{incident?.id}
-                      <span className="badge bg-success font-size-12 ms-2">{incident?.isApproved === true ? 'Approved' : 'Awaiting Approval'}</span>
+                      Reported Incident #{incident?.referenceId}
+                      <span className="badge bg-success font-size-12 ms-2">{incident?.status}</span>
                     </h4>
                     <div className="mb-4">
                       <img src={logo} alt="logo" height="20" />
@@ -140,39 +132,37 @@ const ViewPost = props => {
                   </div>
                   <hr className="my-4" />
                   <Row>
-                    <Col sm="6" xl='12'>
+                    <Col sm="6">
                       <div className="text-muted">
-                        <h5 className="font-size-16 mb-3 ">Post Content:</h5>
-                        <p className="mb-2" style={{ fontWeight: '700' }}>Title: {incident?.title || '--'}</p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Description: <span style={{ fontWeight: '400' }}>
-                          {/* {incident?.content || '--'} */}
-                          <Editor
-                            style={{ border: 'none' }}
-                            editorState={editorState}
-                            toolbarHidden
-                            readOnly
-                          />
-                        </span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Tags: <span style={{ fontWeight: '400' }}>{incident?.tags || '--'}</span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Category: <span style={{ fontWeight: '400' }}>{incident?.page?.name || '--'}</span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>IsApproved: <span style={{ fontWeight: '400' }}>{incident?.isApproved === true ? 'True' : 'False'}</span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>CanComment: <span style={{ fontWeight: '400' }}>{incident?.canComment === true ? 'True' : 'False'}</span></p>
-                        <p className="mb-1" style={{ fontWeight: '700' }}>Date Posted: <span style={{ fontWeight: '400' }}>{new Date(incident?.createdAt).toDateString() || '--'}</span></p>
+                        <h5 className="font-size-16 mb-3">Child Information:</h5>
+                        <p className="mb-2">Full Name: {incident?.childname || '--'}</p>
+                        <p className="mb-1">Address: {incident?.child_address || '--'}</p>
+                        <p className="mb-1">Age: {incident?.age || '--'}</p>
+                        <p className="mb-1">Sex: {incident?.sex || '--'}</p>
+                        <p className="mb-1">City: {incident?.city || '--'}</p>
+                        <p className="mb-1">State: {incident?.state || '--'}</p>
+                        <p className="mb-1">LGA: {incident?.lga || '--'}</p>
                       </div>
                     </Col>
-
+                    <Col sm="6">
+                      <div className="text-muted">
+                        <h5 className="font-size-16 mb-3">Reporter Information:</h5>
+                        <p className="mb-2">Full Name: {incident?.reporter_name || '--'}</p>
+                        <p className="mb-1">Email: {incident?.reporter_mail || '--'}</p>
+                        <p className="mb-1">reporter_phone: {incident?.phone || '--'}</p>
+                      </div>
+                    </Col>
                   </Row>
                   <div className="py-2">
-                    <h5 className="font-size-15 mt-3">Uploaded Documents And Images</h5>
+                    <h5 className="font-size-15">Evidence</h5>
 
                     {incident?.media?.length >= 1 ? <Row>
                       <Col xl={12}>
-
                         <div className="d-flex">
                           <div>
                             {incident?.media.map(e => {
                               return (
-                                <div key={e.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
+                                <div style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)} key={e.id}>
                                   <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
                                 </div>
                               )
@@ -188,10 +178,11 @@ const ViewPost = props => {
                                 src={incident?.media[0].link}
                               />
                             </div> : <div className="embed-responsive">
-                              <img src={evidence} style={{ objectFit: 'contain' }} width='100%' height='300px' alt="reported incident" />
+                              <img src={evidence} className='img-fluixzd' style={{ objectFit: 'contain' }} width='100%' height='300px' alt="reported incident" />
                             </div>}
                           </div>
                         </div>
+
                       </Col>
                     </Row>
                       : <h5>No Evidence</h5>}
@@ -232,51 +223,34 @@ const ViewPost = props => {
                       <Col xl={12} className='mb-2'>
                         <Input type="textarea" height='100px' placeholder="Enter comment" value={comment} onChange={e => setComment(e.target.value)} />
                       </Col>
+                      <Col>
+                        <Label htmlFor="validationCustom01"> Incident Status</Label>
+                        <div className="mb-3">
+                          <select
+                            className="form-select"
+                            id="floatingSelectGrid"
+                            name="category"
+                            style={{ height: '30px' }}
+                            onChange={e => setSelectedStatus(e.target.value)}
 
+                          >
+                            <option>Select Status</option>
+                            {status?.map(e => {
+                              return (
+                                <option key={e.id} value={e.id}>{e.name}</option>
+                              )
+                            })}
+                          </select>
+
+                        </div>
+
+                      </Col>
                     </Row>
-                    <div className="d-flex">
-                      <FormGroup className="mb-3">
-                        <div className="form-check">
-                          <Input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="comment"
-                            checked={canComment}
-                            onClick={() => setCanComment(!canComment)}
-                          />
-                          <Label
-                            className="form-check-label"
-                            htmlFor="comment"
-                          >
-                            {" "}
-                            Allow Comments
-                          </Label>
-                        </div>
-                      </FormGroup>
 
-                      <FormGroup className="mb-3 mx-2">
-                        <div className="form-check">
-                          <Input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="approve"
-                            checked={isApprove}
-                            onClick={() => setIsApprove(!isApprove)}
-                          />
-                          <Label
-                            className="form-check-label"
-                            htmlFor="approve"
-                          >
-                            {" "}
-                            Approve Post
-                          </Label>
-                        </div>
-                      </FormGroup>
-                    </div>
 
                     <div className="d-print-none mt-4">
                       <div className="float-end">
-                        <Link to={`admin-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
+                        {/* <Link to="#" className="btn btn-success waves-effect waves-light me-1"><i className="fa fa-print"></i></Link>{" "} */}
                         <Button className="btn btn-success w-md waves-effect waves-light" onClick={onSave}>Save</Button>
                       </div>
                     </div>
@@ -290,4 +264,4 @@ const ViewPost = props => {
     </React.Fragment>
   );
 }
-export default withRouter(ViewPost);
+export default withRouter(ViewIncident);

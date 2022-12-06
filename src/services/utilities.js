@@ -55,7 +55,7 @@ const checkStatus = async response => {
 export const request = async (url, method, authed = false, data) => {
     // prettier-ignore
     const user = await (new SSRStorage()).getItem(USER_COOKIE);
-    console.log(user)
+    // console.log(user)
     const response = await fetch(`${API_URI}/${url}`, {
         method: method,
         headers: authed ? headers(user) : { ...defaultHeaders },

@@ -178,7 +178,7 @@ const NewPost = (props) => {
         };
         let url = `incident/create`;
         try {
-            const rs = await request(url, 'POST', true, data);
+            const rs = await request(url, 'POST', false, data);
             if (rs.success === true) {
                 dispatch(updateLoader('none'))
                 clearForm();
