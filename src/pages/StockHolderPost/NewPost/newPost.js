@@ -112,7 +112,6 @@ const NewPost = (props) => {
 
     }
 
-console.log(params?.id)
     const uploadCallback = (file) => {
         return new Promise((resolve, reject) => {
             const formData = new FormData();
@@ -135,15 +134,15 @@ console.log(params?.id)
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     function handleMulti(selectedMulti) {
-        console.log(selectedMulti)
-        setselectedMulti(selectedMulti);
+
         selectedMulti.forEach(e => {
             let item = selectedTags.find(x => x === e.value);
-            if (item !== e.value) {
+            if (item === undefined) {
                 selectedTags.push(e.value);
-                let strignifyTags = selectedTags.toString();
-                setTags(strignifyTags);
+                console.log('dsdsn')
             }
+            // console.log(item)
+            // console.log(selectedMulti, selectedTags);
         })
 
     }
@@ -157,6 +156,7 @@ console.log(params?.id)
                 setPost(rs.result);
                 setDescription(rs.result?.content);
                 setTags(rs.result.tags);
+                console.log(rs.result.tags)
                 let comingTags = rs.result.tags.split(',');
                 comingTags.forEach(e => {
                     let x = { label: e, value: e }
@@ -196,13 +196,13 @@ console.log(params?.id)
         const user = await storage.getItem(USER_COOKIE);
         const contentState = editorState.getCurrentContent();
         let data = {
-            pageId: selectedCategory, title, content: JSON.stringify(convertToRaw(contentState)), tags,
+            pageId: selectedCategory, title, content: JSON.stringify(convertToRaw(contentState)), tags: selectedTags.toString(),
             media: allFiles, language: 'english', date: new Date(),
             // categoryId: selectedCategory
             userId: user.payload.id
         }
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`;
-        console.log(data, url)
+        console.log(data, url);
 
         try {
             const rs = await request(url, params?.id === undefined || params?.id === null ? 'POST' : 'PATCH', true, data);
@@ -213,13 +213,15 @@ console.log(params?.id)
 
             console.log(rs)
             if (rs.success === true) {
-                dispatch(updateLoader('none'));
                 props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
+                dispatch(updateLoader('none'));
+
             }
         } catch (err) {
-            dispatch(updateLoader('none'));
             console.log(err);
-            props.showToast('error', 'Failed to save')
+            props.showToast('error', 'Failed to save');
+            dispatch(updateLoader('none'));
+
         }
     }
     const tagOption = [

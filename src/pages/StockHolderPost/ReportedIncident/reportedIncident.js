@@ -14,7 +14,7 @@ const IncidentReported = (props) => {
         if (window.confirm('Are you sure!')) {
             let url = ``;
             try {
-                const rs = await request(url, 'DELETE', false);
+                const rs = await request(url, 'DELETE', true);
                 console.log(rs)
                 if (rs.success === true) {
                     dispatch(updateLoader('none'))
@@ -108,7 +108,7 @@ const IncidentReported = (props) => {
                                                                 </Link>
                                                             </li>
                                                           
-                                                            <li className="list-inline-item">
+                                                            <li className="list-inline-item d-none">
                                                                 <Link
                                                                     to="#"
                                                                     onClick={() => {

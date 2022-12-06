@@ -8,10 +8,15 @@ import Flatpickr from "react-flatpickr"
 import { request } from '../../../services/utilities';
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateLoader } from '../../../store/actions';
+import { Spinner } from "reactstrap";
 
 const NewEvent = props => {
-    const id = ''
+    const dispatch = useDispatch();
+    const { loader } = useSelector((state) => ({
+        loader: state.visibility.show
+    }));
     const [selectedFiles, setselectedFiles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [allFiles] = useState([]);
@@ -63,13 +68,14 @@ const NewEvent = props => {
         enableReinitialize: true,
         initialValues: {
             title: '',
-            categories: ''
+            // categories: ''
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Please Enter Title")
             // categories: Yup.string().required("Please Select Categories")
         }),
         onSubmit: async (e) => {
+            dispatch(updateLoader('block'));
             let count = 0;
             const filteredD = selectedFiles.filter(i => !i.id)
             const files_ = selectedFiles.length > 1 ? filteredD : selectedFiles;
@@ -100,13 +106,16 @@ const NewEvent = props => {
                                 const data = { pageId: 3, content: 'Photo Gallery', title: e.title, media: allFiles, categoryId: selectedCategory };
                                 try {
                                     let url = `sections`;
-                                    const rs = await request(url, 'POST', false, data);
+                                    const rs = await request(url, 'POST', true, data);
                                     if (rs.success === true) {
                                         showToast('success', 'Successfully Publish');
+                                        dispatch(updateLoader('none'));
+
                                     }
                                 } catch (err) {
                                     console.log(err);
                                     showToast('error', 'Failed to publish');
+                                    dispatch(updateLoader('none'));
                                 }
                             }
                             savePhotoGallery();
@@ -163,7 +172,7 @@ const NewEvent = props => {
                                     <Col>
                                         <FormGroup className="mb-3">
                                             <Label htmlFor="validationCustom01">Select Categories</Label>
-                                            <div className="form-floating mb-3">
+                                            <div className="mb-3">
                                                 <select
                                                     className="form-select"
                                                     id="floatingSelectGrid"
@@ -277,6 +286,7 @@ const NewEvent = props => {
                                 <Button className='float-end' color="success" type="submit">
                                     Publish
                                 </Button>
+                                <Spinner className="fs-5 float-end mx-2" style={{ display: loader }} color="primary" />
 
                             </Form>
                         </CardBody>

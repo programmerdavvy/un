@@ -276,7 +276,7 @@ const ViewPost = props => {
 
                     <div className="d-print-none mt-4">
                       <div className="float-end">
-                        <Link to={`admin-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
+                        <Link to={`stakeholder-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
                         <Button className="btn btn-success w-md waves-effect waves-light" onClick={onSave}>Save</Button>
                       </div>
                     </div>

@@ -56,12 +56,14 @@ const Dashboard = () => {
   };
 
   const fetchPosts = useCallback(async (page) => {
+
     dispatch(updateLoader(''));
     let p = page || 1;
     let url = `sections/admin?page=${p}&limit=10`;
 
     try {
       const rs = await request(url, 'GET', true);
+      // console.log(rs);
       if (rs.success === true) {
         setPosts(rs.result);
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));

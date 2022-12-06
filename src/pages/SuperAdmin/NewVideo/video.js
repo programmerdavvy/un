@@ -39,7 +39,7 @@ const NewEvent = (props) => {
             };
             let url = `sections`;
             try {
-                const rs = await request(url, 'POST', false, data);
+                const rs = await request(url, 'POST', true, data);
                 if (rs.success === true) {
                     dispatch(updateLoader('none'))
                     props.showToast('success', 'Saved successfully ');

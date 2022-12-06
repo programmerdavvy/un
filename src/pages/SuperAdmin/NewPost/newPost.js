@@ -135,14 +135,11 @@ const NewPost = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     function handleMulti(selectedMulti) {
-        console.log(selectedMulti)
-        setselectedMulti(selectedMulti);
         selectedMulti.forEach(e => {
             let item = selectedTags.find(x => x === e.value);
-            if (item !== e.value) {
+            if (item === undefined) {
                 selectedTags.push(e.value);
-                let strignifyTags = selectedTags.toString();
-                setTags(strignifyTags);
+                console.log('admin');
             }
         })
 
@@ -158,7 +155,7 @@ const NewPost = (props) => {
                 setDescription(rs.result?.content);
                 setTags(rs.result.tags);
                 let comingTags = rs.result.tags.split(',');
-                 comingTags.forEach(e => {
+                comingTags.forEach(e => {
                     let x = { label: e, value: e }
                     selectedTags.push(x)
                 })
@@ -259,10 +256,7 @@ const NewPost = (props) => {
                         <Col>
                             {/* <Card>
                                 <CardBody> */}
-                            <h4 className="card-title" onClick={() => {
-                                // let x = uploadImageCallBacks()
-                                // console.log(x)
-                            }}>{params.id ? 'Edit' : 'Create a New'} Post</h4>
+                            <h4 className="card-title" >{params.id ? 'Edit' : 'Create a New'} Post</h4>
 
                             <Form className="needs-validation"
                                 onSubmit={(e) => {
@@ -270,13 +264,6 @@ const NewPost = (props) => {
                                     validation.handleSubmit();
                                     return false;
                                 }}>
-                                <Row>
-                                    <Col>
-                                        <div>
-                                            {/* {editorState} */}
-                                        </div>
-                                    </Col>
-                                </Row>
 
                                 <Row>
                                     <Col>
@@ -315,6 +302,7 @@ const NewPost = (props) => {
                                                     components={animatedComponents}
                                                     defaultValue={selectedTags ? selectedTags : [tagOption[0]]}
                                                     isMulti
+
                                                     options={tagOption}
                                                     className='react-select'
                                                     classNamePrefix='tags'
