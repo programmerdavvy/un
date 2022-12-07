@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Button, Card, CardBody, Col, Container, Input, Label, Row, Table, FormGroup } from "reactstrap";
-
+import FileImg from '../../../assets/images/trans_file_img.png';
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
@@ -32,7 +32,7 @@ const ViewPost = props => {
   const [status, setStatus] = useState([]);
   const [media, setMedia] = useState([]);
   const [documents, setDocuments] = useState([]);
-
+  const [fileLink, setFileLink] = useState('');
   const [documentName, setDocumentName] = useState('');
 
   const showToast = (error, message) => {
@@ -108,6 +108,17 @@ const ViewPost = props => {
     }
   }
 
+  const downloadFile = () => {
+    const linkSource = fileLink;
+    const downloadLink = document.createElement('a');
+    const fileName = 'test';
+    downloadLink.href = linkSource;
+    downloadLink.setAttribute('target', '_blank')
+    downloadLink.setAttribute('ref', 'noreferrer noopene')
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+
   const fetchIncident = useCallback(async () => {
     dispatch(updateLoader(''));
     let url = `sections/admin?pageId=4&id=${params.params?.id}`;
@@ -126,7 +137,8 @@ const ViewPost = props => {
         setMedia(medias);
         setEvidence(image[0]?.link);
         setDocumentName(documents[0]?.name);
-        setDocuments(documents)
+        setDocuments(documents);
+        setFileLink(documents[0].link);
       }
       dispatch(updateLoader('none'));
 
@@ -239,20 +251,31 @@ const ViewPost = props => {
                           <div>
                             {documents?.map(e => {
                               return (
-                                <span key={e.id} onMouseEnter={() => setDocumentName(e.name)}
-                                  className="bg-light mt-2 mx-2" alt='document' >
-                                  <i className='uil-file-alt fs-14' /> {e.name}
-                                </span>
+                                <div key={e.id} onMouseEnter={() => {
+                                  setFileLink(e.link);
+                                  setDocumentName(e.name);
+                                }
+                                }
+                                >
+                                  <img src={FileImg} className='img-thumbnail' width='100' alt="reported incident" />
+                                  <br />
+                                  <p>
+                                    {e.name}
+                                  </p>
+                                </div>
+
                               )
 
                             })}
                           </div>
                           <div className="mx-4 w-100">
-                            <div className="embed-responsive">
-                              <span
-                                className="img-thumbnail fs-14 bg-light mt-2 mx-2" alt='document' >
-                                <i className='uil-file-alt' /> {documentName}
-                              </span>
+                            <div className="embed-responsive text-center" style={{ cursor: 'pointer' }} onClick={() => downloadFile()}>
+                              <img src={FileImg} style={{ objectFit: 'contain' }} className='bg-white border-none' width='100%' height='300px'
+                                alt="reported incident" />
+                              <br />
+                              <p>
+                                {documentName}
+                              </p>
                             </div>
                           </div>
                         </div>
