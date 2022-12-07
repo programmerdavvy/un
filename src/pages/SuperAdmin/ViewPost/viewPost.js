@@ -368,7 +368,7 @@ const ViewPost = props => {
                       </div>
                     </div>
                   </div>
-                </CardBody>
+                </CardBody> 
               </Card>
             </Col>
           </Row>
