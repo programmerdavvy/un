@@ -12,11 +12,14 @@ import { useEffect } from "react";
 import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { Editor } from "react-draft-wysiwyg"
-
+import { updateLoader } from "../../../store/actions";
+import { useDispatch } from "react-redux";
 import { EditorState, convertFromRaw } from "draft-js";
 
 const ViewPost = props => {
   const { match: params } = props
+  const dispatch = useDispatch();
+
   const [incident, setIncident] = useState(null);
   const [comment, setComment] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -25,8 +28,12 @@ const ViewPost = props => {
   const [isApprove, setIsApprove] = useState(false);
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty(),);
   const [evidence, setEvidence] = useState('');
+  const [audio, setAudio] = useState('')
   const [status, setStatus] = useState([]);
+  const [media, setMedia] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
+  const [documentName, setDocumentName] = useState('');
 
   const showToast = (error, message) => {
     let positionClass = "toast-top-right"
@@ -58,6 +65,7 @@ const ViewPost = props => {
     else toastr.success(message)
   }
   const onSave = async () => {
+    dispatch(updateLoader(''));
     const data_c = { comment, sectionId: params.params?.id };
 
     let url_addc = `sections/comment`;
@@ -67,21 +75,23 @@ const ViewPost = props => {
 
     try {
       if (comment !== null && comment !== '') {
-        const rs = await request(url_addc, 'POST', false, data_c);
+        const rs = await request(url_addc, 'POST', true, data_c);
         setComment('');
         console.log(rs, 'add comment')
 
       }
       if (isApprove === true) {
-        const rs = await request(url_ap, 'GET', false);
+        const rs = await request(url_ap, 'GET', true);
         console.log(rs, 'approve')
 
       }
       if (canComment === true) {
-        const rs = await request(url_can, 'GET', false);
+        const rs = await request(url_can, 'GET', true);
         console.log(rs, 'cmment')
 
       }
+      dispatch(updateLoader('none'));
+
 
       showToast('success', 'Successfully Saved');
     } catch (err) {
@@ -92,11 +102,14 @@ const ViewPost = props => {
         showToast('error', 'Failed to fetch, kindly try again later');
 
       }
+      dispatch(updateLoader('none'));
+
       console.log(err);
     }
   }
 
   const fetchIncident = useCallback(async () => {
+    dispatch(updateLoader(''));
     let url = `sections/admin?pageId=4&id=${params.params?.id}`;
     try {
       const rs = await request(url, 'GET', true);
@@ -106,11 +119,21 @@ const ViewPost = props => {
         setCanComment(rs.result.canComment);
         setIncident(rs.result);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
-        setEvidence(rs.result.media[0].link);
+        let medias = rs.result.media.filter(e => e.type !== 'document');
+        let image = rs.result.media.filter(e => e.type === 'image');
+
+        let documents = rs.result.media.filter(e => e.type === 'document');
+        setMedia(medias);
+        setEvidence(image[0]?.link);
+        setDocumentName(documents[0]?.name);
+        setDocuments(documents)
       }
+      dispatch(updateLoader('none'));
+
     } catch (err) {
       showToast('error', 'Failed to fetch, kindly try again later');
       console.log(err);
+      dispatch(updateLoader('none'));
     }
   }, [params.params?.id]);
 
@@ -163,33 +186,74 @@ const ViewPost = props => {
 
                   </Row>
                   <div className="py-2">
-                    <h5 className="font-size-15 mt-3">Uploaded Documents And Images</h5>
+                    <h5 className="font-size-15 mt-3">Uploaded  Images</h5>
 
-                    {incident?.media?.length >= 1 ? <Row>
+                    {media?.length >= 1 ? <Row>
                       <Col xl={12}>
 
                         <div className="d-flex">
                           <div>
-                            {incident?.media.map(e => {
-                              return (
-                                <div key={e.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
-                                  <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
-                                </div>
-                              )
+                            {media?.map(e => {
+                              if (e.type === 'image') {
+                                return (
+                                  <div key={e.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setEvidence(e.link)}>
+                                    <img src={e.link} className='img-thumbnail' width='100' alt="reported incident" />
+                                  </div>
+                                )
+                              }
+                              if (e.type === 'video' || e.type === 'audio') {
+                                return (
+                                  <div className="embed-responsive" key={e.id}>
+                                    <iframe
+                                      width='1090px'
+                                      height='400px'
+                                      title={e.name}
+                                      className="embed-responsive-item"
+                                      src={e.link}
+                                      onMouseEnter={() => setAudio(e.link)}
+                                    />
+                                  </div>
+                                )
+                              }
+
                             })}
                           </div>
                           <div className="mx-4 w-100">
-                            {incident?.media[0].type === 'video' ? <div className="embed-responsive">
-                              <iframe
-                                width='1090px'
-                                height='400px'
-                                title={incident?.media[0].name}
-                                className="embed-responsive-item"
-                                src={incident?.media[0].link}
-                              />
-                            </div> : <div className="embed-responsive">
-                              <img src={evidence} style={{ objectFit: 'contain' }} width='100%' height='300px' alt="reported incident" />
-                            </div>}
+                            {media?.type === 'audio' || media?.type === 'video' ?
+                              <div className="embed-responsive">
+                                <iframe
+                                  width='1090px'
+                                  height='400px'
+                                  title={'evidence'}
+                                  className="embed-responsive-item"
+                                  src={audio}
+                                />
+                              </div> : <div className="embed-responsive">
+                                <img src={evidence} style={{ objectFit: 'contain' }} width='100%' height='300px' alt="reported incident" />
+                              </div>}
+                          </div>
+                        </div>
+                        <h5 className="font-size-15 mt-3">Uploaded Documents</h5>
+
+                        <div className="d-flex">
+                          <div>
+                            {documents?.map(e => {
+                                return (
+                                  <span key={e.id} onMouseEnter={() => setDocumentName(e.name)}
+                                    className="bg-light mt-2 mx-2" alt='document' >
+                                    <i className='uil-file-alt fs-14' /> {e.name}
+                                  </span>
+                                )
+
+                            })}
+                          </div>
+                          <div className="mx-4 w-100">
+                            <div className="embed-responsive">
+                              <span
+                                className="img-thumbnail fs-14 bg-light mt-2 mx-2" alt='document' >
+                                <i className='uil-file-alt' /> {documentName}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </Col>
@@ -276,7 +340,7 @@ const ViewPost = props => {
 
                     <div className="d-print-none mt-4">
                       <div className="float-end">
-                        <Link to={`stakeholder-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
+                        <Link to={`/stakeholder-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
                         <Button className="btn btn-success w-md waves-effect waves-light" onClick={onSave}>Save</Button>
                       </div>
                     </div>

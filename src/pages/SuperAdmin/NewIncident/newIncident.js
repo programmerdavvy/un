@@ -35,46 +35,7 @@ const NewPost = (props) => {
 
 
     function handleAcceptedFiles(files) {
-        setselectedFiles(files)
-        // files.map(file =>
-        //     Object.assign(file, {
-        //         preview: URL.createObjectURL(file),
-        //         formattedSize: formatBytes(file.size),
-        //     })
-        // )
-        // 
-        // const formData = new FormData();
-        // let file = files[0];
-        // console.log(file)
-        // formData.append("file", file);
-        // formData.append("upload_preset", "geekyimages");
-        // fetch(`https://api.cloudinary.com/v1_1/doxlmaiuh/image/upload`, {
-        //     method: "POST",
-        //     body: formData
-        // })
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        // let dataFile = { name: data.original_filename, file: data.secure_url };
-        // if (dataFile?.name !== null) {
-        //     allFiles.push(dataFile);
-        // }
-        // console.log(data)
-        // count++
-        // console.log(count);
-        // if (count === files_.length) {
-        //     alert('upload sucessffully')
-        //     // setLoading(false);
-        //     // return MySwal.fire({
-        //     //     text: 'Files Uploaded Successfully!',
-        //     //     icon: 'success',
-        //     //     showConfirmButton: false,
-        //     //     timer: 2000
-        //     // })
-        // }
-        // });
-
+        setselectedFiles(files);
     }
     /**
      * Formats the size

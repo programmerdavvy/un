@@ -92,7 +92,8 @@ const NewPost = (props) => {
                         console.log(data);
                         let dataFile = {
                             name: data.original_filename, link: data.secure_url, type: data.format === 'png' || data.format === 'jpeg' ?
-                                'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : data.format === 'pdf' ? 'pdf' : ''
+                                'image' : data.format === 'mp4' ? 'video' : data.format === 'mp3' ? 'audio' : data.format !== 'jpeg' && data.format !== 'png'
+                                    && data.format !== 'gif' && data.format !== 'jpg' ? 'document' : ''
                         };
                         if (dataFile?.name !== null) {
                             allFiles.push(dataFile);
