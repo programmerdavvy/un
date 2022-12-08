@@ -137,15 +137,16 @@ const NewPost = (props) => {
     function handleMulti(selectedMulti) {
 
         selectedMulti.forEach(e => {
-            let item = selectedTags.find(x => x === e.value);
-            if (item === undefined) {
-                selectedTags.push(e.value);
-                console.log('dsdsn')
-            }
-            // console.log(item)
-            // console.log(selectedMulti, selectedTags);
-        })
+            console.log(selectedTags, 'mmmm')
 
+            let item = selectedTags.find(x => x === e.value);
+            console.log(item)
+            if (item === undefined) {
+                let undefinedMedia = selectedTags.filter(e => e.value !== '[object Object]');
+                console.log(undefinedMedia, 'ooopopopopp');
+                selectedTags.push(e.value);
+            }
+        })
     }
     const fetchPostById = useCallback(async () => {
         dispatch(updateLoader(''));
@@ -157,18 +158,19 @@ const NewPost = (props) => {
                 setPost(rs.result);
                 setDescription(rs.result?.content);
                 setTags(rs.result.tags);
-                console.log(rs.result.tags)
+                // console.log(rs.result.tags)
                 let comingTags = rs.result.tags.split(',');
-                comingTags.forEach(e => {
+                let filterTags = comingTags.filter(e => e !== '[object Object]')
+                filterTags.forEach(e => {
                     let x = { label: e, value: e }
-                    selectedTags.push(x)
+                    selectedTags.push(x);
                 })
                 setselectedCategory(rs.result?.pageId);
                 setTitle(rs.result?.title);
                 setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
                 setAllFiles(rs.result?.media);
                 let images = rs.result?.media.filter(e => e.type === 'image');
-                let documents = rs.result?.media.filter(e => e.type === 'pdf');
+                let documents = rs.result?.media.filter(e => e.type === 'document');
                 setSelectedImages(images);
                 setselectedDocuments(documents);
                 dispatch(updateLoader('none'));
@@ -198,12 +200,12 @@ const NewPost = (props) => {
         const contentState = editorState.getCurrentContent();
         let data = {
             pageId: selectedCategory, title, content: JSON.stringify(convertToRaw(contentState)), tags: selectedTags.toString(),
-            media: allFiles, language: 'english', date: new Date(),
+            media: allFiles, language: 'english', date: new Date(), featuredMedia: '',
             // categoryId: selectedCategory
             userId: user.payload.id
         }
         let url = params?.id == undefined || params?.id == null ? `sections` : `sections?id=${params.id}`;
-        console.log(data, url);
+        // console.log(data, url);
 
         try {
             const rs = await request(url, params?.id === undefined || params?.id === null ? 'POST' : 'PATCH', true, data);
@@ -215,6 +217,7 @@ const NewPost = (props) => {
             console.log(rs)
             if (rs.success === true) {
                 props.showToast('success', params?.id === undefined || params?.id === null ? 'Saved Successfully' : 'Updated Successfully');
+                clearForm();
                 dispatch(updateLoader('none'));
 
             }
@@ -225,6 +228,15 @@ const NewPost = (props) => {
 
         }
     }
+    const clearForm = () => {
+        setTitle('');
+        setEditorState(() => EditorState.createEmpty(),);
+        setSelectedImages([]);
+        setselectedDocuments([]);
+        setselectedFiles([]);
+        setSelectedTags([{ label: 'UN', value: 'UN' }]);
+
+    }
     const tagOption = [
         { label: "UN", value: "UN" },
         { label: "NEWS", value: "NEWS" },
@@ -234,6 +246,54 @@ const NewPost = (props) => {
         { label: "HUMANITARIAN ADIF", value: "HUMANITARIAN AID" },
         { label: "SDGs", value: "SDGs" }
     ]
+    const deleteMedia = async (file) => {
+        if (window.confirm('are you sure')) {
+            if (!file.id) {
+                const filteredF = selectedImages.filter(i => i.name !== file.name)
+                setSelectedImages([...filteredF]);
+            } else {
+                try {
+                    dispatch(updateLoader(''));
+                    const filteredD = selectedImages.filter(i => i.name !== file.name);
+                    const url = `media/?id=${file.id}`;
+                    const rs = await request(url, 'DELETE', true);
+                    if (rs.success === true) {
+                        setSelectedImages([...filteredD]);
+                    }
+                    dispatch(updateLoader('none'));
+                } catch (err) {
+                    dispatch(updateLoader('none'));
+                    console.log(err);
+                }
+
+            }
+
+        }
+    }
+    const deleteDocuments = async (file) => {
+        if (window.confirm('are you sure')) {
+            if (!file.id) {
+                const filteredF = selectedDocuments.filter(i => i.name !== file.name)
+                setselectedDocuments([...filteredF]);
+            } else {
+                try {
+                    dispatch(updateLoader(''));
+                    const filteredD = selectedDocuments.filter(i => i.name !== file.name);
+                    const url = `media/?id=${file.id}`;
+                    const rs = await request(url, 'DELETE', true);
+                    if (rs.success === true) {
+                        setselectedDocuments([...filteredD]);
+                    }
+                    dispatch(updateLoader('none'));
+                } catch (err) {
+                    dispatch(updateLoader('none'));
+                    console.log(err);
+                }
+
+            }
+
+        }
+    }
 
     const onChangeDocument = e => {
         let x = [...selectedFiles, ...e]
@@ -261,12 +321,8 @@ const NewPost = (props) => {
                 <CardBody>
                     <Row>
                         <Col>
-                            {/* <Card>
-                                <CardBody> */}
-                            <h4 className="card-title" onClick={() => {
-                                // let x = uploadImageCallBacks()
-                                // console.log(x)
-                            }}>{params.id ? 'Edit' : 'Create a New'} Post</h4>
+
+                            <h4 className="card-title" onClick={clearForm}>{params.id ? 'Edit' : 'Create a New'} Post</h4>
 
                             <Form className="needs-validation"
                                 onSubmit={(e) => {
@@ -274,13 +330,6 @@ const NewPost = (props) => {
                                     validation.handleSubmit();
                                     return false;
                                 }}>
-                                <Row>
-                                    <Col>
-                                        <div>
-                                            {/* {editorState} */}
-                                        </div>
-                                    </Col>
-                                </Row>
 
                                 <Row>
                                     <Col>
@@ -382,13 +431,7 @@ const NewPost = (props) => {
                                                 toolbarClassName="toolbarClassName"
                                                 wrapperClassName="wrapperClassName"
                                                 editorClassName="editorClassName"
-                                                // readOnly
                                                 toolbar={{
-                                                    // inline: { inDropdown: true },
-                                                    // list: { inDropdown: true },
-                                                    // textAlign: { inDropdown: true },
-                                                    // link: { inDropdown: true },
-                                                    // history: { inDropdown: true },
                                                     image: {
                                                         uploadEnabled: true,
                                                         uploadCallback: uploadCallback,
@@ -401,28 +444,7 @@ const NewPost = (props) => {
                                                         },
                                                     },
                                                 }}
-                                            // toolbar={{
-                                            //     inline: { inDropdown: true },
-                                            //     list: { inDropdown: true },
-                                            //     textAlign: { inDropdown: true },
-                                            //     link: { inDropdown: true },
-                                            //     history: { inDropdown: true },
-                                            //     image: {
-                                            //         uploadCallback: uploadImageCallBack,
-                                            //         alt: { present: false, mandatory: false },
-                                            //     },
-                                            // }}
                                             />
-                                            {/* <Editor
-                                                toolbarClassName="toolbarClassName"
-                                                wrapperClassName="wrapperClassName"
-                                                editorClassName="editorClassName"
-                                                // contentState={}
-                                                name='description'
-                                                onChange={e => setDescription(e.blocks[0].text)}
-
-                                            /> */}
-
                                         </FormGroup>
                                     </Col>
                                 </Row>
@@ -434,22 +456,32 @@ const NewPost = (props) => {
                                         <div>
                                             {selectedDocuments?.map(e => {
                                                 return (
-                                                    <span height="80" key={e.id}
-                                                        className="avatar-sm rounded bg-light mt-2 mx-2" alt='document' >
-                                                        <i className='uil-file-alt' /> {e.name}
-                                                    </span>
+                                                    <>
+                                                        <span style={{ position: 'absolute', cursor: 'pointer' }} onClick={() => deleteDocuments(e)}>
+                                                            <i className='uil-cancel text-danger fs-4' ></i>
+                                                        </span>
+                                                        <span height="80" key={e.id}
+                                                            className="avatar-sm rounded bg-light mt-2 mx-2" alt='document' >
+                                                            <i className='uil-file-alt' /> {e.name}
+                                                        </span>
+                                                    </>
                                                 )
                                             })}
                                         </div>
                                     </Col>
                                     <Col>
                                         <Label>Add Feature Image</Label>
-                                        <Input type='file' onChange={e => onChangeImage(e.target.files)} accept="image/*" multiple />
+                                        <Input type='file' onChange={e => onChangeImage(e.target.files)} accept="image/*" />
                                         <div>
                                             {selectedImages?.map(e => {
                                                 return (
-                                                    <img src={e.size === undefined ? e.link : URL.createObjectURL(e)} height="80" key={e.name}
-                                                        className="avatar-sm rounded bg-light mt-2 mx-2" alt='feature' />
+                                                    <>
+                                                        <span style={{ position: 'absolute', cursor: 'pointer' }} onClick={() => deleteMedia(e)}>
+                                                            <i className='uil-cancel text-danger fs-4' ></i>
+                                                        </span>
+                                                        <img src={e.size === undefined ? e.link : URL.createObjectURL(e)} height="80" key={e.name}
+                                                            className="avatar-sm rounded bg-light mt-2 mx-2" alt='feature' />
+                                                    </>
 
                                                 )
                                             })}

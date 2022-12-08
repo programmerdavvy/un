@@ -145,6 +145,13 @@ function PostList(props) {
 
     }
   }
+  const checkTags = e => {
+    let comingTags = e.split(',');
+    let filterTags = comingTags.filter(e => e !== '[object Object]')
+    let stringTag = filterTags.toString();
+    console.log(stringTag);
+    return stringTag;
+  }
 
   return (
     <React.Fragment>
@@ -209,7 +216,7 @@ function PostList(props) {
                             {e.page?.name}
                           </td>
                           <td>
-                            {e.tags}
+                            {checkTags(e.tags)}
                           </td>
                           <td>
                             {new Date(e.createdAt).toDateString()}

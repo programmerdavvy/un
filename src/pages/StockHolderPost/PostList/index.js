@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [count, setCount] = useState(1);
   const [meta, setMeta] = useState(null);
 
+
   const showToast = (error, message) => {
     let positionClass = "toast-top-right"
     let toastType
@@ -63,7 +64,6 @@ const Dashboard = () => {
 
     try {
       const rs = await request(url, 'GET', true);
-      console.log(rs);
       if (rs.success === true) {
         setPosts(rs.result);
         setCount(Math.ceil(rs.paging?.total / rowsPerPage));

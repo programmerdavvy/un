@@ -99,7 +99,8 @@ const Login = props => {
           dispatch(updateLoader('none'))
           showToast('success', 'Successfully login');
           window.location.href = '/stakeholder';
-        } else if (rs.success === true && rs.result?.payload?.userType === 'admin') {
+        }
+        if (rs.success === true && rs.result?.payload?.userType === 'admin') {
           dispatch(updateLoader('none'))
           window.location.href = '/admin-login';
         }
@@ -109,8 +110,7 @@ const Login = props => {
         if (err.message === 'invalid credentials') {
           showToast('error', 'Invalid Email or Password')
         } else {
-          showToast('error', 'Failed to login kindly try again later')
-
+          showToast('error', 'Failed to login kindly try again later');
         }
 
       }
