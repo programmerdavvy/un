@@ -144,7 +144,7 @@ const Layout = (props) => {
           // type={leftSideBarType}
           isMobile={isMobile}
         />
-        <div className="main-content">{props.children}</div>
+        <div className="main-content mt-4">{props.children}</div>
         <Footer />
       </div>
       {showRightSidebar ? <Rightbar /> : null}

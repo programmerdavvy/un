@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Button, Card, CardBody, Col, Container, Input, Label, Row, Table, FormGroup } from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Input, Spinner, Label, Row, UncontrolledTooltip, Table, FormGroup } from "reactstrap";
 import FileImg from '../../../assets/images/trans_file_img.png';
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import ReactPaginate from "react-paginate"
 
 //Import Image
 import logo from "../../../assets/images/logo-dark.png";
@@ -13,13 +14,15 @@ import toastr from "toastr"
 import "toastr/build/toastr.min.css"
 import { Editor } from "react-draft-wysiwyg"
 import { updateLoader } from "../../../store/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { EditorState, convertFromRaw } from "draft-js";
 
 const ViewPost = props => {
   const { match: params } = props
   const dispatch = useDispatch();
-
+  const { loader } = useSelector((state) => ({
+    loader: state.visibility.show
+  }));
   const [incident, setIncident] = useState(null);
   const [comment, setComment] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -80,16 +83,16 @@ const ViewPost = props => {
         console.log(rs, 'add comment')
 
       }
-      if (isApprove === true) {
-        const rs = await request(url_ap, 'GET', true);
-        console.log(rs, 'approve')
+      // if (isApprove === true) {
+      //   const rs = await request(url_ap, 'GET', true);
+      //   console.log(rs, 'approve')
 
-      }
-      if (canComment === true) {
-        const rs = await request(url_can, 'GET', true);
-        console.log(rs, 'cmment')
+      // }
+      // if (canComment === true) {
+      //   const rs = await request(url_can, 'GET', true);
+      //   console.log(rs, 'cmment')
 
-      }
+      // }
       dispatch(updateLoader('none'));
 
 
@@ -247,36 +250,83 @@ const ViewPost = props => {
                         </div>
                         <h5 className="font-size-15 mt-3">Uploaded Documents</h5>
 
-                        <div className="d-flex">
-                          <div>
-                            {documents?.map(e => {
-                              return (
-                                <div key={e.id} onMouseEnter={() => {
-                                  setFileLink(e.link);
-                                  setDocumentName(e.name);
-                                }
-                                }
-                                >
-                                  <img src={FileImg} className='img-thumbnail' width='100' alt="reported incident" />
-                                  <br />
-                                  <p>
-                                    {e.name}
-                                  </p>
-                                </div>
 
-                              )
+                        <div className="">
+                          <Table bordered striped>
+                            <thead>
+                              <tr>
+                                <th>
+                                  #
+                                </th>
+                                <th>
+                                  Name
+                                </th>
+                                <th>
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {documents?.map((e, i) => {
+                                return (
+                                  <tr key={i} className='text-capitalize'>
 
-                            })}
-                          </div>
-                          <div className="mx-4 w-100">
-                            <div className="embed-responsive text-center" style={{ cursor: 'pointer' }} onClick={() => downloadFile()}>
-                              <img src={FileImg} style={{ objectFit: 'contain' }} className='bg-white border-none' width='100%' height='300px'
-                                alt="reported incident" />
-                              <br />
-                              <p>
-                                {documentName}
-                              </p>
+                                    <td>
+                                      {i + 1}
+                                    </td>
+                                    <td>
+                                      {e.name}
+                                    </td>
+
+                                    <td>
+                                      <div className="d-flex gap-3 users">
+                                        <ul className="list-inline font-size-20 contact-links mb-0">
+
+                                          <li className="list-inline-item">
+                                            <Button
+                                              to='#'
+                                              onClick={() => {
+                                                downloadFile(e.link);
+                                              }}
+                                            >
+                                              <i className="uil-expand-arrows-alt font-size-18" id="edittooltip2" />
+                                              <UncontrolledTooltip placement="top" target="edittooltip2">
+                                                View Details
+                                              </UncontrolledTooltip>
+                                            </Button>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                )
+                              })}
+                            </tbody>
+                          </Table>
+                          <div className="mt-3 d-flex align-items-center justify-content-between">
+                            <div>Showing 1 to 10 of {documents?.length} entries</div>
+
+                            <div>
+                              <ReactPaginate
+                                nextLabel='Next'
+                                breakLabel='...'
+                                previousLabel='Prev'
+                                pageCount={1}
+                                activeClassName='active'
+                                breakClassName='page-item'
+                                pageClassName={'page-item'}
+                                breakLinkClassName='page-link'
+                                nextLinkClassName={'page-link'}
+                                pageLinkClassName={'page-link'}
+                                nextClassName={'page-item next'}
+                                previousLinkClassName={'page-link'}
+                                previousClassName={'page-item prev'}
+                                // onPageChange={page => props.handlePagination(page)}
+                                forcePage={1}
+                                containerClassName={'pagination react-paginate justify-content-end p-1'}
+                              />
                             </div>
+
                           </div>
                         </div>
                       </Col>
@@ -321,7 +371,7 @@ const ViewPost = props => {
                       </Col>
 
                     </Row>
-                    <div className="d-flex">
+                    {/* <div className="d-flex">
                       <FormGroup className="mb-3">
                         <div className="form-check">
                           <Input
@@ -359,9 +409,12 @@ const ViewPost = props => {
                           </Label>
                         </div>
                       </FormGroup>
-                    </div>
+                    </div> */}
 
                     <div className="d-print-none mt-4">
+                      <div className="float-start">
+                        <Spinner className="fs-5 float-end mx-2" style={{ display: loader }} color="primary" />
+                      </div>
                       <div className="float-end">
                         <Link to={`/stakeholder-edit-post/${params.params?.id}`} className="btn btn-success waves-effect waves-light me-1">Edit</Link>{" "}
                         <Button className="btn btn-success w-md waves-effect waves-light" onClick={onSave}>Save</Button>
