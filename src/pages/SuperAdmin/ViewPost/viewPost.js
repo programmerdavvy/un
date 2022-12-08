@@ -127,7 +127,6 @@ const ViewPost = props => {
     let url = `sections/admin?pageId=4&id=${params.params?.id}`;
     try {
       const rs = await request(url, 'GET', true);
-      console.log(rs);
       if (rs.success === true) {
         setIsApprove(rs.result.isApproved);
         setCanComment(rs.result.canComment);
@@ -135,13 +134,12 @@ const ViewPost = props => {
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(rs.result?.content))))
         let medias = rs.result.media.filter(e => e.type !== 'document');
         let image = rs.result.media.filter(e => e.type === 'image');
-
         let documents = rs.result.media.filter(e => e.type === 'document');
         setMedia(medias);
         setEvidence(image[0]?.link);
         setDocumentName(documents[0]?.name);
         setDocuments(documents);
-        setFileLink(documents[0].link);
+        setFileLink(documents[0]?.link);
       }
       dispatch(updateLoader('none'));
 
@@ -248,87 +246,86 @@ const ViewPost = props => {
                               </div>}
                           </div>
                         </div>
-                        <h5 className="font-size-15 mt-3">Uploaded Documents</h5>
+                        {documents?.length >= 1 ? <>
+                          <h5 className="font-size-15 mt-3">Uploaded Documents</h5>
+                          <div className="">
+                            <Table bordered striped>
+                              <thead>
+                                <tr>
+                                  <th>
+                                    #
+                                  </th>
+                                  <th>
+                                    Name
+                                  </th>
+                                  <th>
+                                    Actions
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {documents?.map((e, i) => {
+                                  return (
+                                    <tr key={i} className='text-capitalize'>
 
+                                      <td>
+                                        {i + 1}
+                                      </td>
+                                      <td>
+                                        {e.name}
+                                      </td>
 
-                        <div className="">
-                          <Table bordered striped>
-                            <thead>
-                              <tr>
-                                <th>
-                                  #
-                                </th>
-                                <th>
-                                  Name
-                                </th>
-                                <th>
-                                  Actions
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {documents?.map((e, i) => {
-                                return (
-                                  <tr key={i} className='text-capitalize'>
+                                      <td>
+                                        <div className="d-flex gap-3 users">
+                                          <ul className="list-inline font-size-20 contact-links mb-0">
 
-                                    <td>
-                                      {i + 1}
-                                    </td>
-                                    <td>
-                                      {e.name}
-                                    </td>
+                                            <li className="list-inline-item">
+                                              <Button
+                                                to='#'
+                                                onClick={() => {
+                                                  downloadFile(e.link);
+                                                }}
+                                              >
+                                                <i className="uil-expand-arrows-alt font-size-18" id="edittooltip2" />
+                                                <UncontrolledTooltip placement="top" target="edittooltip2">
+                                                  View Details
+                                                </UncontrolledTooltip>
+                                              </Button>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  )
+                                })}
+                              </tbody>
+                            </Table>
+                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                              <div>Showing 1 to 10 of {documents?.length} entries</div>
 
-                                    <td>
-                                      <div className="d-flex gap-3 users">
-                                        <ul className="list-inline font-size-20 contact-links mb-0">
+                              <div>
+                                <ReactPaginate
+                                  nextLabel='Next'
+                                  breakLabel='...'
+                                  previousLabel='Prev'
+                                  pageCount={1}
+                                  activeClassName='active'
+                                  breakClassName='page-item'
+                                  pageClassName={'page-item'}
+                                  breakLinkClassName='page-link'
+                                  nextLinkClassName={'page-link'}
+                                  pageLinkClassName={'page-link'}
+                                  nextClassName={'page-item next'}
+                                  previousLinkClassName={'page-link'}
+                                  previousClassName={'page-item prev'}
+                                  // onPageChange={page => props.handlePagination(page)}
+                                  forcePage={1}
+                                  containerClassName={'pagination react-paginate justify-content-end p-1'}
+                                />
+                              </div>
 
-                                          <li className="list-inline-item">
-                                            <Button
-                                              to='#'
-                                              onClick={() => {
-                                                downloadFile(e.link);
-                                              }}
-                                            >
-                                              <i className="uil-expand-arrows-alt font-size-18" id="edittooltip2" />
-                                              <UncontrolledTooltip placement="top" target="edittooltip2">
-                                                View Details
-                                              </UncontrolledTooltip>
-                                            </Button>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                )
-                              })}
-                            </tbody>
-                          </Table>
-                          <div className="mt-3 d-flex align-items-center justify-content-between">
-                            <div>Showing 1 to 10 of {documents?.length} entries</div>
-
-                            <div>
-                              <ReactPaginate
-                                nextLabel='Next'
-                                breakLabel='...'
-                                previousLabel='Prev'
-                                pageCount={1}
-                                activeClassName='active'
-                                breakClassName='page-item'
-                                pageClassName={'page-item'}
-                                breakLinkClassName='page-link'
-                                nextLinkClassName={'page-link'}
-                                pageLinkClassName={'page-link'}
-                                nextClassName={'page-item next'}
-                                previousLinkClassName={'page-link'}
-                                previousClassName={'page-item prev'}
-                                // onPageChange={page => props.handlePagination(page)}
-                                forcePage={1}
-                                containerClassName={'pagination react-paginate justify-content-end p-1'}
-                              />
                             </div>
-
-                          </div>
-                        </div>
+                          </div></> : ''}
                       </Col>
                     </Row>
                       : <h5>No Evidence</h5>}

@@ -29,7 +29,7 @@ import { GoogleLogin } from "react-google-login"
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 
 // actions
-import { loginUser, socialLogin ,updateLoader} from "../../store/actions"
+import { loginUser, socialLogin, updateLoader } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-dark.png"
@@ -249,20 +249,6 @@ const Login = props => {
                             {validation.errors.password}
                           </FormFeedback>
                         ) : null}
-                      </div>
-
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="customControlInline"
-                        >
-                          Remember me
-                        </label>
                       </div>
 
                       <div className="mt-3">

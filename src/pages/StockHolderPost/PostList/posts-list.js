@@ -148,29 +148,6 @@ function PostList(props) {
 
   return (
     <React.Fragment>
-
-      <Row className="d-none">
-        <Col className="col-12">
-          <Card>
-            <CardBody>
-              {/* <CardTitle>Stripped example </CardTitle>
-              <CardSubtitle className="mb-3">
-                mdbreact DataTables has most features enabled by default, so
-                all you need to do to use it with your own tables is to call
-                the construction function:{" "}
-                <code>&lt;MDBDataTable striped /&gt;</code>.
-              </CardSubtitle> */}
-              <div>
-                <Link to='/admin-new-post' className="btn btn-primary float-end">
-                  Add New
-                </Link>
-              </div>
-              <MDBDataTable responsive striped bordered data={data} />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-
       <Row>
         <Col className="col-12">
           <Card>
@@ -182,7 +159,7 @@ function PostList(props) {
                     {/* <Button color="primary" style={{ borderRadius: '0px', borderTopRightRadius: '10px' }}> Search</Button> */}
                   </div>
                   <div>
-                    <Link to='/admin-new-post' className="btn btn-primary">
+                    <Link to='/new-post' className="btn btn-primary">
                       Add New
                     </Link>
                   </div>
@@ -241,7 +218,7 @@ function PostList(props) {
                           <td>
                             <div className="d-flex gap-3 users">
                               <ul className="list-inline font-size-20 contact-links mb-0">
-                                <li className="list-inline-item">
+                                {/* <li className="list-inline-item">
                                   <Link
                                     to={`#`}
                                     className="text-dark"
@@ -254,7 +231,7 @@ function PostList(props) {
                                       Approve
                                     </UncontrolledTooltip>
                                   </Link>
-                                </li>
+                                </li> */}
                                 <li className="list-inline-item">
                                   <Link
                                     to={`/stakeholder-view-post/${e.id}`}

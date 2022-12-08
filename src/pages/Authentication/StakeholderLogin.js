@@ -254,20 +254,6 @@ const Login = props => {
                         ) : null}
                       </div>
 
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="customControlInline"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-
                       <div className="mt-3">
 
                         <div className="d-flex p-2 justify-content-center">
